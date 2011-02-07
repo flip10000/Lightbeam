@@ -2,7 +2,6 @@ package lightbeam.playground;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -58,17 +57,10 @@ public class Playground extends GamePlayground
         this.menuBar.add( this.jfile );
         		
 		this.mapArea				= new MapArea( this.tileset, this.initRows, this.initCols );		
-		this.mapsettings			= new MapSettings( this.mapArea, this.initRows, this.initCols );		
-		this.palette				= new TilePalette( this.tileset );
 		
-		this.palette.setBounds( new Rectangle( 5, this.mapsettings.panel().getBounds().y + this.mapsettings.panel().getBounds().height, 128, 128 ) );
-
 		this.left_panel.setLayout( null );
-		this.left_panel.setPreferredSize( new Dimension( this.mapsettings.panel().getBounds().x + this.mapsettings.panel().getBounds().width + 5, 200 ) );
+		this.left_panel.setPreferredSize( new Dimension( 200, 200 ) );
 
-		this.left_panel.add( this.mapsettings.panel() );
-		this.left_panel.add( this.palette );
-		
 		this.frame.setLayout( new BorderLayout() );
  
 		this.frame.add( this.menuBar, BorderLayout.NORTH );
