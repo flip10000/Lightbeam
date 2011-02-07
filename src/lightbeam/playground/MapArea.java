@@ -67,51 +67,51 @@ public class MapArea
 		
 		this.panel.addMouseListener(new MouseAdapter(){public void mouseClicked( MouseEvent e ) 
 		{
-			int row	= e.getY() / 32;
-			int col = e.getX() / 32;
-			
-			String focusedType	= MapArea.this.setFocused( row, col );
-			String selectedType	= MapArea.this.tileset.getSelected().type();
-
-			if( "beam" == focusedType && selectedType != "field" )
-			{
-				Tile beamsource 	= MapArea.this.map.tile( row, col ).beamsource();
-
-				MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
-			} else
-			{
-				MapArea.this.updateTile( row, col );
-			}
+//			int row	= e.getY() / 32;
+//			int col = e.getX() / 32;
+//			
+//			String focusedType	= MapArea.this.setFocused( row, col );
+//			String selectedType	= MapArea.this.tileset.getSelected().type();
+//
+//			if( "beam" == focusedType && selectedType != "field" )
+//			{
+//				Tile beamsource 	= MapArea.this.map.tile( row, col ).beamsource();
+//
+//				MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
+//			} else
+//			{
+//				MapArea.this.updateTile( row, col );
+//			}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
 		{
-			int row	= e.getY() / 32;
-			int col = e.getX() / 32;
-			
-			MapArea.this.setFocused( row, col );
-			MapArea.this.updateTile( row, col );
+//			int row	= e.getY() / 32;
+//			int col = e.getX() / 32;
+//			
+//			MapArea.this.setFocused( row, col );
+//			MapArea.this.updateTile( row, col );
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
 		{
-			int row	= e.getY() / 32;
-			int col = e.getX() / 32;
-			
-			String focusedType	= MapArea.this.setFocused( row, col );
-
-			if( focusedType == "beam" || focusedType == "beamsource" )
-			{
-				Tile beamsource	= MapArea.this.map.tile( row, col );
-				
-				if( focusedType == "beam" )
-				{
-					beamsource 	= beamsource.beamsource();
-				}
-				
-				MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
-				MapArea.this.highlightBeamsource( beamsource );
-			}			
+//			int row	= e.getY() / 32;
+//			int col = e.getX() / 32;
+//			
+//			String focusedType	= MapArea.this.setFocused( row, col );
+//
+//			if( focusedType == "beam" || focusedType == "beamsource" )
+//			{
+//				Tile beamsource	= MapArea.this.map.tile( row, col );
+//				
+//				if( focusedType == "beam" )
+//				{
+//					beamsource 	= beamsource.beamsource();
+//				}
+//				
+//				MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
+//				MapArea.this.highlightBeamsource( beamsource );
+//			}			
 		}});
 	}
 	
@@ -180,14 +180,24 @@ public class MapArea
 			for( int col = startCol; col < endCol; col++ )
 			{
 				Tile tile				= this.map.tile( row, col );
+
 				BufferedImage imgTile	= tile.image();
+				
+				if( tile.type() == "beam" && tile.hidden() == true )
+				{
+					imgTile				= this.tileset.tile( 1 ).image();
+				} else 
+				{
+					imgTile				= tile.image();
+				}
+				
 				int strength			= tile.strength();
 				
 				g.drawImage( imgTile, col * 32, row * 32, this.panel );
 				
 				if( tile.focused() == true )
 				{
-					if( tile.type() == "beam" )
+					if( tile.type() == "beam" && tile.hidden() == false )
 					{
 						g.setColor( new Color( 255, 0, 0, 135 ) );
 					} else if( tile.type() == "beamsource" )
@@ -244,11 +254,11 @@ public class MapArea
 	public TileArray getMap() 	{ return this.map; 		} 
 	public String getMapName()	{ return this.mapName; 	}
 	
-	public void setMap( TileArray map )			
+	public void setMap( TileArray map, Boolean savegame )			
 	{ 
 		this.map 			= map;
 		
-		ITileState	newTile	= null;
+		ITileState newTile	= null;
 		int rows			= this.map.rows();
 		int cols			= this.map.cols();
 		
@@ -256,20 +266,22 @@ public class MapArea
 		{
 			for( int col = 0; col < cols; col++ )
 			{
-				String type	= this.map.tile( row, col ).type();
+				String type			= this.map.tile( row, col ).type();
 				
 				if( type.equals( "field" ) )
 				{
-					try 					{ newTile = new TileField(); 		}
-					catch( IOException e ) 	{ e.printStackTrace();				}
+					try 						{ newTile = new TileField(); 		}
+					catch( IOException e ) 		{ e.printStackTrace();				}
 				} else if( type.equals( "beam" ) )
 				{
-					try 					{ newTile = new TileBeam(); 		}
-					catch( IOException e ) 	{ e.printStackTrace();				}
+					try 						{ newTile = new TileBeam(); 		}
+					catch( IOException e ) 		{ e.printStackTrace();				}
+					
+					if( savegame == false  )	{ newTile.hidden( true );			}
 				} else if( type.equals( "beamsource" ) )
 				{
-					try 					{ newTile = new TileBeamsource();	}
-					catch( IOException e ) 	{ e.printStackTrace();				}
+					try 						{ newTile = new TileBeamsource(); 	}
+					catch( IOException e ) 		{ e.printStackTrace();				}
 				}
 				
 				this.map.tile( row, col ).setTileState( newTile );
