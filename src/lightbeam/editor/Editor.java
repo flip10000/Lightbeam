@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -20,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import core.GameEditor;
 import core.tilestate.TileArray;
@@ -79,7 +82,14 @@ public class Editor extends GameEditor
 
 		// Größe des Fensters setzen
 		this.frame.setSize( 800, 600 );
-		this.frame.setLocationRelativeTo( null );
+		this.frame.setLocationRelativeTo( null );		
+		
+		// Map beenden:
+		this.jfile_close.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				Editor.this.closeEditor();
+			}
+		});	
 		
 		// Map speichern:
 		this.jkarte_save.addActionListener(new ActionListener(){

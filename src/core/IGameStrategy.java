@@ -12,7 +12,9 @@ public interface IGameStrategy
 	public ImageIcon getIcon();
 	
 	public void setEditor( IGameEditor editor );
+	public void setPlayground( IGamePlayground playground );
 	public void setEditorTileset( AbstractTileSetFactory editorTileset );
+	public void setPGTileset( AbstractTileSetFactory playgroundTileset );
 	public void setGame( IGameStrategy game );
 	
 	public void openEditor();

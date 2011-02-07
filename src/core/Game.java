@@ -8,10 +8,11 @@ import core.tilefactory.AbstractTileSetFactory;
 
 public abstract class Game implements IGameStrategy
 {
-	protected static AbstractTileSetFactory editorTileset	= null;
-	protected static IGameStrategy game						= null;
-	protected IGameEditor editor							= null;
-	
+	protected static AbstractTileSetFactory editorTileset		= null;
+	protected static AbstractTileSetFactory playgroundTileset	= null;
+	protected static IGameStrategy game							= null;
+	protected IGameEditor editor								= null;
+	protected IGamePlayground playground						= null;
 	
 	public Game() 				{				}
 	public void execute() 		{				}
@@ -28,6 +29,16 @@ public abstract class Game implements IGameStrategy
 		Game.editorTileset = editorTileset;
 	}
 
+	public void setPGTileset( AbstractTileSetFactory playgroundTileset )
+	{
+		Game.playgroundTileset = playgroundTileset;
+	}
+
+	public void setPlayground( IGamePlayground playground )	
+	{ 
+		this.playground = playground;
+	}
+	
 	public void setEditor( IGameEditor editor )	
 	{ 
 		this.editor = editor;
@@ -36,6 +47,11 @@ public abstract class Game implements IGameStrategy
 	public void openEditor()
 	{
 		this.editor.showEditor();
+	}
+
+	public void openPlayground()
+	{
+		this.playground.showPlayground();
 	}
 	
 	public void closeEditor() {}

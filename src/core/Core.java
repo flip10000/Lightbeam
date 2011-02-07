@@ -62,11 +62,11 @@ public class Core implements Observer
 	public void load()
 	{
 		// Anzahl der übergebenen Spiele ermitteln:
-		int gLen	= this.pkgGames.size();
+		int gLen			= this.pkgGames.size();
 		
 		// Anzahl der Spiele an GUIScreeer zur Forschrittsanzeige übergeben:
-		Core.screener.setMaximum( gLen );
-		
+		Core.screener.setMaximum( gLen * 15 );
+
 		for( int gCnt = 0; gCnt < gLen; gCnt++ )
 		{
 			try 
@@ -74,41 +74,85 @@ public class Core implements Observer
 				// String der Klassen generieren ( Schema: Package.Class ):
 				String gamename							= this.pkgGames.get( gCnt ).toLowerCase();
 				String game								= gamename + "." + this.pkgGames.get( gCnt );
+				String playground						= gamename + ".playground.Playground";
+				String playgroundTileset				= gamename + ".playground.Tileset";
 				String editor							= gamename + ".editor.Editor";
 				String editorTileset					= gamename + ".editor.Tileset";
 				
 				// Klassen-Objekte holen:
 				Class clGame							= (Class<IGameStrategy>) Class.forName( game );
-				Class clEditor							= (Class<IGameEditor>) Class.forName( editor );				
+				Core.screener.setProgress();
+
+				Class clPlayground						= (Class<IGamePlayground>) Class.forName( playground );
+				Core.screener.setProgress();
+		
+				Class clPlaygroundTileset 				= (Class<AbstractTileSetFactory>) Class.forName( playgroundTileset );
+				Core.screener.setProgress();
+				
+				Class clEditor							= (Class<IGameEditor>) Class.forName( editor );
+				Core.screener.setProgress();
+		
 				Class clEditorTileset 					= (Class<AbstractTileSetFactory>) Class.forName( editorTileset );
-								
+				Core.screener.setProgress();
+				
 				// Konstruktor der Klassenobjekte holen:
 				java.lang.reflect.Constructor coGame			= clGame.getConstructor();
-				java.lang.reflect.Constructor coEditor			= clEditor.getConstructor();				
-				java.lang.reflect.Constructor coEditorTileset	= clEditorTileset.getConstructor();				
+				Core.screener.setProgress();
+
+				java.lang.reflect.Constructor coPlayground		= clPlayground.getConstructor();
+				Core.screener.setProgress();
+				
+				java.lang.reflect.Constructor coPGdTileset		= clEditorTileset.getConstructor();
+				Core.screener.setProgress();
+				
+				java.lang.reflect.Constructor coEditor			= clEditor.getConstructor();
+				Core.screener.setProgress();
+				
+				java.lang.reflect.Constructor coEditorTileset	= clEditorTileset.getConstructor();
+				Core.screener.setProgress();
 				
 				// Objektinstanzen erzeugen:
-				AbstractTileSetFactory instETileset	= (AbstractTileSetFactory)coEditorTileset.newInstance();
-				IGameStrategy instGame				= (IGameStrategy)coGame.newInstance();				
-				instGame.setGame( instGame );
-				instGame.setEditorTileset( instETileset );		
+				AbstractTileSetFactory instETileset		= (AbstractTileSetFactory)coEditorTileset.newInstance();
+				Core.screener.setProgress();
 				
-				IGameEditor instEditor				= (IGameEditor)coEditor.newInstance();
+				AbstractTileSetFactory instPGTileset	= (AbstractTileSetFactory)coPGdTileset.newInstance();
+				Core.screener.setProgress();
+				
+				IGameStrategy instGame					= (IGameStrategy)coGame.newInstance();
+				Core.screener.setProgress();
+				
+				instGame.setGame( instGame );
+				Core.screener.setProgress();
+
+				instGame.setPGTileset( instPGTileset );		
+				Core.screener.setProgress();
+
+				instGame.setEditorTileset( instETileset );		
+				Core.screener.setProgress();
+				
+				IGamePlayground instPlayground			= (IGamePlayground)coPlayground.newInstance();
+				Core.screener.setProgress();
+				
+				IGameEditor instEditor					= (IGameEditor)coEditor.newInstance();
+				Core.screener.setProgress();
+
+				instGame.setPlayground( instPlayground );
+				Core.screener.setProgress();
+				
 				instGame.setEditor( instEditor );
+				Core.screener.setProgress();
 				
 				// Hinzufügen des instanziierten Spiels/Editors: 
 				this.games.add( instGame );
-//				this.editors.add( instEditor );
-//				this.editorTileset.add( instETileset );
+				Core.screener.setProgress();
 				
 				// Hinzufügen des Spiel-Icons:
 				this.gamesIcons.add( instGame.getIcon() );
+				Core.screener.setProgress();
 				
 				// Hinzufügen des Spiele-Namens:
 				this.gamesNames.add( instGame.getName() );
-				
-				// Fortschritt im Screener setzen:
-				Core.screener.setProgress( gCnt + 1 );
+				Core.screener.setProgress();
 			} catch( Exception e ) 
 			{
 				// TODO: Fehler als Inscreen-Nachricht ausgeben:

@@ -5,12 +5,11 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 import core.Core;
 import core.Game;
@@ -42,15 +41,12 @@ public class Lightbeam extends Game
 		this.panel			= new ImagePanel( "./src/fx/Lightbeam/bg/laser.jpg" );
 		
 		this.frame.setTitle( "Hauptmenü" );
+		this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.frame.setAlwaysOnTop(true);
 		this.frame.setLayout( new BorderLayout() );
 		this.frame.setResizable( false );
 		this.frame.setSize( 406, 200 );
-		this.frame.addWindowListener(new WindowAdapter(){
-			public void windowClosing( WindowEvent e ) {
-				Lightbeam.this.closeGUIMenu();
-			}
-		});
-
+		
 		this.panel.setSize( this.frame.getWidth(), this.frame.getHeight() );
 		
 		JButton playGame 	= new JButton( "Spiel spielen" );
@@ -62,6 +58,7 @@ public class Lightbeam extends Game
 		playGame.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e) 
 		{
 			Lightbeam.this.closeGUIMenu();
+			Lightbeam.this.openPlayground();
 		}});		
 
 		JButton createGame	= new JButton( "Spiel erstellen" );
@@ -94,8 +91,6 @@ public class Lightbeam extends Game
 		this.panel.add( closeGame, null );
 		
 		this.frame.add( panel, BorderLayout.CENTER );
-		
-		// Screener mittig anzeigen:
 	}
 	
 	public void closeEditor()
@@ -107,7 +102,7 @@ public class Lightbeam extends Game
 	{
 		// Screener mittig anzeigen:
 		this.frame.setLocationRelativeTo( null );
-		this.frame.setVisible( true );
+		this.frame.setVisible( true );		
 		this.frame.setFocusable( true );
 	}
 	

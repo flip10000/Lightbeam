@@ -261,8 +261,6 @@ public class GUIScreener extends JWindow implements Runnable
 			btnGame.setBounds( ( cntIco *  100 ) + ( cntIco + 1 ) * this.marginLeft, g_top, 100, 80 );
 			btnGame.setDoubleBuffered( true );
 			
-			
-			
 			// Hover-Event (Hier MouseEnter) erzeugen:
 			btnGame.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
 			{
@@ -293,7 +291,7 @@ public class GUIScreener extends JWindow implements Runnable
 		// ScreenPanel neu zeichnen:
 		this.screenPanel.repaint();
 		
-//		6.) Verschwinden der Progressbar und Einfügen des Beenden-Buttons
+		// 6) Verschwinden der Progressbar und Einfügen des Beenden-Buttons
 		progressBar.setVisible(false);
 		progressLabel.setVisible(false);
 		btnExit.setVisible(true);
@@ -388,7 +386,7 @@ public class GUIScreener extends JWindow implements Runnable
 	public void setMaximum( int length ) { this.progressBar.setMaximum( length ); }
 	
 	// Den aktuelle Fortschritt anzeigen:
-	public void setProgress( int num )	{ this.progressBar.setValue( num ); }
+	public void setProgress()			{ this.progressBar.setValue( this.progressBar.getValue() + 1 ); }
 	
 	// Game-Label auf Defaultwert zurücksetzen:
 	private void clearGameinfo() { this.gameLabel.setText( this.defaultInfo ); }

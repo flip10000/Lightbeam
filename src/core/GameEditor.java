@@ -3,6 +3,7 @@ package core;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 public class GameEditor extends GameObjects implements IGameEditor 
 {
@@ -11,13 +12,16 @@ public class GameEditor extends GameObjects implements IGameEditor
 	public GameEditor()
 	{
 		// Fenster schliessen
-		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
-		    public void windowClosing(WindowEvent winEvt) {
-		        // Perhaps ask user if they want to save any unsaved files first.
-				GameEditor.this.frame.setVisible( false );
-				GameEditor.this.game.closeEditor();
-		    }
-		});	
+		GameEditor.this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+//		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
+//		    public void windowClosing(WindowEvent winEvt) {}
+//		});	
+	}
+
+	public void closeEditor()
+	{		
+		GameEditor.this.frame.setVisible( false );
+		GameEditor.this.game.closeEditor();
 	}
 	
 	public void showEditor() 
