@@ -16,7 +16,8 @@ public class Tile implements Serializable
 	private int row								= 0;
 	private int col								= 0;
 	private transient BufferedImage image		= null;
-	private boolean focused						= false;
+	private transient boolean focused			= false;
+	private boolean hidden						= false;
 
 	public final static int HORIZONTAL		= 0;
 	public final static int VERTICAL		= 1;
@@ -34,6 +35,7 @@ public class Tile implements Serializable
 		this.col		= col;
 	}
 	
+	// Seta - Methoden
 	public void strength( int strength ) 			{ this.strength 	= strength;		}
 	public void setDirection( int axis )			{ this.axis			= axis;			}
 	public void setBeamMaster( Tile beamsource )
@@ -45,10 +47,14 @@ public class Tile implements Serializable
 	{ 
 		this.type		= tileState.type();
 		this.image		= tileState.image();
+		this.hidden		= tileState.hidden();
 	}
+	
+	public void hidden( boolean hidden )		{ this.hidden = hidden;					}
 	
 	public void focus( boolean blFocus )		{ this.focused = blFocus;				}
 	
+	// Geta - Methoden
 	public int direction()						{ return this.axis;						}
 	public Tile beamsource()					{ return this.parent; 					}
 	public Tile parent()						{ return this.parent; 					}
@@ -58,4 +64,5 @@ public class Tile implements Serializable
 	public BufferedImage image()				{ return this.image;					}
 	public int strength()						{ return this.strength;					}
 	public boolean focused()					{ return this.focused;					}
+	public boolean hidden()						{ return this.hidden;					}
 }
