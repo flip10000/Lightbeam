@@ -33,10 +33,12 @@ public class Playground extends GamePlayground
 	
 	private JMenu jfile						= new JMenu( "Datei" );
 	
-	private JMenuItem jkarte				= new JMenu( "Karte" );
-	private JMenuItem jkarte_new			= new JMenuItem( "Neu" );
-	private JMenuItem jkarte_open			= new JMenuItem( "Öffnen" );
-	private JMenuItem jkarte_save			= new JMenuItem( "Speichern" );
+	private JMenuItem jsavegame				= new JMenu( "Spielstand" );
+	private JMenuItem jsavegame_load		= new JMenuItem( "Neu" );
+	private JMenuItem jsavegame_save		= new JMenuItem( "Speichern" );
+	
+	private JMenuItem jkarte				= new JMenuItem( "Karte öffnen" );
+	
 	private JMenuItem jfile_close			= new JMenuItem( "Beenden" );
 	
 	private int initRows					= 10;
@@ -47,11 +49,11 @@ public class Playground extends GamePlayground
 		//Setzen eines Fenstertitels
 		this.frame.setTitle( "Spiel - spielen" );
 		
-        this.jkarte.add( this.jkarte_new );
-        this.jkarte.add( this.jkarte_open );
-        this.jkarte.add( this.jkarte_save );
+        this.jsavegame.add( this.jsavegame_load );
+        this.jsavegame.add( this.jsavegame_save );
         
-        this.jfile.add( this.jkarte );
+        this.jfile.add( this.jsavegame );
+        this.jfile.add( this.jkarte );        
         this.jfile.add( this.jfile_close );
         
         this.menuBar.add( this.jfile );
@@ -59,7 +61,7 @@ public class Playground extends GamePlayground
 		this.mapArea				= new MapArea( this.tileset, this.initRows, this.initCols );		
 		
 		this.left_panel.setLayout( null );
-		this.left_panel.setPreferredSize( new Dimension( 200, 200 ) );
+		this.left_panel.setPreferredSize( new Dimension( 100, 200 ) );
 
 		this.frame.setLayout( new BorderLayout() );
  
@@ -70,38 +72,70 @@ public class Playground extends GamePlayground
 		// Größe des Fensters setzen
 		this.frame.setSize( 800, 600 );
 		this.frame.setLocationRelativeTo( null );
-		
-		// Map speichern:
-		this.jkarte_save.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Playground.this.saveMap();
-			}
-		});
-		
+
 		// Map laden/öffnen:
-		this.jkarte_open.addActionListener(new ActionListener(){
+		this.jkarte.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				Playground.this.loadMap();
 			}
 		});
 		
-		// Neue map ertellen:
-		this.jkarte_new.addActionListener(new ActionListener(){
+		// Spiel speichern:
+		this.jsavegame_save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				Playground.this.newMap();
+				Playground.this.saveGame();
+			}
+		});
+		
+		// Spiel laden:
+		this.jsavegame_load.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				Playground.this.loadGame();
 			}
 		});		
 	}
 	
-//	public void show() 					{ this.frame.setVisible( true ); 	}
 	public JFrame getFrame()			{ return this.frame;				}
 	
 	public MapSettings getMapSettings()	{ return this.mapsettings;			}
 	public TilePalette getPalette() 	{ return this.palette;				}
 	public JPanel getPanel() 			{ return this.left_panel;			}
-//	public TileSet getTileset()			{ return this.tileSet;				}
 	
-	private void saveMap()
+	private void loadMap()
+	{
+		try {
+			JFileChooser loadDialog	= new JFileChooser();
+			
+			loadDialog.showOpenDialog( this.frame );
+			
+			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
+			BufferedInputStream buf	= new BufferedInputStream( file );
+			ObjectInputStream read 	= new ObjectInputStream( buf );
+ 
+			TileArray map 			= (TileArray) read.readObject();
+			String 	mapName			= (String) read.readObject();
+
+			this.mapArea.setMap( map, false );
+			this.mapArea.setMapName( mapName );
+			this.mapArea.reload();
+			
+			read.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
+	}
+	
+	private void loadGame()
+	{
+		this.mapArea.resetMap( this.initRows, this.initCols );
+		this.mapsettings.resetSettings( this.initRows, this.initCols );
+	}	
+	
+	private void saveGame()
 	{
 		try 
 		{
@@ -122,40 +156,6 @@ public class Playground extends GamePlayground
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	private void loadMap()
-	{
-		try {
-			JFileChooser loadDialog	= new JFileChooser();
-			
-			loadDialog.showOpenDialog( this.frame );
-			
-			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
-			BufferedInputStream buf	= new BufferedInputStream( file );
-			ObjectInputStream read 	= new ObjectInputStream( buf );
- 
-			TileArray map 			= (TileArray) read.readObject();
-			String 	mapName			= (String) read.readObject();
-
-			this.mapArea.setMap( map );
-			this.mapArea.setMapName( mapName );
-			this.mapArea.reload();
-			
-			read.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}				
-	}
-	
-	private void newMap()
-	{
-		this.mapArea.resetMap( this.initRows, this.initCols );
-		this.mapsettings.resetSettings( this.initRows, this.initCols );
 	}
 	
 	public JFrame getWindow()	{ return this.frame;	}
