@@ -29,10 +29,6 @@ public class TileArray implements Serializable
 		this.cols	= cols;
 	}
 	
-//	public void setTile( int row, int col, Tile tile )	{ this.tiles[row][col]	= tile; }
-	
-//	public Tile getTile( int row, int col )				{ return this.tiles[row][col]; }
-	
 	public void setSize( int rows )
 	{
 		Tile tmpArray[][] = new Tile[rows][];
@@ -148,37 +144,6 @@ public class TileArray implements Serializable
 		}
 		
 		this.tiles	= tmpTiles;
-	}
-	
-	public void setSize( int rows, int cols )
-	{
-		Tile tmpArray[][] = new Tile[rows][];
-		
-		for( int i = 0; i < rows; i++ )
-		{
-			tmpArray[i]	= new Tile[cols];
-			
-//			for( int j = 0; j < cols; j++ ) { tmpArray[i][j] = new int[this.keys]; }
-		}
-		
-		int minRows		= Math.min( this.rows, rows );
-		int minCols 	= Math.min( this.cols, cols );
-		
-		for( int i = 0; i < minRows; i++ )
-		{
-			for( int j = 0; j < minCols; j++ )
-			{
-//				for( int k = 0; k < this.keys; k++ )
-//				{
-//					tmpArray[i][j][k]	= this.tArray[i][j][k];
-//				}
-			}
-		}
-		
-		this.cols	= cols;
-		this.rows	= rows;
-		
-		this.tiles	= tmpArray;
 	}
 
 	public int rows() 						{ return this.tiles.length; 		}
