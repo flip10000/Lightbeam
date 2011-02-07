@@ -21,7 +21,7 @@ public abstract class Game implements IGameStrategy
 
 	public void setGame( IGameStrategy game  )
 	{
-		this.game	= game; 
+		Game.game	= game; 
 	}
 	
 	public void setEditorTileset( AbstractTileSetFactory editorTileset )

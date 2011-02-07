@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -14,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Observer;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -22,7 +19,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 
 import core.GameEditor;
 import core.tilestate.TileArray;
@@ -51,7 +47,7 @@ public class Editor extends GameEditor
 	public Editor()
 	{
 		//Setzen eines Fenstertitels
-		this.frame.setTitle( "Karteneditor" );
+		this.frame.setTitle( "Karte - erstellen/verändern" );
 		
         this.jkarte.add( this.jkarte_new );
         this.jkarte.add( this.jkarte_open );
@@ -132,7 +128,7 @@ public class Editor extends GameEditor
 			FileOutputStream file		= new FileOutputStream( saveDialog.getSelectedFile() );
 			BufferedOutputStream buf	= new BufferedOutputStream( file );
 			ObjectOutputStream write 	= new ObjectOutputStream( buf );
-			
+
 			write.writeObject( this.mapArea.getMap() );
 			write.writeObject( this.mapArea.getMapName() );
 

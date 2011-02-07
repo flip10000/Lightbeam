@@ -10,7 +10,7 @@ import custom.objects.ImgResize;
 
 
 
-public class TileField extends AbstractTileSet 
+public class TileField extends AbstractTileSet
 {
 	public TileField() throws IOException	
 	{

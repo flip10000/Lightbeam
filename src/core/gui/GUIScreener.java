@@ -21,6 +21,8 @@ import custom.components.ImagePanel;
 
 public class GUIScreener extends JWindow implements Runnable
 {
+	private static final long serialVersionUID = -1844666854822869514L;
+
 	// Instanzvariable auf sich selbst. Es darf nur ein Screener erzeugt werden,
 	// da auch nur einer benötigt wird!
 	private static GUIScreener screener		= new GUIScreener();

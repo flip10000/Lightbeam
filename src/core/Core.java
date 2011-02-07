@@ -18,13 +18,10 @@ public class Core implements Observer
 	// ArrayList der im Konstruktor übergebenen Spiele ( =Packagename des jew. Spiels )
 	// bereitstellen:
 	private ArrayList<String> pkgGames				= new ArrayList<String>();
-	private ArrayList<String> pkgEditors			= new ArrayList<String>();
 	
 	// ArrayList für die per Class-Reflection erzeugten Spiel-Instanzen
 	// bereitstellen:
 	private ArrayList<IGameStrategy> games						= new ArrayList<IGameStrategy>();
-	private ArrayList<IGameEditor>	editors						= new ArrayList<IGameEditor>();
-	private ArrayList<AbstractTileSetFactory> editorTileset		= new ArrayList<AbstractTileSetFactory>();
 	
 	// ArrayList der Spiele-Icons für den Screener bereitstellen:
 	private ArrayList<ImageIcon> gamesIcons			= new ArrayList<ImageIcon>();
@@ -59,6 +56,7 @@ public class Core implements Observer
 	public void addGame( String pkgGame ) { this.pkgGames.add( pkgGame ); }
 	
 	// Laden der Spiele-Packages per Class-Reflection:
+	@SuppressWarnings({ "unchecked", "unchecked", "unchecked", "unchecked" })
 	public void load()
 	{
 		// Anzahl der übergebenen Spiele ermitteln:
@@ -86,6 +84,7 @@ public class Core implements Observer
 				Class clPlayground						= (Class<IGamePlayground>) Class.forName( playground );
 				Core.screener.setProgress();
 		
+				@SuppressWarnings("unused")
 				Class clPlaygroundTileset 				= (Class<AbstractTileSetFactory>) Class.forName( playgroundTileset );
 				Core.screener.setProgress();
 				

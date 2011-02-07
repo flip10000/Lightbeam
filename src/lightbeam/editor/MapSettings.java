@@ -139,8 +139,6 @@ public class MapSettings extends GameObjects
 	
 	public JPanel panel() { return this.panelSettings; }
 	
-//	public int getTileID() 		{ return this.curTileID; 				}
-//	public void setTile() 		{ this.tileset.setTileState( this ); 	}
 	public void resetSettings( int rows, int cols )	
 	{
 		this.oldTileState	= null;
@@ -149,6 +147,4 @@ public class MapSettings extends GameObjects
 		this.txtRows.setText( rows + "" );
 		this.txtRows.setText( cols + "" );
 	}
-	
-	private void resetTile() 	{ this.curTileState = this.oldTileState;	}
 }

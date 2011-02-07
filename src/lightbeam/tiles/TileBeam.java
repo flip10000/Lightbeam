@@ -11,7 +11,7 @@ import custom.objects.ImgResize;
 
 
 
-public class TileBeam extends AbstractTileSet implements ITileState 
+public class TileBeam extends AbstractTileSet implements ITileState
 {
 	public TileBeam() throws IOException	
 	{

@@ -1,7 +1,5 @@
 package core;
 
-import java.awt.event.WindowEvent;
-
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -13,9 +11,6 @@ public class GameEditor extends GameObjects implements IGameEditor
 	{
 		// Fenster schliessen
 		GameEditor.this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-//		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
-//		    public void windowClosing(WindowEvent winEvt) {}
-//		});	
 	}
 
 	public void closeEditor()
