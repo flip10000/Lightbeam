@@ -22,6 +22,7 @@ import core.tilestate.Tile;
 import core.tilestate.TileArray;
 
 import lightbeam.tiles.TileBeam;
+import lightbeam.tiles.TileBeamsource;
 import lightbeam.tiles.TileField;
 
 public class MapArea
@@ -243,7 +244,39 @@ public class MapArea
 	public TileArray getMap() 	{ return this.map; 		} 
 	public String getMapName()	{ return this.mapName; 	}
 	
-	public void setMap( TileArray map )			{ this.map = map; 			}
+	public void setMap( TileArray map )			
+	{ 
+		this.map 			= map;
+		
+		ITileState	newTile	= null;
+		int rows			= this.map.rows();
+		int cols			= this.map.cols();
+		
+		for( int row = 0; row < rows; row++ )
+		{
+			for( int col = 0; col < cols; col++ )
+			{
+				String type	= this.map.tile( row, col ).type();
+				
+				if( type.equals( "field" ) )
+				{
+					try 					{ newTile = new TileField(); 		}
+					catch( IOException e ) 	{ e.printStackTrace();				}
+				} else if( type.equals( "beam" ) )
+				{
+					try 					{ newTile = new TileBeam(); 		}
+					catch( IOException e ) 	{ e.printStackTrace();				}
+				} else if( type.equals( "beamsource" ) )
+				{
+					try 					{ newTile = new TileBeamsource();	}
+					catch( IOException e ) 	{ e.printStackTrace();				}
+				}
+				
+				this.map.tile( row, col ).setTileState( newTile );
+			}
+		}
+	}
+	
 	public void setMapName( String mapName )	{ this.mapName = mapName; 	}
 	public void reload()						{ this.scroll.repaint();	}
 	
