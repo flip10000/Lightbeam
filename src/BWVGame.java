@@ -11,7 +11,7 @@ public class BWVGame
 
 		// Spielepackage hinzufügen ( hier mal zum Test 8 x Lightbeam ):
 		gameCore.addGame( "Lightbeam" );
-//		gameBuilder.addGame( "Lightbeam" );
+		gameCore.addGame( "Lightbeam" );
 //		gameBuilder.addGame( "Lightbeam" );
 //		gameBuilder.addGame( "Lightbeam" );
 //		gameBuilder.addGame( "Lightbeam" );
