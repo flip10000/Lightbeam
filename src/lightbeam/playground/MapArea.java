@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -75,6 +74,10 @@ public class MapArea
 		
 		this.panel.addMouseListener(new MouseAdapter(){public void mouseClicked( MouseEvent e ) 
 		{
+		}});
+		
+		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
+		{
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
 
@@ -82,15 +85,6 @@ public class MapArea
 			{
 				MapArea.this.setPossibleBeams( row, col );
 			}
-		}});
-		
-		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
-		{
-//			int row	= e.getY() / 32;
-//			int col = e.getX() / 32;
-//			
-//			MapArea.this.setFocused( row, col );
-//			MapArea.this.updateTile( row, col );
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
@@ -126,10 +120,6 @@ public class MapArea
 				
 				g.drawImage( imgTile, col * 32, row * 32, this.panel );
 				g.setColor( tile.color() );
-				
-				// beamsource
-//				g.setColor( new Color( 3, 115, 210, 135 ) );
-					
 				g.fillRect( ( col * 32 ), ( row * 32 ), 32, 32 );				
 				
 				// Ich denke max 999 Beams/Beamsource sollten reichen!
@@ -300,10 +290,149 @@ public class MapArea
 	
 	private void setPossibleBeams( int row, int col )
 	{
+		this.dehighlightPossibleBeams();
+		
 		Tile source		= this.map.tile( row, col );
-		int strength	= source.strength();
+		
+		int toLeft		= this.getLeftPossibleBeams( source );
+		int toTop		= this.getTopPossibleBeams( source );
+		int toRight		= this.getRightPossibleBeams( source );
+		int toBottom	= this.getBottomPossibleBeams( source );
+
+		for( int cntCol = col; cntCol > toLeft; cntCol-- )
+		{
+			highlightPossibleBeams( this.map.tile( row, cntCol ) );
+		}
+		
+		for( int cntRow = row; cntRow > toTop; cntRow-- )
+		{
+			highlightPossibleBeams( this.map.tile( cntRow, col ) );
+		}
+		
+		for( int cntCol = col; cntCol < toRight; cntCol++ )
+		{
+			highlightPossibleBeams( this.map.tile( row, cntCol ) );
+		}
+		
+		for( int cntRow = row; cntRow < toBottom; cntRow++ )
+		{
+			highlightPossibleBeams( this.map.tile( cntRow, col ) );
+		}
 		
 		
+		this.scroll.repaint();
+	}
+	
+	private int getLeftPossibleBeams( Tile beamsource )
+	{
+		int bRow		= beamsource.row();
+		int bCol		= beamsource.col() - 1;
+		int bStrength	= beamsource.strength();
 		
+		int min 		= ( ( bCol - bStrength ) > 0 )? bCol - bStrength : - 1;
+		
+		for( int col = bCol; col > min; col-- )
+		{
+			Tile crossing	= this.map.tile( bRow, col );
+			
+			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) )
+			{
+				return bCol - ( bCol - col ) - 1;
+			}
+		}
+		
+		return min;
+	}
+	
+	private int getTopPossibleBeams( Tile beamsource )
+	{
+		int bRow		= beamsource.row() - 1;
+		int bCol		= beamsource.col();		
+		int bStrength	= beamsource.strength();
+		
+		int min			= ( bRow - bStrength > 0 )? bRow - bStrength : - 1;
+		
+		for( int row = bRow; row > min; row-- )
+		{
+			Tile crossing	= this.map.tile( row, bCol );
+			
+			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) ) 
+			{
+				return bRow - ( bRow - row ) - 1; 
+			}
+		}
+		
+		return min;	
+	}
+	
+	private int getRightPossibleBeams( Tile beamsource )
+	{
+		int bRow		= beamsource.row();
+		int bCol		= beamsource.col() + 1;		
+		int bStrength	= beamsource.strength();
+		
+		int max			= ( bCol + bStrength < this.map.cols() )? bCol + bStrength : this.map.cols();
+		
+		for( int col = bCol; col < max; col++ )
+		{
+			Tile crossing	= this.map.tile( bRow, col );
+			
+			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) ) 
+			{
+				return col; 
+			}
+		}
+		
+		return max;	
+	}
+	
+	private int getBottomPossibleBeams( Tile beamsource )
+	{
+		int bRow		= beamsource.row() + 1;
+		int bCol		= beamsource.col();		
+		int bStrength	= beamsource.strength();
+		
+		int max			= ( bRow + bStrength < this.map.rows() )? bRow + bStrength : this.map.rows();
+		
+		for( int row = bRow; row < max; row++ )
+		{
+			Tile crossing	= this.map.tile( row, bCol );
+			
+			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) ) 
+			{
+				return row; 
+			}
+		}
+		
+		return max;	
+	}
+	
+	private void highlightPossibleBeams( Tile pBeam )
+	{
+		if( pBeam.type() == "field" )
+		{
+			pBeam.color( MapArea.CBLUE );
+			this.m.addDirtyRegion( this.scroll, pBeam.row() * 32, pBeam.col() * 32, 32, 32 );
+		} else if( pBeam.type() == "beam" && pBeam.hidden() == true )
+		{
+			pBeam.color( MapArea.CBLUE );
+			this.m.addDirtyRegion( this.scroll, pBeam.row() * 32, pBeam.col() * 32, 32, 32 );
+		}
+	}
+	
+	private void dehighlightPossibleBeams()
+	{
+		int rows	= this.map.rows();
+		int cols	= this.map.cols();
+		
+		for( int row = 0; row < rows; row++ )
+		{
+			for( int col = 0; col < cols; col++ )
+			{
+				Tile tile	= this.map.tile( row, col );
+				
+				if( !tile.type().equals( "beamsource" ) ) { tile.color( CTRANSPARENT ); }
+			}
+		}
 	}
 }
