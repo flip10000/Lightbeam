@@ -2,6 +2,6 @@ package core;
 
 public interface IGamePlayground 
 {
-	public void showPlayground();
+	public void openPlayground();
 	public void closePlayground();
 }
