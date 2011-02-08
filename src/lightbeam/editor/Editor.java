@@ -58,9 +58,9 @@ public class Editor extends GameEditor
         
         this.menuBar.add( this.jfile );
         		
-		this.mapArea				= new MapArea( this.tileset, this.initRows, this.initCols );		
+		this.mapArea				= new MapArea( this.eTileset, this.initRows, this.initCols );		
 		this.mapsettings			= new MapSettings( this.mapArea, this.initRows, this.initCols );		
-		this.palette				= new TilePalette( this.tileset );
+		this.palette				= new TilePalette( this.eTileset );
 		
 		this.palette.setBounds( new Rectangle( 5, this.mapsettings.panel().getBounds().y + this.mapsettings.panel().getBounds().height, 128, 128 ) );
 
@@ -80,7 +80,7 @@ public class Editor extends GameEditor
 		this.frame.setSize( 800, 600 );
 		this.frame.setLocationRelativeTo( null );		
 		
-		// Map beenden:
+		// Editor schlieﬂen:
 		this.jfile_close.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				Editor.this.closeEditor();
