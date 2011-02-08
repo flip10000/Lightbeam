@@ -72,15 +72,6 @@ public class MapSettings extends GameObjects
 		btnRowsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
 		btnRowsUp.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y, btnWidth, btnHeight );
 		btnRowsUp.addMouseListener( new MouseAdapter(){public void mouseReleased(MouseEvent e){
-			oldTileState	= MapSettings.this.tileset.getSelected();
-			curTileState	= MapSettings.this.tileset.tile( 1 );
-
-			MapSettings.this.tileset.setSelected( curTileState );
-			MapSettings.this.maparea.addRow();
-			MapSettings.this.tileset.setSelected( oldTileState );
-			
-			int amountRows	= Integer.parseInt( MapSettings.this.txtRows.getText() ) + 1;
-			MapSettings.this.txtRows.setText( amountRows + "" );
 		}});
 
 		// Spielfeldzeile entfernen:
@@ -88,37 +79,18 @@ public class MapSettings extends GameObjects
 		btnRowsDown.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnDown.png" ) );
 		btnRowsDown.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y + txtRows.getBounds().height - btnHeight, btnWidth, btnHeight );
 		btnRowsDown.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
-			if( MapSettings.this.maparea.delRow() == true )
-			{
-				int amountRows	= Integer.parseInt( MapSettings.this.txtRows.getText() ) - 1;
-				MapSettings.this.txtRows.setText( amountRows + "" );
-			}
 		}});
 
 		JButton btnColsUp	= new JButton();
 		btnColsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
 		btnColsUp.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y, btnWidth, btnHeight );
 		btnColsUp.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
-			oldTileState	= MapSettings.this.tileset.getSelected();
-			curTileState	= MapSettings.this.tileset.tile( 1 );
-			
-			MapSettings.this.tileset.setSelected( curTileState );
-			MapSettings.this.maparea.addCol();
-			MapSettings.this.tileset.setSelected( oldTileState );
-			
-			int amountCols	= Integer.parseInt( MapSettings.this.txtCols.getText() ) + 1;
-			MapSettings.this.txtCols.setText( amountCols + "" );
 		}});
 
 		JButton btnColsDown	= new JButton();
 		btnColsDown.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnDown.png" ) );
 		btnColsDown.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y + txtRows.getBounds().height - btnHeight, btnWidth, btnHeight );
 		btnColsDown.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
-			if( MapSettings.this.maparea.delCol() == true )
-			{
-				int amountCols	= Integer.parseInt( MapSettings.this.txtCols.getText() ) - 1;
-				MapSettings.this.txtCols.setText( amountCols + "" );
-			}
 		}});
 		
 		int iWidth	= margin_left + lblWidth + txtWidth + btnWidth + margin_right;
