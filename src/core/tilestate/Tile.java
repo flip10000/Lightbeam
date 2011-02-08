@@ -1,5 +1,6 @@
 package core.tilestate;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ public class Tile implements Serializable
 	private Tile parent							= null;
 	private int row								= 0;
 	private int col								= 0;
+	private Color color							= new Color( 255, 255, 255, 0 );
 	private transient BufferedImage image		= null;
 	private transient boolean focused			= false;
 	private boolean hidden						= false;
@@ -53,6 +55,8 @@ public class Tile implements Serializable
 	public void hidden( boolean hidden )		{ this.hidden = hidden;					}
 	
 	public void focus( boolean blFocus )		{ this.focused = blFocus;				}
+	public void color( Color color )			{ this.color = color;					}
+	public void image( BufferedImage image )	{ this.image = image;					}
 	
 	// Geta - Methoden
 	public int direction()						{ return this.axis;						}
@@ -65,4 +69,5 @@ public class Tile implements Serializable
 	public int strength()						{ return this.strength;					}
 	public boolean focused()					{ return this.focused;					}
 	public boolean hidden()						{ return this.hidden;					}
+	public Color color()						{ return this.color;					}
 }
