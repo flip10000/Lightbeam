@@ -28,7 +28,7 @@ import lightbeam.tiles.TileField;
 
 public class MapArea
 {
-	private static final long serialVersionUID = 2L;
+//	private static final long serialVersionUID = 2L; // TEST
 	private AbstractTileSetFactory tileset		= null;
 	private JPanel panel						= null;
 	private JScrollPane scroll					= new JScrollPane();
