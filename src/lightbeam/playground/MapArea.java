@@ -33,7 +33,8 @@ public class MapArea
 	
 	final static Color CBLUE					= new Color( 3, 115, 210, 110 );
 	final static Color CRED						= new Color( 255, 0, 0, 100 );
-	final static Color CTRANSPARENT				= new Color( 255, 255, 255, 0 );
+	final static Color CGREEN					= new Color( 76, 188, 64, 100 );
+	final static Color CTRANSPARENT				= new Color( 255, 255, 255, 0 );	
 		
 	final static Cursor CURSOR_HAND				= new Cursor( Cursor.HAND_CURSOR );
 	final static Cursor CURSOR_DEFAULT			= new Cursor( Cursor.DEFAULT_CURSOR );
@@ -78,21 +79,23 @@ public class MapArea
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
 		{
-			int row	= e.getY() / 32;
-			int col = e.getX() / 32;
-
-			if( MapArea.this.isBeamsource( row, col ) )
-			{
-				MapArea.this.setPossibleBeams( row, col );
-			}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
 		{
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
-
-			MapArea.this.paintFocused( row, col );
+			
+			if( MapArea.this.isInArea( row, col ) )
+			{
+				MapArea.this.dehighlightPossibleBeams();
+				MapArea.this.paintFocused( row, col );
+				
+				if( MapArea.this.isBeamsource( row, col ) )
+				{
+					MapArea.this.setPossibleBeams( row, col );
+				}
+			}
 		}});
 	}
 	
@@ -271,7 +274,7 @@ public class MapArea
 				this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
 			} else if( tile.type() == "beamsource" )
 			{
-				tile.color( CRED );
+				tile.color( CGREEN );
 				
 				this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
 			}
@@ -290,8 +293,6 @@ public class MapArea
 	
 	private void setPossibleBeams( int row, int col )
 	{
-		this.dehighlightPossibleBeams();
-		
 		Tile source		= this.map.tile( row, col );
 		
 		int toLeft		= this.getLeftPossibleBeams( source );
@@ -318,7 +319,6 @@ public class MapArea
 		{
 			highlightPossibleBeams( this.map.tile( cntRow, col ) );
 		}
-		
 		
 		this.scroll.repaint();
 	}
