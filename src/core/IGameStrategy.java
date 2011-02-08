@@ -16,7 +16,15 @@ public interface IGameStrategy
 	public void setEditorTileset( AbstractTileSetFactory editorTileset );
 	public void setPGTileset( AbstractTileSetFactory playgroundTileset );
 	public void setGame( IGameStrategy game );
+
+	public void openGameGUI();	
+	public void closeGameGUI();
+	public void exitGameGUI();
 	
 	public void openEditor();
 	public void closeEditor();
+	
+	public void openPlayground();
+	public void closePlayground();
+	
 }
