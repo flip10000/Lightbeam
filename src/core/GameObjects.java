@@ -4,12 +4,14 @@ import core.tilefactory.AbstractTileSetFactory;
 
 public class GameObjects
 {
-	protected AbstractTileSetFactory tileset	= null;
+	protected AbstractTileSetFactory eTileset	= null;
+	protected AbstractTileSetFactory gTileset	= null;
 	protected IGameStrategy game				= null;
 	
 	public GameObjects()
 	{
-		this.tileset	= Game.getEditorTileset();
+		this.eTileset	= Game.getEditorTileset();
+		this.gTileset	= Game.getPlaygroundTileset();
 		this.game		= Game.getGame();
 	}
 }
