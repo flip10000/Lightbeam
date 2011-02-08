@@ -72,12 +72,12 @@ public class MapSettings extends GameObjects
 		btnRowsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
 		btnRowsUp.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y, btnWidth, btnHeight );
 		btnRowsUp.addMouseListener( new MouseAdapter(){public void mouseReleased(MouseEvent e){
-			oldTileState	= MapSettings.this.tileset.getSelected();
-			curTileState	= MapSettings.this.tileset.tile( 1 );
+			oldTileState	= MapSettings.this.eTileset.getSelected();
+			curTileState	= MapSettings.this.eTileset.tile( 1 );
 
-			MapSettings.this.tileset.setSelected( curTileState );
+			MapSettings.this.eTileset.setSelected( curTileState );
 			MapSettings.this.maparea.addRow();
-			MapSettings.this.tileset.setSelected( oldTileState );
+			MapSettings.this.eTileset.setSelected( oldTileState );
 			
 			int amountRows	= Integer.parseInt( MapSettings.this.txtRows.getText() ) + 1;
 			MapSettings.this.txtRows.setText( amountRows + "" );
@@ -99,12 +99,12 @@ public class MapSettings extends GameObjects
 		btnColsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
 		btnColsUp.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y, btnWidth, btnHeight );
 		btnColsUp.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
-			oldTileState	= MapSettings.this.tileset.getSelected();
-			curTileState	= MapSettings.this.tileset.tile( 1 );
+			oldTileState	= MapSettings.this.eTileset.getSelected();
+			curTileState	= MapSettings.this.eTileset.tile( 1 );
 			
-			MapSettings.this.tileset.setSelected( curTileState );
+			MapSettings.this.eTileset.setSelected( curTileState );
 			MapSettings.this.maparea.addCol();
-			MapSettings.this.tileset.setSelected( oldTileState );
+			MapSettings.this.eTileset.setSelected( oldTileState );
 			
 			int amountCols	= Integer.parseInt( MapSettings.this.txtCols.getText() ) + 1;
 			MapSettings.this.txtCols.setText( amountCols + "" );
