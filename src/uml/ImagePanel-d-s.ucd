@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="ImagePanel-d-s" id="{UMLID=_l2wRlDOkEeCCyLthuspy8g,JavaID=custom.components}" metadata="uml2-1.0" initialized="true" tag="10" key="3230303730363239204C696768746265616D">
+  <children xsi:type="editmodel:ClassEditModel" name="ImagePanel" location="50,50" size="138,119" timstampe="8" stereotype="" id="{UMLID=_l2wRlTOkEeCCyLthuspy8g,JavaID=custom.components/ImagePanel}" runTimeClassModel="paintComponent(Ljava.awt.Graphics;),img,ImagePanel(Ljava.awt.Image;),ImagePanel(Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="45,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="img" size="45,16" id="{UMLID=_mE43YDOoEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="117,54">
+      <children xsi:type="editmodel:MethodEditModel" name="ImagePanel" size="94,16" id="{UMLID=_mE43ZTOoEeCCyLthuspy8g,JavaID=custom.components/ImagePanel#ImagePanel(Ljava.lang.String;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="ImagePanel" size="94,16" id="{UMLID=_mE43bTOoEeCCyLthuspy8g,JavaID=custom.components/ImagePanel#ImagePanel(Ljava.awt.Image;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="paintComponent" size="117,16" id="{UMLID=_mE43aDOoEeCCyLthuspy8g,JavaID=custom.components/ImagePanel#paintComponent(Ljava.awt.Graphics;)}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" level="4" properties="open=custom.components/ImagePanel;wireOptions=4"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="14,14" gridOrigin="0,0" rulerUnit="cm" gridShow="true">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" attributeSorter="Natural" methodSorter="Natural" shortPackageNameFormat="true" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showMethods="true" showAttributes="true" showLiterlas="true" showInnerEntity="true"/>
+</editmodel:ClassDiagramEditModel>

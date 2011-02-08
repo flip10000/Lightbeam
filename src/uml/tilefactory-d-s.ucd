@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="tilefactory-d-s" id="{UMLID=_dduKGjOkEeCCyLthuspy8g,JavaID=core.tilefactory}" metadata="uml2-1.0" initialized="true" tag="10" key="3230303730363239204C696768746265616D">
+  <children xsi:type="editmodel:ClassEditModel" name="AbstractTileSet" location="283,50" size="136,191" timstampe="21" stereotype="" id="{UMLID=_hVphEjOoEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSet}" runTimeClassModel="image(),hidden,image,AbstractTileSet(Ljava.lang.String;Ljava.awt.image.BufferedImage;),hidden(),hidden(Z),type,type()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="61,54">
+      <children xsi:type="editmodel:AttributeEditModel" name="type" size="50,16" id="{UMLID=_qhr9ZjOpEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="image" size="57,16" id="{UMLID=_qhr9YzOpEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="hidden" size="61,16" id="{UMLID=_qhr9YTOpEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="114,90">
+      <children xsi:type="editmodel:MethodEditModel" name="AbstractTileSet" size="114,16" id="{UMLID=_qh1HUDOpEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSet#AbstractTileSet(Ljava.lang.String;Ljava.awt.image.BufferedImage;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="hidden" size="72,16" id="{UMLID=_qhr9cjOpEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSet#hidden(Z)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="type" size="61,16" id="{UMLID=_qhr9bDOpEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSet#type()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="image" size="68,16" id="{UMLID=_qhr9bzOpEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSet#image()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="hidden" size="72,16" id="{UMLID=_qhr9aTOpEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSet#hidden()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="AbstractTileSetFactory" location="50,50" size="183,201" timstampe="13" stereotype="" id="{UMLID=_dd37EDOkEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSetFactory}" runTimeClassModel="tile(I),length(),tileset,getSelected(),AbstractTileSetFactory(),tilestate,createTiles(),setSelected(Lcore.tilestate.ITileState;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="72,46">
+      <children xsi:type="editmodel:AttributeEditModel" name="tileset" size="63,21" id="{UMLID=_hVphEDOoEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tilestate" size="72,21" id="{UMLID=_hVphFDOoEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="151,108">
+      <children xsi:type="editmodel:MethodEditModel" name="AbstractTileSetFactory" size="151,16" id="{UMLID=_hVphGjOoEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSetFactory#AbstractTileSetFactory()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="tile" size="53,16" id="{UMLID=_hVzSHjOoEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSetFactory#tile(I)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="length" size="69,16" id="{UMLID=_hVzSFDOoEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSetFactory#length()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSelected" size="97,16" id="{UMLID=_hVzSGDOoEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSetFactory#setSelected(Lcore.tilestate.ITileState;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSelected" size="97,16" id="{UMLID=_hVzSGzOoEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSetFactory#getSelected()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createTiles" size="93,16" id="{UMLID=_hVzSFzOoEeCCyLthuspy8g,JavaID=core.tilefactory/AbstractTileSetFactory#createTiles()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" level="4" showScope="InPackage" properties="wireOptions=4"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="14,14" gridOrigin="154,154" rulerUnit="cm" gridShow="true">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" attributeSorter="Natural" methodSorter="Natural" shortPackageNameFormat="true" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showMethods="true" showAttributes="true" showLiterlas="true" showInnerEntity="true"/>
+</editmodel:ClassDiagramEditModel>

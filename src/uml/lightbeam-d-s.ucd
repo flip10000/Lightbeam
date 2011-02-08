@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="lightbeam-d-s" id="{UMLID=_WAgGYDOrEeCCyLthuspy8g,JavaID=lightbeam}" metadata="uml2-1.0" initialized="true" tag="10" key="3230303730363239204C696768746265616D">
+  <children xsi:type="editmodel:ClassEditModel" name="Lightbeam" location="50,50" size="135,232" timstampe="4" stereotype="" id="{UMLID=_WDMOADOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam}" runTimeClassModel="getName(),panel,getIcon(),frame,closeGUIMenu(),closeEditor(),Lightbeam(),showGUIMenu(),execute(),createGUIMenu()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="61,41">
+      <children xsi:type="editmodel:AttributeEditModel" name="frame" size="57,16" id="{UMLID=_WDVX8zOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="panel" size="61,21" id="{UMLID=_WDVX8DOrEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="114,144">
+      <children xsi:type="editmodel:MethodEditModel" name="Lightbeam" size="89,16" id="{UMLID=_WDfI9jOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam#Lightbeam()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="execute" size="79,16" id="{UMLID=_WDVX9zOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam#execute()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" size="82,16" id="{UMLID=_WDfI8jOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam#getName()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIcon" size="75,16" id="{UMLID=_WDVX-TOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam#getIcon()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createGUIMenu" size="114,16" id="{UMLID=_WDfI9zOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam#createGUIMenu()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closeEditor" size="93,16" id="{UMLID=_WDVX9jOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam#closeEditor()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="showGUIMenu" size="111,16" id="{UMLID=_WDVX-DOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam#showGUIMenu()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closeGUIMenu" size="109,16" id="{UMLID=_WDfI8TOrEeCCyLthuspy8g,JavaID=lightbeam/Lightbeam#closeGUIMenu()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" level="4" showScope="InPackage" properties="wireOptions=4"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="14,14" gridOrigin="0,0" rulerUnit="cm" gridShow="true">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" attributeSorter="Natural" methodSorter="Natural" shortPackageNameFormat="true" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showMethods="true" showAttributes="true" showLiterlas="true" showInnerEntity="true"/>
+</editmodel:ClassDiagramEditModel>

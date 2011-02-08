@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="core-d-s" id="{UMLID=_EkowoDOkEeCCyLthuspy8g,JavaID=core}" metadata="uml2-1.0" initialized="true" zoom="0.75" tag="10" key="3230303730363239204C696768746265616D">
+  <children xsi:type="editmodel:ClassEditModel" name="GamePlayground" location="138,140" size="151,119" timstampe="3" stereotype="" id="{UMLID=_dmz0oDOkEeCCyLthuspy8g,JavaID=core/GamePlayground}" runTimeClassModel="frame,showPlayground(),closePlayground(),GamePlayground()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="57,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="frame" size="57,16" id="{UMLID=_dm9loDOkEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="122,54">
+      <children xsi:type="editmodel:MethodEditModel" name="GamePlayground" size="122,16" id="{UMLID=_dm9lpDOkEeCCyLthuspy8g,JavaID=core/GamePlayground#GamePlayground()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closePlayground" size="120,16" id="{UMLID=_dm9lpTOkEeCCyLthuspy8g,JavaID=core/GamePlayground#closePlayground()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="showPlayground" size="122,16" id="{UMLID=_dm9lpjOkEeCCyLthuspy8g,JavaID=core/GamePlayground#showPlayground()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:InterfaceRealizationEditModel" size="2,1" autoLocated="true" id="{UMLID=_dmz0pTOkEeCCyLthuspy8g}" source="//@children.0" target="//@children.3" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="151,10" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,97"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_dm9lpzOkEeCCyLthuspy8g}" source="//@children.0" target="//@children.6" targetEnd="//@children.0/@sourceConnections.1/@children.2" label="//@children.0/@sourceConnections.1/@children.0" sourceEnd="//@children.0/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="38,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="141,119" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_dnGvkTOkEeCCyLthuspy8g}" source="//@children.0" target="//@children.7" targetEnd="//@children.0/@sourceConnections.2/@children.2" label="//@children.0/@sourceConnections.2/@children.0" sourceEnd="//@children.0/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="51,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="7,119" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="117,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Core" location="1116,14" size="134,293" timstampe="10" stereotype="" id="{UMLID=_EkowoTOkEeCCyLthuspy8g,JavaID=core/Core}" runTimeClassModel="update(Ljava.util.Observable;Ljava.lang.Object;),games,load(),gameEditor,addGame(Ljava.lang.String;),gamesIcons,executeGame(Ljava.lang.Integer;),showScreener(),pkgGames,Core(Ljava.lang.String;),screener,gamesNames">
+    <children xsi:type="editmodel:CompartmentEditModel" size="100,138">
+      <children xsi:type="editmodel:AttributeEditModel" name="screener" size="79,21" id="{UMLID=_dhvufDOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="pkgGames" size="86,21" id="{UMLID=_dhvueDOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="games" size="67,21" id="{UMLID=_dhl9cDOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="gamesIcons" size="93,21" id="{UMLID=_dhvudjOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="gamesNames" size="100,21" id="{UMLID=_dhvuejOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="gameEditor" size="88,21" id="{UMLID=_dhvudDOkEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="113,108">
+      <children xsi:type="editmodel:MethodEditModel" name="Core" size="63,16" id="{UMLID=_dh44YTOkEeCCyLthuspy8g,JavaID=core/Core#Core(Ljava.lang.String;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="showScreener" size="113,16" id="{UMLID=_dh44bTOkEeCCyLthuspy8g,JavaID=core/Core#showScreener()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addGame" size="86,16" id="{UMLID=_diCpYDOkEeCCyLthuspy8g,JavaID=core/Core#addGame(Ljava.lang.String;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="load" size="60,16" id="{UMLID=_diCpYzOkEeCCyLthuspy8g,JavaID=core/Core#load()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="executeGame" size="107,16" id="{UMLID=_dhvugTOkEeCCyLthuspy8g,JavaID=core/Core#executeGame(Ljava.lang.Integer;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="update" size="73,16" id="{UMLID=_dh44ZDOkEeCCyLthuspy8g,JavaID=core/Core#update(Ljava.util.Observable;Ljava.lang.Object;)}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_dj1ZITOkEeCCyLthuspy8g}" source="//@children.1" target="//@children.6" targetEnd="//@children.1/@sourceConnections.0/@children.2" label="//@children.1/@sourceConnections.0/@children.0" sourceEnd="//@children.1/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="73,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,293" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="135,10"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_dkIUETOkEeCCyLthuspy8g}" source="//@children.1" target="//@children.3" targetEnd="//@children.1/@sourceConnections.1/@children.2" label="//@children.1/@sourceConnections.1/@children.0" sourceEnd="//@children.1/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="50,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,48" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="155,48"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_dldw0TOkEeCCyLthuspy8g}" source="//@children.1" target="//@children.4" targetEnd="//@children.1/@sourceConnections.2/@children.2" label="//@children.1/@sourceConnections.2/@children.0" sourceEnd="//@children.1/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="50,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,283" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="109,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="GameEditor" location="378,812" size="116,119" timstampe="5" stereotype="" id="{UMLID=_dpCpRDOkEeCCyLthuspy8g,JavaID=core/GameEditor}" runTimeClassModel="GameEditor(),frame,closeEditor(),showEditor()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="57,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="frame" size="57,16" id="{UMLID=_dpCpSDOkEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,54">
+      <children xsi:type="editmodel:MethodEditModel" name="GameEditor" size="95,16" id="{UMLID=_dpMaQTOkEeCCyLthuspy8g,JavaID=core/GameEditor#GameEditor()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closeEditor" size="93,16" id="{UMLID=_dpCpSjOkEeCCyLthuspy8g,JavaID=core/GameEditor#closeEditor()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="showEditor" size="95,16" id="{UMLID=_dpMaQDOkEeCCyLthuspy8g,JavaID=core/GameEditor#showEditor()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:InterfaceRealizationEditModel" size="2,1" autoLocated="true" id="{UMLID=_dpCpRzOkEeCCyLthuspy8g}" source="//@children.2" target="//@children.4" targetEnd="//@children.2/@sourceConnections.0/@children.2" label="//@children.2/@sourceConnections.0/@children.0" sourceEnd="//@children.2/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="116,53" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,39"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_dpMaQjOkEeCCyLthuspy8g}" source="//@children.2" target="//@children.6" targetEnd="//@children.2/@sourceConnections.1/@children.2" label="//@children.2/@sourceConnections.1/@children.0" sourceEnd="//@children.2/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="38,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="38,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="95,241"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_dpWLQTOkEeCCyLthuspy8g}" source="//@children.2" target="//@children.7" targetEnd="//@children.2/@sourceConnections.2/@children.2" label="//@children.2/@sourceConnections.2/@children.0" sourceEnd="//@children.2/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="51,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="126,101"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.6/@sourceConnections.1 //@children.1/@sourceConnections.1 //@children.0/@sourceConnections.0" name="IGamePlayground" location="448,14" size="155,97" timstampe="3" id="{UMLID=_dduKEjOkEeCCyLthuspy8g,JavaID=core/IGamePlayground}" runTimeClassModel="showPlayground(),closePlayground()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="122,36">
+      <children xsi:type="editmodel:MethodEditModel" name="showPlayground" size="122,16" id="{UMLID=_dgZqoTOkEeCCyLthuspy8g,JavaID=core/IGamePlayground#showPlayground()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closePlayground" size="120,16" id="{UMLID=_dgZqoDOkEeCCyLthuspy8g,JavaID=core/IGamePlayground#closePlayground()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.5/@sourceConnections.1 //@children.6/@sourceConnections.0 //@children.1/@sourceConnections.2 //@children.2/@sourceConnections.0" name="IGameEditor" location="924,826" size="119,79" timstampe="5" id="{UMLID=_dduKFjOkEeCCyLthuspy8g,JavaID=core/IGameEditor}" runTimeClassModel="showEditor()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,18">
+      <children xsi:type="editmodel:MethodEditModel" name="showEditor" size="95,16" id="{UMLID=_dmXIsTOkEeCCyLthuspy8g,JavaID=core/IGameEditor#showEditor()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.7/@sourceConnections.1" name="Game" location="700,112" size="141,444" timstampe="10" stereotype="" id="{UMLID=_ddHtIDOkEeCCyLthuspy8g,JavaID=core/Game}" runTimeClassModel="playground,setEditor(Lcore.IGameEditor;),getIcon(),playgroundTileset,getEditorTileset(),game,setEditorTileset(Lcore.tilefactory.AbstractTileSetFactory;),execute(),openEditor(),getName(),setGame(Lcore.IGameStrategy;),editor,closeEditor(),getGame(),Game(),setPGTileset(Lcore.tilefactory.AbstractTileSetFactory;),setPlayground(Lcore.IGamePlayground;),editorTileset,openPlayground()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="120,115">
+      <children xsi:type="editmodel:AttributeEditModel" name="editorTileset" size="93,21" id="{UMLID=_dd37FTOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="playgroundTileset" size="120,21" id="{UMLID=_dduKGDOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="game" size="61,21" id="{UMLID=_dd37EzOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="editor" size="62,21" id="{UMLID=_dduKFDOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="playground" size="89,21" id="{UMLID=_dduKEDOkEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="119,282">
+      <children xsi:type="editmodel:MethodEditModel" name="Game" size="68,16" id="{UMLID=_dd37HjOkEeCCyLthuspy8g,JavaID=core/Game#Game()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="execute" size="79,16" id="{UMLID=_deBFDDOkEeCCyLthuspy8g,JavaID=core/Game#execute()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIcon" size="75,16" id="{UMLID=_dd37JjOkEeCCyLthuspy8g,JavaID=core/Game#getIcon()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" location="14,131" size="82,16" id="{UMLID=_dd37IjOkEeCCyLthuspy8g,JavaID=core/Game#getName()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setGame" size="89,21" id="{UMLID=_deBFCTOkEeCCyLthuspy8g,JavaID=core/Game#setGame(Lcore.IGameStrategy;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setEditorTileset" size="119,21" id="{UMLID=_deBFDTOkEeCCyLthuspy8g,JavaID=core/Game#setEditorTileset(Lcore.tilefactory.AbstractTileSetFactory;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPGTileset" size="100,16" id="{UMLID=_dd37GzOkEeCCyLthuspy8g,JavaID=core/Game#setPGTileset(Lcore.tilefactory.AbstractTileSetFactory;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPlayground" size="115,21" id="{UMLID=_dd37HzOkEeCCyLthuspy8g,JavaID=core/Game#setPlayground(Lcore.IGamePlayground;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setEditor" size="88,21" id="{UMLID=_deBFBjOkEeCCyLthuspy8g,JavaID=core/Game#setEditor(Lcore.IGameEditor;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="openEditor" size="91,16" id="{UMLID=_deBFETOkEeCCyLthuspy8g,JavaID=core/Game#openEditor()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="openPlayground" size="118,16" id="{UMLID=_dd37GjOkEeCCyLthuspy8g,JavaID=core/Game#openPlayground()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closeEditor" size="93,16" id="{UMLID=_deBFEDOkEeCCyLthuspy8g,JavaID=core/Game#closeEditor()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getGame" size="89,21" id="{UMLID=_deBFEjOkEeCCyLthuspy8g,JavaID=core/Game#getGame()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getEditorTileset" size="119,21" id="{UMLID=_dd37FzOkEeCCyLthuspy8g,JavaID=core/Game#getEditorTileset()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:InterfaceRealizationEditModel" size="2,1" autoLocated="true" id="{UMLID=_ddReIjOkEeCCyLthuspy8g}" source="//@children.5" target="//@children.6" targetEnd="//@children.5/@sourceConnections.0/@children.2" label="//@children.5/@sourceConnections.0/@children.0" sourceEnd="//@children.5/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,313" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="135,120"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_de6c4TOkEeCCyLthuspy8g}" source="//@children.5" target="//@children.4" targetEnd="//@children.5/@sourceConnections.1/@children.2" label="//@children.5/@sourceConnections.1/@children.0" sourceEnd="//@children.5/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="73,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="141,434" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.5/@sourceConnections.0 //@children.1/@sourceConnections.0 //@children.0/@sourceConnections.1 //@children.7/@sourceConnections.0 //@children.2/@sourceConnections.1" name="IGameStrategy" location="321,305" size="135,241" timstampe="5" id="{UMLID=_ddReIDOkEeCCyLthuspy8g,JavaID=core/IGameStrategy}" runTimeClassModel="getName(),setEditor(Lcore.IGameEditor;),setGame(Lcore.IGameStrategy;),getIcon(),closeEditor(),setPGTileset(Lcore.tilefactory.AbstractTileSetFactory;),setPlayground(Lcore.IGamePlayground;),execute(),setEditorTileset(Lcore.tilefactory.AbstractTileSetFactory;),openEditor()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="113,180">
+      <children xsi:type="editmodel:MethodEditModel" name="execute" size="79,16" id="{UMLID=_dqYtHTOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#execute()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" size="82,16" id="{UMLID=_dqYtEzOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#getName()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIcon" size="75,16" id="{UMLID=_dqieETOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#getIcon()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setEditor" size="82,16" id="{UMLID=_dqYtHjOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#setEditor(Lcore.IGameEditor;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPlayground" size="109,16" id="{UMLID=_dqYtEDOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#setPlayground(Lcore.IGamePlayground;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setEditorTileset" size="113,16" id="{UMLID=_dqYtFjOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#setEditorTileset(Lcore.tilefactory.AbstractTileSetFactory;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPGTileset" size="100,16" id="{UMLID=_dqieFDOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#setPGTileset(Lcore.tilefactory.AbstractTileSetFactory;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setGame" size="83,16" id="{UMLID=_dqYtGjOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#setGame(Lcore.IGameStrategy;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="openEditor" size="91,16" id="{UMLID=_dqYtGTOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#openEditor()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="closeEditor" size="93,16" id="{UMLID=_dqO8EDOkEeCCyLthuspy8g,JavaID=core/IGameStrategy#closeEditor()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_drIT8TOkEeCCyLthuspy8g}" source="//@children.6" target="//@children.4" targetEnd="//@children.6/@sourceConnections.0/@children.2" label="//@children.6/@sourceConnections.0/@children.0" sourceEnd="//@children.6/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="50,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="135,231" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,0"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_drSE8TOkEeCCyLthuspy8g}" source="//@children.6" target="//@children.3" targetEnd="//@children.6/@sourceConnections.1/@children.2" label="//@children.6/@sourceConnections.1/@children.0" sourceEnd="//@children.6/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="50,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="130,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="3,97"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.2 //@children.2/@sourceConnections.2" name="GameObjects" location="28,630" size="126,111" timstampe="5" stereotype="" id="{UMLID=_dmz0ojOkEeCCyLthuspy8g,JavaID=core/GameObjects}" runTimeClassModel="tileset,game,GameObjects()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="63,46">
+      <children xsi:type="editmodel:AttributeEditModel" name="tileset" size="63,21" id="{UMLID=_doJ4cDOkEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="game" size="61,21" id="{UMLID=_doJ4cjOkEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="105,18">
+      <children xsi:type="editmodel:MethodEditModel" name="GameObjects" size="105,16" id="{UMLID=_doJ4dDOkEeCCyLthuspy8g,JavaID=core/GameObjects#GameObjects()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_doTCYTOkEeCCyLthuspy8g}" source="//@children.7" target="//@children.6" targetEnd="//@children.7/@sourceConnections.0/@children.2" label="//@children.7/@sourceConnections.0/@children.0" sourceEnd="//@children.7/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="50,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="126,10" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,241"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_doczYTOkEeCCyLthuspy8g}" source="//@children.7" target="//@children.5" targetEnd="//@children.7/@sourceConnections.1/@children.2" label="//@children.7/@sourceConnections.1/@children.0" sourceEnd="//@children.7/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="38,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="126,10" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,444"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" level="4" showScope="InPackage" properties="wireOptions=4"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="14,14" gridOrigin="0,0" rulerUnit="cm" gridShow="true">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" attributeSorter="Natural" methodSorter="Natural" shortPackageNameFormat="true" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showMethods="true" showAttributes="true" showLiterlas="true" showInnerEntity="true"/>
+</editmodel:ClassDiagramEditModel>

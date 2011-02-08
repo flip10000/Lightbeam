@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="editor-d-s" id="{UMLID=_Yx0-gDOrEeCCyLthuspy8g,JavaID=lightbeam.editor}" metadata="uml2-1.0" initialized="true" zoom="0.25" tag="10" key="3230303730363239204C696768746265616D">
+  <children xsi:type="editmodel:ClassEditModel" name="Tileset" location="938,278" size="114,83" timstampe="4" stereotype="" id="{UMLID=_ZFpSYDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Tileset}" runTimeClassModel="createTiles(),Tileset()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="93,36">
+      <children xsi:type="editmodel:MethodEditModel" name="Tileset" size="71,16" id="{UMLID=_ZFzDYjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Tileset#Tileset()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createTiles" size="93,16" id="{UMLID=_ZFzDYTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Tileset#createTiles()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.2" name="TilePalette" location="1300,163" size="138,237" timstampe="4" stereotype="" id="{UMLID=_Y-fhkDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/TilePalette}" runTimeClassModel="highlightLeft,tileset,paintComponent(Ljava.awt.Graphics;),marginTop,marginLeft,TilePalette(Lcore.tilefactory.AbstractTileSetFactory;),curTile,serialVersionUID,setTile(II),highlightRight">
+    <children xsi:type="editmodel:CompartmentEditModel" size="109,136">
+      <children xsi:type="editmodel:AttributeEditModel" name="serialVersionUID" size="109,16" id="{UMLID=_ZHcCKjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="curTile" size="67,21" id="{UMLID=_ZHcCKDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tileset" size="63,21" id="{UMLID=_ZHcCIjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="highlightLeft" size="87,16" id="{UMLID=_ZHSRITOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="highlightRight" size="92,16" id="{UMLID=_ZHcCLDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="marginLeft" size="80,16" id="{UMLID=_ZHcCJjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="marginTop" size="79,16" id="{UMLID=_ZHcCJDOrEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="117,54">
+      <children xsi:type="editmodel:MethodEditModel" name="TilePalette" size="88,16" id="{UMLID=_ZHcCLjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/TilePalette#TilePalette(Lcore.tilefactory.AbstractTileSetFactory;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="paintComponent" size="117,16" id="{UMLID=_ZHcCNjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/TilePalette#paintComponent(Ljava.awt.Graphics;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTile" size="71,16" id="{UMLID=_ZHcCMTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/TilePalette#setTile(II)}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Editor" location="627,1034" size="135,463" timstampe="4" stereotype="" id="{UMLID=_Y-C1kDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor}" runTimeClassModel="jkarte_save,menuBar,mapsettings,getMapSettings(),getPanel(),jkarte,newMap(),palette,loadMap(),getFrame(),jkarte_new,jfile,jfile_close,Editor(),jkarte_open,getWindow(),mapArea,getPalette(),initRows,saveMap(),initCols,left_panel">
+    <children xsi:type="editmodel:CompartmentEditModel" size="93,249">
+      <children xsi:type="editmodel:AttributeEditModel" name="mapsettings" size="93,21" id="{UMLID=_Y-fhiDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="left_panel" size="76,16" id="{UMLID=_Y-pSgzOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="palette" size="67,21" id="{UMLID=_Y-fhjjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="mapArea" size="79,21" id="{UMLID=_Y-fhnDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="menuBar" size="72,16" id="{UMLID=_Y-fhhDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="jfile" size="45,16" id="{UMLID=_Y-fhlDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="jkarte" size="55,16" id="{UMLID=_Y-fhjDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="jkarte_new" size="83,16" id="{UMLID=_Y-fhkjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="jkarte_open" size="85,16" id="{UMLID=_Y-fhmjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="jkarte_save" size="85,16" id="{UMLID=_Y-fhgDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="jfile_close" size="77,16" id="{UMLID=_Y-fhmDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="initRows" size="71,16" id="{UMLID=_Y-pSgTOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="initCols" size="63,16" id="{UMLID=_Y-pShTOrEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="114,167">
+      <children xsi:type="editmodel:MethodEditModel" name="Editor" size="67,16" id="{UMLID=_Y-pSmTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#Editor()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFrame" size="85,16" id="{UMLID=_Y-pSkzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#getFrame()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMapSettings" size="114,16" id="{UMLID=_Y-pSiTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#getMapSettings()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPalette" size="93,21" id="{UMLID=_Y-pSkDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#getPalette()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getPanel" size="81,16" id="{UMLID=_Y-pSljOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#getPanel()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="saveMap" size="84,16" id="{UMLID=_Y-pSjzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#saveMap()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="loadMap" size="80,16" id="{UMLID=_Y-pSiDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#loadMap()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="newMap" size="82,16" id="{UMLID=_Y-pShzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#newMap()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getWindow" size="95,16" id="{UMLID=_Y-pSjDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/Editor#getWindow()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_Y-8NfDOrEeCCyLthuspy8g}" source="//@children.2" target="//@children.3" targetEnd="//@children.2/@sourceConnections.0/@children.2" label="//@children.2/@sourceConnections.0/@children.0" sourceEnd="//@children.2/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="73,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="33,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="130,715"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_Y_r0UTOrEeCCyLthuspy8g}" source="//@children.2" target="//@children.4" targetEnd="//@children.2/@sourceConnections.1/@children.2" label="//@children.2/@sourceConnections.1/@children.0" sourceEnd="//@children.2/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="73,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,10" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="115,386"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_ZAIgQTOrEeCCyLthuspy8g}" source="//@children.2" target="//@children.1" targetEnd="//@children.2/@sourceConnections.2/@children.2" label="//@children.2/@sourceConnections.2/@children.0" sourceEnd="//@children.2/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="73,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="135,10" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,237"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0 //@children.4/@sourceConnections.0" name="MapArea" location="530,14" size="164,715" timstampe="4" stereotype="" id="{UMLID=_Y0XVIDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea}" runTimeClassModel="panel,getTileArea(II),paintComponent(Ljava.awt.Graphics;),drawTile(II),initScrollpane(),MapArea(Lcore.tilefactory.AbstractTileSetFactory;II),resetMap(II),updateBeamsources(),addCol(),removeBeams(Lcore.tilestate.Tile;Lcore.tilestate.Tile;II),map,serialVersionUID,initMap(II),setBeams(II),getParent(II),tileset,setFocused(II),scroll,isBeamsource(II),reload(),setMap(Lcore.tilestate.TileArray;),isInArea(II),m,delCol(),mapName,getScrollPane(),highlightBeams(II),removeBeams(Lcore.tilestate.Tile;),highlightBeamsource(Lcore.tilestate.Tile;),delRow(),updateTile(II),setMapName(Ljava.lang.String;),removeBeamsources(II),getMapName(),getMap(),addRow()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="109,136">
+      <children xsi:type="editmodel:AttributeEditModel" name="serialVersionUID" size="109,16" id="{UMLID=_Y0qQHTOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tileset" size="63,21" id="{UMLID=_Y0qQEzOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="panel" size="55,16" id="{UMLID=_Y0qQEDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="scroll" size="55,16" id="{UMLID=_Y0qQFjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="m" size="37,16" id="{UMLID=_Y0qQHzOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="map" size="55,21" id="{UMLID=_Y0qQGjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="mapName" size="76,16" id="{UMLID=_Y0qQIzOrEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="143,532">
+      <children xsi:type="editmodel:MethodEditModel" name="MapArea" size="84,16" id="{UMLID=_Y09LDDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#MapArea(Lcore.tilefactory.AbstractTileSetFactory;II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getScrollPane" size="106,16" id="{UMLID=_Y00BLDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#getScrollPane()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addRow" size="81,16" id="{UMLID=_Y1Z28zOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#addRow()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="delRow" size="77,16" id="{UMLID=_Y1Z29DOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#delRow()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addCol" size="73,16" id="{UMLID=_Y1G8DjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#addCol()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="delCol" size="69,16" id="{UMLID=_Y1QtBTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#delCol()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="paintComponent" size="117,16" id="{UMLID=_Y1G8AjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#paintComponent(Ljava.awt.Graphics;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="initScrollpane" size="104,16" id="{UMLID=_Y00BFDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#initScrollpane()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMap" size="81,21" id="{UMLID=_Y1G8CzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#getMap()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMapName" size="102,16" id="{UMLID=_Y1QtAjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#getMapName()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMap" size="81,21" id="{UMLID=_Y1QtFjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#setMap(Lcore.tilestate.TileArray;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMapName" size="102,16" id="{UMLID=_Y09LEzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#setMapName(Ljava.lang.String;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="reload" size="70,16" id="{UMLID=_Y1Z29zOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#reload()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="initMap" size="73,16" id="{UMLID=_Y1G8DzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#initMap(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="resetMap" size="85,16" id="{UMLID=_Y0qQJzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#resetMap(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="drawTile" size="82,16" id="{UMLID=_Y1G8BjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#drawTile(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="updateTile" size="89,16" id="{UMLID=_Y1Z2-DOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#updateTile(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeBeams" size="109,16" id="{UMLID=_Y1QtDTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#removeBeams(Lcore.tilestate.Tile;Lcore.tilestate.Tile;II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeBeams" size="109,16" id="{UMLID=_Y09LGzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#removeBeams(Lcore.tilestate.Tile;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParent" size="86,16" id="{UMLID=_Y00BHjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#getParent(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="highlightBeamsource" size="140,16" id="{UMLID=_Y09LCTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#highlightBeamsource(Lcore.tilestate.Tile;)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="highlightBeams" size="112,16" id="{UMLID=_Y1QtGTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#highlightBeams(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setBeams" size="88,16" id="{UMLID=_Y09LFjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#setBeams(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isInArea" size="80,16" id="{UMLID=_Y1G8FDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#isInArea(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getTileArea" size="95,16" id="{UMLID=_Y00BFTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#getTileArea(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isBeamsource" size="109,16" id="{UMLID=_Y09LAjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#isBeamsource(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFocused" size="97,16" id="{UMLID=_Y00BJTOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#setFocused(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeBeamsources" size="143,16" id="{UMLID=_Y1QtCDOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#removeBeamsources(II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="updateBeamsources" size="140,16" id="{UMLID=_Y0qQJjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapArea#updateBeamsources()}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.1" name="MapSettings" location="54,448" size="125,386" timstampe="4" stereotype="" id="{UMLID=_Y-fhijOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapSettings}" runTimeClassModel="ctrlHeight,MapSettings(Llightbeam.editor.MapArea;II),btnWidth,curTileState,margin_bottom,resetSettings(II),txtRows,txtCols,txtWidth,margin_top,oldTileState,margin_right,btnHeight,margin_left,panelSettings,lblWidth,maparea,panel()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="99,285">
+      <children xsi:type="editmodel:AttributeEditModel" name="panelSettings" size="94,16" id="{UMLID=_ZKkOpDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="txtRows" size="70,16" id="{UMLID=_ZKadqDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="txtCols" size="62,16" id="{UMLID=_ZKadrDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="oldTileState" size="90,21" id="{UMLID=_ZKadsjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="curTileState" size="92,21" id="{UMLID=_ZKadpDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="maparea" size="77,21" id="{UMLID=_ZKkOqDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lblWidth" size="66,16" id="{UMLID=_ZKkOpjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="txtWidth" size="68,16" id="{UMLID=_ZKadrjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="btnWidth" size="71,16" id="{UMLID=_ZKadojOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="btnHeight" size="74,16" id="{UMLID=_ZKadtDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="margin_left" size="82,16" id="{UMLID=_ZKkOoDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="margin_right" size="88,16" id="{UMLID=_ZKkOojOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="margin_top" size="82,16" id="{UMLID=_ZKadsDOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="margin_bottom" size="99,16" id="{UMLID=_ZKadpjOrEeCCyLthuspy8g}"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="ctrlHeight" size="74,16" id="{UMLID=_ZKadoDOrEeCCyLthuspy8g}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="104,54">
+      <children xsi:type="editmodel:MethodEditModel" name="MapSettings" size="99,16" id="{UMLID=_ZKkOsjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapSettings#MapSettings(Llightbeam.editor.MapArea;II)}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="panel" size="66,16" id="{UMLID=_ZKkOrzOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapSettings#panel()}"/>
+      <children xsi:type="editmodel:MethodEditModel" name="resetSettings" size="104,16" id="{UMLID=_ZKkOqjOrEeCCyLthuspy8g,JavaID=lightbeam.editor/MapSettings#resetSettings(II)}"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" size="2,1" autoLocated="true" id="{UMLID=_ZLwhcTOrEeCCyLthuspy8g}" source="//@children.4" target="//@children.3" targetEnd="//@children.4/@sourceConnections.0/@children.2" label="//@children.4/@sourceConnections.0/@children.0" sourceEnd="//@children.4/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="50,28" fontInfo="Arial-8-0" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="125,140" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,574"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showMethods="true" showAttributes="true" showLiterals="true" ShowInnerEntity="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" level="4" showScope="InPackage" properties="wireOptions=4"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="14,14" gridOrigin="0,0" rulerUnit="cm" gridShow="true">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" attributeSorter="Natural" methodSorter="Natural" shortPackageNameFormat="true" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showPrivateMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showPrivateInnerClasses="true" showStaticInnerClasses="true" showInterfaceStereotype="true" showMethods="true" showAttributes="true" showLiterlas="true" showInnerEntity="true"/>
+</editmodel:ClassDiagramEditModel>
