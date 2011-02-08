@@ -15,7 +15,8 @@ public abstract class AbstractTileSet implements ITileState
 		this.image	= image;
 	}
 	
-	public void hidden( boolean hidden )	{ this.hidden = hidden;	}
+	public void hidden( boolean hidden )		{ this.hidden = hidden;	}
+	public void image( BufferedImage image )	{ this.image = image;	}
 	
 	public String type()				{ return this.type;		}
 	public BufferedImage image()		{ return this.image;	}

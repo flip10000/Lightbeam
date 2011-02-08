@@ -101,7 +101,7 @@ public class Core implements Observer
 				java.lang.reflect.Constructor coPlayground		= clPlayground.getConstructor();
 				Core.screener.setProgress();
 				
-				java.lang.reflect.Constructor coPGdTileset		= clEditorTileset.getConstructor();
+				java.lang.reflect.Constructor coPGTileset		= clPlaygroundTileset.getConstructor();
 				Core.screener.setProgress();
 				
 				java.lang.reflect.Constructor coEditor			= clEditor.getConstructor();
@@ -114,7 +114,7 @@ public class Core implements Observer
 				AbstractTileSetFactory instETileset		= (AbstractTileSetFactory)coEditorTileset.newInstance();
 				Core.screener.setProgress();
 				
-				AbstractTileSetFactory instPGTileset	= (AbstractTileSetFactory)coPGdTileset.newInstance();
+				AbstractTileSetFactory instPGTileset	= (AbstractTileSetFactory)coPGTileset.newInstance();
 				Core.screener.setProgress();
 				
 				IGameStrategy instGame					= (IGameStrategy)coGame.newInstance();

@@ -1,6 +1,7 @@
 package lightbeam.playground;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -32,8 +33,16 @@ public class MapArea
 	private JPanel panel						= null;
 	private JScrollPane scroll					= new JScrollPane();
 	
+	final static Color CBLUE					= new Color( 3, 115, 210, 110 );
+	final static Color CRED						= new Color( 255, 0, 0, 100 );
+	final static Color CTRANSPARENT				= new Color( 255, 255, 255, 0 );
+		
+	final static Cursor CURSOR_HAND				= new Cursor( Cursor.HAND_CURSOR );
+	final static Cursor CURSOR_DEFAULT			= new Cursor( Cursor.DEFAULT_CURSOR );
+	
 	private RepaintManager m					= null;
 	private TileArray map						= null;
+	private int[] oldFocused 					= new int[2];
 //	private TileArray oldMap					= null;
 	
 	private String mapName						= "Testkarte";
@@ -67,21 +76,10 @@ public class MapArea
 		
 		this.panel.addMouseListener(new MouseAdapter(){public void mouseClicked( MouseEvent e ) 
 		{
-//			int row	= e.getY() / 32;
-//			int col = e.getX() / 32;
-//			
-//			String focusedType	= MapArea.this.setFocused( row, col );
-//			String selectedType	= MapArea.this.tileset.getSelected().type();
-//
-//			if( "beam" == focusedType && selectedType != "field" )
-//			{
-//				Tile beamsource 	= MapArea.this.map.tile( row, col ).beamsource();
-//
-//				MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
-//			} else
-//			{
-//				MapArea.this.updateTile( row, col );
-//			}
+			int row	= e.getY() / 32;
+			int col = e.getX() / 32;
+
+			MapArea.this.paintBeam( row, col );
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
@@ -95,75 +93,14 @@ public class MapArea
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
 		{
-//			int row	= e.getY() / 32;
-//			int col = e.getX() / 32;
-//			
-//			String focusedType	= MapArea.this.setFocused( row, col );
-//
-//			if( focusedType == "beam" || focusedType == "beamsource" )
-//			{
-//				Tile beamsource	= MapArea.this.map.tile( row, col );
-//				
-//				if( focusedType == "beam" )
-//				{
-//					beamsource 	= beamsource.beamsource();
-//				}
-//				
-//				MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
-//				MapArea.this.highlightBeamsource( beamsource );
-//			}			
+			int row	= e.getY() / 32;
+			int col = e.getX() / 32;
+
+			MapArea.this.paintFocused( row, col );
 		}});
 	}
 	
 	public JScrollPane getScrollPane() { return this.scroll; }
-	
-	public void addRow()
-	{
-		this.map.addRow( this.tileset.getSelected() );
-		this.scroll.repaint();
-	}
-	
-	public boolean delRow()
-	{
-		int row	= this.map.rows() - 1;
-		
-		if( row > 0 )
-		{
-			this.removeBeamsources( row, Tile.HORIZONTAL );
-			this.map.delRow();
-			this.updateBeamsources();
-			this.scroll.repaint();
-			
-			return true;
-		} else
-		{
-			return false;
-		}
-	}
-	
-	public void addCol()
-	{
-		this.map.addCol( this.tileset.getSelected() );
-		this.scroll.repaint();
-	}
-	
-	public boolean delCol()
-	{
-		int col	= this.map.cols() - 1;
-		
-		if( col > 1 )
-		{
-			this.removeBeamsources( col, Tile.VERTICAL );
-			this.map.delCol();
-			this.updateBeamsources();
-			this.scroll.repaint();
-			
-			return true;
-		} else
-		{
-			return false;
-		}
-	}
 	
 	private void paintComponent( Graphics g )
 	{
@@ -183,30 +120,18 @@ public class MapArea
 
 				BufferedImage imgTile	= tile.image();
 				
-				if( tile.type() == "beam" && tile.hidden() == true )
-				{
-					imgTile				= this.tileset.tile( 1 ).image();
-				} else 
-				{
-					imgTile				= tile.image();
-				}
-				
 				int strength			= tile.strength();
 				
 				g.drawImage( imgTile, col * 32, row * 32, this.panel );
+				g.setColor( tile.color() );
 				
-				if( tile.focused() == true )
-				{
-					if( tile.type() == "beam" && tile.hidden() == false )
-					{
-						g.setColor( new Color( 255, 0, 0, 135 ) );
-					} else if( tile.type() == "beamsource" )
-					{
-						g.setColor( new Color( 3, 115, 210, 135 ) );
-					}
+				// beam (not hidden)
+//				g.setColor( new Color( 255, 0, 0, 135 ) );
 					
-					g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
-				}
+				// beamsource
+//				g.setColor( new Color( 3, 115, 210, 135 ) );
+					
+				g.fillRect( ( col * 32 ), ( row * 32 ), 32, 32 );				
 				
 				// Ich denke max 999 Beams/Beamsource sollten reichen!
 				// Keine Lust auf Relative Größenermittlung der FontSizes sowie Padding,
@@ -277,7 +202,11 @@ public class MapArea
 					try 						{ newTile = new TileBeam(); 		}
 					catch( IOException e ) 		{ e.printStackTrace();				}
 					
-					if( savegame == false  )	{ newTile.hidden( true );			}
+					if( savegame == false  )	
+					{ 
+						newTile.hidden( true );
+						newTile.image( this.tileset.tile( 1 ).image() );
+					}
 				} else if( type.equals( "beamsource" ) )
 				{
 					try 						{ newTile = new TileBeamsource(); 	}
@@ -305,314 +234,6 @@ public class MapArea
 		}
 	}
 	
-	public void resetMap( int rows, int cols )
-	{
-		this.initMap( rows, cols );
-
-		this.scroll.repaint();
-	}
-	
-	private void drawTile( int row, int col )
-	{
-		int[] area			= getTileArea( row, col );
-		
-		int acol			= area[0];
-		int arow			= area[1];
-		ITileState selected	= this.tileset.getSelected();
-		String type			= this.map.tile( row, col ).type();
-		String selType		= selected.type(); 
-
-		if( type != "beam" || selType == "field" )
-		{
-			this.map.setTile( row, col ).withState( selected );
-			
-			if( acol > -1 && arow > -1 )
-			{
-				this.m.addDirtyRegion( this.panel , acol, arow, 32, 32 );
-			}
-		}
-	}
-	
-	private void updateTile( int row, int col )
-	{
-		if( isInArea( row, col ) == true )
-		{
-			Tile trigger	= this.map.tile( row, col );
-			Tile beamsource	= getParent( row, col );
-			
-			if( beamsource == null || trigger.type() == "beamsource" )
-			{
-				if( this.tileset.getSelected().type() == "field" )
-				{
-					removeBeams( trigger );
-				}
-				
-				drawTile( row, col );					
-				
-				if( isBeamsource( row, col ) == true )
-				{
-					setBeams( row, col );
-					highlightBeams( row, col );
-					highlightBeamsource( trigger );
-					
-					m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
-				}
-			} else if( this.tileset.getSelected().type() == "field" )
-			{
-				int bRow	= beamsource.row();
-				
-				if( row == bRow )
-				{
-					removeBeams( beamsource, trigger, Tile.HORIZONTAL, col );
-				} else
-				{
-					removeBeams( beamsource, trigger, Tile.VERTICAL, row );
-				}
-			}
-			
-			this.scroll.repaint();
-		}
-	}
-	
-	private void removeBeams( Tile source, Tile trigger, int axis, int posMouse )
-	{
-		ArrayList<Tile> bTiles		= this.map.filter( "beam", source ).depends( source );
-		ArrayList<Tile> foundTiles	= this.map.find( axis, bTiles );
-		
-		int remFrom, posSrc;
-		
-		if( axis == Tile.HORIZONTAL )
-		{
-			posSrc	= source.col();
-			remFrom = ( trigger.col() < posSrc )? Tile.LEFT : Tile.RIGHT;
-		} else
-		{
-			posSrc	= source.row();
-			remFrom	= ( trigger.row() < posSrc )? Tile.TOP: Tile.BOTTOM;
-		}
-		
-		ArrayList<Tile> depTiles	= this.map.removeFrom( posSrc, remFrom, foundTiles );
-		
-		int fLen					= depTiles.size(); 
-
-		for( int cntTile = 0; cntTile < fLen; cntTile++ )
-		{
-			Tile tile 	= depTiles.get( cntTile );
-			int row		= tile.row();
-			int col		= tile.col();
-			
-			try 
-			{
-				this.map.setTile( row, col ).withState( new TileField() );
-				
-				m.addDirtyRegion( this.scroll, col * 32, row * 32, 32, 32 );
-			} catch (IOException e) 
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		int row			= trigger.row();
-		int col			= trigger.col();
-		int strength	= this.map.filter( "beam", source ).depends( source ).size();
-		
-		source.strength( strength );
-		
-		m.addDirtyRegion( this.scroll, col * 32, row * 32, 32, 32 );
-		
-		this.scroll.repaint(); 
-	}
-	
-	private void removeBeams( Tile beamsource )
-	{
-		ArrayList<Tile> bTiles		= this.map.filter( "beam", beamsource ).depends( beamsource );
-		int bLen					= bTiles.size(); 
-
-		for( int cntTile = 0; cntTile < bLen; cntTile++ )
-		{
-			Tile tile 	= bTiles.get( cntTile );
-			int row		= tile.row();
-			int col		= tile.col();
-			
-			try 
-			{
-				this.map.setTile( row, col ).withState( new TileField() );
-				
-				m.addDirtyRegion( this.scroll, col * 32, row * 32, 32, 32 );
-			} catch (IOException e) 
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	private Tile getParent( int row, int col )
-	{
-		Tile tile	= this.map.tile( row, col );
-		String type	= tile.type();
-		
-		if( type == "beam" || type == "beamsource" )
-		{
-			if( type == "beam" ) 	{ return tile.beamsource(); }
-			else					{ return tile;				}
-		} else
-		{
-			return null;
-		}
-	}
-	
-	private void highlightBeamsource( Tile beamsource )
-	{
-		int rows	= this.map.rows();
-		int cols	= this.map.cols();
-		int bRow	= beamsource.row();
-		int bCol	= beamsource.col();
-		
-		for( int row = 0; row < rows; row++ )
-		{
-			for( int col = 0; col < cols; col++ )
-			{
-				Tile tile	= this.map.tile( row, col );
-			
-				if( tile.type() == "beamsource" ) 
-				{ 
-					tile.focus( false );
-					m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
-				}
-			}
-		}
-		
-		m.addDirtyRegion( this.scroll, bRow * 32, bCol * 32, 32, 32 );
-		
-		this.map.tile( bRow, bCol ).focus( true );
-	}
-	
-	private void highlightBeams( int row, int col )
-	{
-		Tile beamsource			= this.map.tile( row, col );
-		
-		ArrayList<Tile> beams	= this.map.filter( "beam", beamsource ).depends( beamsource );
-		int lenBeams			= beams.size();
-		
-		int rows			= this.map.rows();
-		int cols			= this.map.cols();
-
-		for( int cntRow = 0; cntRow < rows; cntRow++ )
-		{
-			for( int cntCol = 0; cntCol < cols; cntCol++ )
-			{
-				this.map.tile( cntRow, cntCol ).focus( false );
-			}
-		}
-
-		for( int beam = 0; beam < lenBeams; beam++ )
-		{
-			Tile bBeam	= beams.get( beam );
-			int bRow	= bBeam.row();
-			int bCol	= bBeam.col();
-			
-			this.map.tile( bRow, bCol ).focus( true );
-		}
-
-		this.scroll.repaint();
-	}
-	
-	private void setBeams( int row, int col )
-	{
-//		this.oldMap			= this.map;
-		
-		Tile beamsource		= this.map.tile( row, col );
-		int beamstrength	= 0;
-
-		int rows			= this.map.rows();
-		int cols			= this.map.cols();
-		
-		int startRow		= 0;
-		int startCol		= 0;
-
-		int endRow			= rows;
-		int endCol			= cols;
-
-		for( int cntCol = 0; cntCol < cols; cntCol++ )
-		{
-			Tile tile	= this.map.tile( row, cntCol );
-
-			if( cntCol < col )
-			{
-				if( ( tile.type() == "beamsource" || tile.type() == "beam" ) ) {
-					startCol	= tile.col() + 1;
-				}
-			} else if( cntCol > col )
-			{
-				if( ( tile.type() == "beamsource" || tile.type() == "beam" ) &&
-					cntCol < endCol
-				) {
-					endCol		= tile.col();
-				}
-			}
-		}
-
-		for( int cntRow = 0; cntRow < rows; cntRow++ )
-		{
-			Tile tile	= this.map.tile( cntRow, col );
-			
-			if( cntRow < row )
-			{
-				if( ( tile.type() == "beamsource" || tile.type() == "beam" ) )
-				{
-					startRow	= tile.row() + 1;
-				} 
-			} else if( cntRow > row )
-			{
-				if( ( tile.type() == "beamsource" || tile.type() == "beam" ) &&
-					cntRow < endRow
-				) {
-					endRow	= tile.row();
-				}
-			}
-		}
-
-		for( int cntRow = startRow; cntRow < endRow; cntRow++ )
-		{
-			if( cntRow != row )
-			{
-				try 
-				{
-					this.map.setTile( cntRow, col ).withState( new TileBeam(), beamsource );
-					this.map.tile( cntRow, col ).setDirection( Tile.VERTICAL );
-				}
-				catch (IOException e) { e.printStackTrace(); }
-			}
-		}
-
-		if( startCol < endCol )
-		{
-			for( int cntCol = startCol; cntCol < endCol; cntCol++ )
-			{
-				if( cntCol != col )
-				{
-					try 
-					{ 
-						this.map.setTile( row, cntCol ).withState( new TileBeam(), beamsource );
-						this.map.tile( row, cntCol ).setDirection( Tile.HORIZONTAL );
-					} catch (IOException e) 
-					{ 
-						e.printStackTrace(); 
-					}
-				}
-			}
-		}
-		
-		beamstrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
-		
-		if( beamstrength > 0 )
-		{
-			this.map.tile( row, col ).strength( beamstrength );
-		}
-	}
-	
 	private boolean isInArea( int row, int col )
 	{
 		int maxRow	= MapArea.this.map.rows();
@@ -621,117 +242,68 @@ public class MapArea
 		return ( row < maxRow && col < maxCol && row > -1 && col > -1 )? true : false;
 	}
 	
-	private int[] getTileArea( int row, int col )
-	{
-		int[] ret	= new int[2];
-		
-		ret[0]		= -1;
-		ret[1]		= -1;
-		
-		int maxy	= this.map.rows();
-		int maxx	= this.map.cols();
-		
-		if( col > -1 && col < maxx && 
-			row > -1 && row < maxy
-		) {
-			Rectangle r		= this.scroll.getViewport().getViewRect();
-
-			ret[0]			= this.scroll.getLocation().x + this.panel.getInsets().left - r.x + ( col * 32 );
-			ret[1]			= this.scroll.getLocation().y + this.panel.getInsets().top - r.y + ( row * 32 );
-
-			return ret; 
-		} else
-		{
-			return ret;
-		}
-	}
 	
-	private boolean isBeamsource( int row, int col )
-	{
-		Tile seltile	= this.map.tile( row, col );
-
-		if( seltile.type() == "beamsource" )
-		{
-			return true;
-		} else
-		{
-			return false;
-		}
-	}
-	
-	private String setFocused( int row, int col )
+	private Tile getFocused( int row, int col )
 	{
 		if( this.isInArea( row, col ) )
 		{
-			return this.map.tile( row, col ).type();
+			this.oldFocused[0]	= row;
+			this.oldFocused[1]	= col;
+			
+			return this.map.tile( row, col );
 		} else
 		{
 			return null;
 		}
 	}
 	
-	private void removeBeamsources( int pos, int axis )
+	private void paintFocused( int row, int col )
 	{
-		int rows	= this.map.rows();
-		int cols	= this.map.cols();
-				
-		if( axis == Tile.HORIZONTAL )
+		if( this.oldFocused != null )
 		{
-			for( int col = 0; col < cols; col++ )
-			{
-				Tile src	= this.map.tile( pos, col );
-				
-				if( src.type() == "beamsource" )
-				{
-					removeBeams( src );
-					try 
-					{
-						this.map.setTile( pos, col ).withState( new TileField() );
-					} catch( IOException e ) 
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		} else if( axis == Tile.VERTICAL )
+			int oldRow		= this.oldFocused[0];
+			int oldCol		= this.oldFocused[1];
+
+			this.map.tile( oldRow, oldCol ).color( CTRANSPARENT );
+			this.m.addDirtyRegion( this.scroll, oldRow * 32, oldCol * 32, 32, 32 );
+		}
+		
+		if( MapArea.this.isInArea( row, col ) )
 		{
-			for( int row = 0; row < rows; row++ )
+			this.scroll.setCursor( CURSOR_HAND );
+			
+			Tile tile	= this.getFocused( row, col );
+			
+			if( tile.type() == "field" || ( tile.type() == "beam" && tile.hidden() ) )
 			{
-				Tile src	= this.map.tile( row, pos );
+				tile.color( CBLUE );
 				
-				if( src.type() == "beamsource" )
-				{
-					removeBeams( src );
-					try 
-					{
-						this.map.setTile( row, pos ).withState( new TileField() );
-					} catch( IOException e ) 
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+				this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
+			} else if( tile.type() == "beamsource" )
+			{
+				tile.color( CRED );
+				
+				this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
 			}
+			
+			this.scroll.repaint();
+		} else
+		{
+			this.scroll.setCursor( MapArea.CURSOR_DEFAULT );
 		}
 	}
 	
-	private void updateBeamsources()
+	private void paintBeam( int row, int col )
 	{
-		int rows	= this.map.rows();
-		int cols	= this.map.cols();
-		
-		for( int row = 0; row < rows; row++ )
+		if( isInArea( row, col ) == true )
 		{
-			for( int col = 0; col < cols; col++ )
+			Tile tile	= this.map.tile( row, col );
+			
+			if( tile.type() == "field" || tile.type() == "beam" )
 			{
-				Tile source	= this.map.tile( row, col );
-				
-				if( source.type() == "beamsource" )
+				if( tile.type() == "field" )
 				{
-					ArrayList<Tile> beams	= this.map.filter( "beam", source ).depends( source );
-					
-					source.strength( beams.size() );
+					tile.image( this.tileset.tile( 2 ).image() );
 				}
 			}
 		}

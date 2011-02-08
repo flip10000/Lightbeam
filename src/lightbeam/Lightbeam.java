@@ -32,7 +32,7 @@ public class Lightbeam extends Game
 	}
 	
 	// Aufgerufen durch den GameBuilder ( ab hier belibt alles dem Programmierer überlassen ):
-	public void execute()					{ this.showGUIMenu();	}
+	public void execute()					{ this.openGameGUI();	}
 	public String getName()					{ return "Lightbeam";	}
 	public ImageIcon getIcon()				{ return new ImageIcon( "src/fx/Lightbeam/Icon/lightbeam.png" );	}
 	
@@ -57,7 +57,7 @@ public class Lightbeam extends Game
 		playGame.setBounds( 10 , 15, 200, 40 );
 		playGame.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e) 
 		{
-			Lightbeam.this.closeGUIMenu();
+			Lightbeam.this.closeGameGUI();
 			Lightbeam.this.openPlayground();
 		}});		
 
@@ -69,7 +69,7 @@ public class Lightbeam extends Game
 		createGame.setBounds( 10 , 60, 200, 40 );
 		createGame.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e) 
 		{
-			Lightbeam.this.closeGUIMenu();
+			Lightbeam.this.closeGameGUI();
 			Lightbeam.this.openEditor();
 		}});
 		
@@ -81,7 +81,7 @@ public class Lightbeam extends Game
 		closeGame.setBounds( 10 , 105, 200, 40 );
 		closeGame.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e) 
 		{
-			Lightbeam.this.closeGUIMenu();
+			Lightbeam.this.closeGameGUI();
 			Core.showScreener();
 			
 		}});
@@ -93,12 +93,12 @@ public class Lightbeam extends Game
 		this.frame.add( panel, BorderLayout.CENTER );
 	}
 	
-	public void closeEditor()
+	public void closeChildWindow()
 	{
-		this.showGUIMenu();
+		this.openGameGUI();
 	}
 	
-	private void showGUIMenu()
+	public void openGameGUI()
 	{
 		// Screener mittig anzeigen:
 		this.frame.setLocationRelativeTo( null );
@@ -106,5 +106,7 @@ public class Lightbeam extends Game
 		this.frame.setFocusable( true );
 	}
 	
-	private void closeGUIMenu()	{ this.frame.setVisible( false );	}	
+	public void closeGameGUI()	{ this.frame.setVisible( false );	}
+	
+	public void exitGameGUI() {}
 }

@@ -48,15 +48,22 @@ public abstract class Game implements IGameStrategy
 	{
 		this.editor.showEditor();
 	}
+	
+	public void closeEditor() 
+	{
+		
+	}
 
 	public void openPlayground()
 	{
-		this.playground.showPlayground();
+		this.playground.openPlayground();
 	}
 	
-	public void closeEditor() {}
+	public void closePlayground() {}
+
 
 	public static IGameStrategy getGame() { return Game.game; }
 	
-	public static AbstractTileSetFactory getEditorTileset() { return Game.editorTileset; }
+	public static AbstractTileSetFactory getEditorTileset() 	{ return Game.editorTileset; }
+	public static AbstractTileSetFactory getPlaygroundTileset() { return Game.playgroundTileset; }
 }
