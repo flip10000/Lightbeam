@@ -58,7 +58,7 @@ public class Playground extends GamePlayground
         
         this.menuBar.add( this.jfile );
         		
-		this.mapArea				= new MapArea( this.tileset, this.initRows, this.initCols );		
+		this.mapArea				= new MapArea( this.gTileset, this.initRows, this.initCols );		
 		
 		this.left_panel.setLayout( null );
 		this.left_panel.setPreferredSize( new Dimension( 100, 200 ) );
@@ -73,6 +73,12 @@ public class Playground extends GamePlayground
 		this.frame.setSize( 800, 600 );
 		this.frame.setLocationRelativeTo( null );
 
+		this.jfile_close.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				Playground.this.closePlayground();
+			}
+		});	
+		
 		// Map laden/öffnen:
 		this.jkarte.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -131,8 +137,6 @@ public class Playground extends GamePlayground
 	
 	private void loadGame()
 	{
-		this.mapArea.resetMap( this.initRows, this.initCols );
-		this.mapsettings.resetSettings( this.initRows, this.initCols );
 	}	
 	
 	private void saveGame()
