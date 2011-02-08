@@ -79,7 +79,10 @@ public class MapArea
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
 
-			MapArea.this.paintBeam( row, col );
+			if( MapArea.this.isBeamsource( row, col ) )
+			{
+				MapArea.this.setPossibleBeams( row, col );
+			}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
@@ -125,9 +128,6 @@ public class MapArea
 				g.drawImage( imgTile, col * 32, row * 32, this.panel );
 				g.setColor( tile.color() );
 				
-				// beam (not hidden)
-//				g.setColor( new Color( 255, 0, 0, 135 ) );
-					
 				// beamsource
 //				g.setColor( new Color( 3, 115, 210, 135 ) );
 					
@@ -259,6 +259,7 @@ public class MapArea
 	
 	private void paintFocused( int row, int col )
 	{
+		
 		if( this.oldFocused != null )
 		{
 			int oldRow		= this.oldFocused[0];
@@ -293,19 +294,17 @@ public class MapArea
 		}
 	}
 	
-	private void paintBeam( int row, int col )
+	private boolean isBeamsource( int row, int col )
 	{
-		if( isInArea( row, col ) == true )
-		{
-			Tile tile	= this.map.tile( row, col );
-			
-			if( tile.type() == "field" || tile.type() == "beam" )
-			{
-				if( tile.type() == "field" )
-				{
-					tile.image( this.tileset.tile( 2 ).image() );
-				}
-			}
-		}
+		return ( this.map.tile( row, col ).type() == "beamsource" )? true : false; 
+	}
+	
+	private void setPossibleBeams( int row, int col )
+	{
+		Tile source		= this.map.tile( row, col );
+		int strength	= source.strength();
+		
+		
+		
 	}
 }
