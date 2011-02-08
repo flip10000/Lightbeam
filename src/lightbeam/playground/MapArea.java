@@ -42,6 +42,7 @@ public class MapArea
 	private RepaintManager m					= null;
 	private TileArray map						= null;
 	private int[] oldFocused 					= new int[2];
+	private Tile snapsource						= null;
 //	private TileArray oldMap					= null;
 	
 	private String mapName						= "Testkarte";
@@ -75,6 +76,24 @@ public class MapArea
 		
 		this.panel.addMouseListener(new MouseAdapter(){public void mouseClicked( MouseEvent e ) 
 		{
+			int row	= e.getY() / 32;
+			int col = e.getX() / 32;
+			
+			if( MapArea.this.snapsource == null || MapArea.this.isBeamsource( row, col ) == true )
+			{
+				MapArea.this.clearPrepaintedBeams();
+				
+				if( MapArea.this.isInArea( row, col ) )
+				{
+					MapArea.this.triggerTiles( row, col, true );
+					MapArea.this.snapsource	= MapArea.this.map.tile( row, col);
+				}
+			} else 
+			{
+				MapArea.this.snapsource = null;
+				MapArea.this.clearPrepaintedBeams();
+				MapArea.this.triggerTiles( row, col, false );
+			}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
@@ -86,16 +105,7 @@ public class MapArea
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
 			
-			if( MapArea.this.isInArea( row, col ) )
-			{
-				MapArea.this.dehighlightPossibleBeams();
-				MapArea.this.paintFocused( row, col );
-				
-				if( MapArea.this.isBeamsource( row, col ) )
-				{
-					MapArea.this.setPossibleBeams( row, col );
-				}
-			}
+			MapArea.this.triggerTiles( row, col, false );
 		}});
 	}
 	
@@ -230,8 +240,18 @@ public class MapArea
 	{
 		int maxRow	= MapArea.this.map.rows();
 		int maxCol	= MapArea.this.map.cols();
-		
-		return ( row < maxRow && col < maxCol && row > -1 && col > -1 )? true : false;
+
+		if( row < maxRow && col < maxCol && row > -1 && col > -1 )
+		{
+			this.scroll.setCursor( CURSOR_HAND );
+			
+			return true;
+		} else
+		{
+			this.scroll.setCursor( CURSOR_DEFAULT );
+			
+			return false;
+		}
 	}
 	
 	
@@ -263,8 +283,6 @@ public class MapArea
 		
 		if( MapArea.this.isInArea( row, col ) )
 		{
-			this.scroll.setCursor( CURSOR_HAND );
-			
 			Tile tile	= this.getFocused( row, col );
 			
 			if( tile.type() == "field" || ( tile.type() == "beam" && tile.hidden() ) )
@@ -280,9 +298,6 @@ public class MapArea
 			}
 			
 			this.scroll.repaint();
-		} else
-		{
-			this.scroll.setCursor( MapArea.CURSOR_DEFAULT );
 		}
 	}
 	
@@ -291,7 +306,7 @@ public class MapArea
 		return ( this.map.tile( row, col ).type() == "beamsource" )? true : false; 
 	}
 	
-	private void setPossibleBeams( int row, int col )
+	private void hilightPossibleBeams( int row, int col )
 	{
 		Tile source		= this.map.tile( row, col );
 		
@@ -302,22 +317,22 @@ public class MapArea
 
 		for( int cntCol = col; cntCol > toLeft; cntCol-- )
 		{
-			highlightPossibleBeams( this.map.tile( row, cntCol ) );
+			preparePossibleBeam( this.map.tile( row, cntCol ) );
 		}
 		
 		for( int cntRow = row; cntRow > toTop; cntRow-- )
 		{
-			highlightPossibleBeams( this.map.tile( cntRow, col ) );
+			preparePossibleBeam( this.map.tile( cntRow, col ) );
 		}
 		
 		for( int cntCol = col; cntCol < toRight; cntCol++ )
 		{
-			highlightPossibleBeams( this.map.tile( row, cntCol ) );
+			preparePossibleBeam( this.map.tile( row, cntCol ) );
 		}
 		
 		for( int cntRow = row; cntRow < toBottom; cntRow++ )
 		{
-			highlightPossibleBeams( this.map.tile( cntRow, col ) );
+			preparePossibleBeam( this.map.tile( cntRow, col ) );
 		}
 		
 		this.scroll.repaint();
@@ -337,7 +352,7 @@ public class MapArea
 			
 			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) )
 			{
-				return bCol - ( bCol - col ) - 1;
+				return col;
 			}
 		}
 		
@@ -358,7 +373,7 @@ public class MapArea
 			
 			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) ) 
 			{
-				return bRow - ( bRow - row ) - 1; 
+				return row; 
 			}
 		}
 		
@@ -407,7 +422,7 @@ public class MapArea
 		return max;	
 	}
 	
-	private void highlightPossibleBeams( Tile pBeam )
+	private void preparePossibleBeam( Tile pBeam )
 	{
 		if( pBeam.type() == "field" )
 		{
@@ -432,6 +447,103 @@ public class MapArea
 				Tile tile	= this.map.tile( row, col );
 				
 				if( !tile.type().equals( "beamsource" ) ) { tile.color( CTRANSPARENT ); }
+			}
+		}
+	}
+	
+	private void prepaintBeams( int mouseRow, int mouseCol )
+	{
+		int bRow		= this.snapsource.row();
+		int bCol		= this.snapsource.col();
+		
+		int toLeft		= this.getLeftPossibleBeams( this.snapsource );
+		int toTop		= this.getTopPossibleBeams( this.snapsource );
+		int toRight		= this.getRightPossibleBeams( this.snapsource );
+		int toBottom	= this.getBottomPossibleBeams( this.snapsource );
+		
+		this.clearPrepaintedBeams();
+
+		if( mouseRow == bRow && mouseCol > toLeft && mouseCol < toRight )
+		{
+			if( mouseCol < bCol )
+			{
+				this.paintHorizontalBeams( mouseCol, bCol, bRow );
+			} else if( mouseCol > bCol )
+			{
+				this.paintHorizontalBeams( bCol + 1, mouseCol + 1, bRow );
+			}
+		} else if( mouseCol == bCol && mouseRow > toTop && mouseRow < toBottom )
+		{
+			if( mouseRow < bRow )
+			{
+				this.paintVerticalBeams( mouseRow, bRow, bCol );
+			} else if( mouseRow > bRow )
+			{
+				this.paintVerticalBeams( bRow + 1, mouseRow + 1, bCol );
+			}
+		}
+	}
+
+	private void clearPrepaintedBeams()
+	{
+		int rows	= this.map.rows();
+		int cols	= this.map.cols();
+		
+		for( int row = 0; row < rows; row++ )
+		{
+			for( int col = 0; col < cols; col++ )
+			{
+				Tile tile	= this.map.tile( row, col );
+				
+				if( tile.type() == "field" || ( tile.type() == "beam" && tile.hidden() == true ) )
+				{
+					this.map.tile( row, col ).image( this.tileset.tile( 1 ).image() );
+					this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
+				}
+			}
+		}
+		
+		this.scroll.repaint();
+	}
+	
+	private void paintHorizontalBeams( int fromCol, int toCol, int inRow )
+	{
+		for( int col = fromCol; col < toCol; col++ )
+		{
+			this.map.tile( inRow, col ).image( this.tileset.tile( 2 ).image() );
+			this.m.addDirtyRegion( this.scroll, inRow * 32, col * 32, 32, 32 );
+		}
+		
+		this.scroll.repaint();
+	}
+	
+	private void paintVerticalBeams( int fromRow, int toRow, int inCol )
+	{
+		for( int row = fromRow; row < toRow; row++ )
+		{
+			this.map.tile( row, inCol ).image( this.tileset.tile( 2 ).image() );
+			this.m.addDirtyRegion( this.scroll, inCol * 32, row * 32, 32, 32 );
+		}
+		
+		this.scroll.repaint();
+	}
+	
+	private void triggerTiles( int row, int col, boolean force )
+	{
+		if( this.isInArea( row, col )  )
+		{
+			if( this.snapsource == null || force == true )
+			{
+				this.dehighlightPossibleBeams();
+				this.paintFocused( row, col );
+				
+				if( this.isBeamsource( row, col ) )
+				{
+					this.hilightPossibleBeams( row, col );
+				}
+			} else
+			{
+				this.prepaintBeams( row, col );
 			}
 		}
 	}
