@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -343,16 +344,20 @@ public class MapArea
 	{
 		int bRow		= beamsource.row();
 		int bCol		= beamsource.col() - 1;
-		int bStrength	= beamsource.strength();
-		
+		int curStrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
+		int bStrength	= beamsource.strength() - curStrength;
 		int min 		= ( ( bCol - bStrength ) > 0 )? bCol - bStrength : - 1;
 		
 		for( int col = bCol; col > min; col-- )
 		{
 			Tile crossing	= this.map.tile( bRow, col );
 			
-			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) )
-			{
+			if( crossing.type() == "beamsource" || 
+				( crossing.type() == "beam" && crossing.hidden() == false &&
+				   crossing.beamsource() != null && crossing.beamsource().row() != bRow &&
+				   crossing.beamsource().col() != bCol
+				)
+			) {
 				return col;
 			}
 		}
@@ -363,17 +368,21 @@ public class MapArea
 	private int getTopPossibleBeams( Tile beamsource )
 	{
 		int bRow		= beamsource.row() - 1;
-		int bCol		= beamsource.col();		
-		int bStrength	= beamsource.strength();
-		
+		int bCol		= beamsource.col();
+		int curStrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
+		int bStrength	= beamsource.strength() - curStrength;
 		int min			= ( bRow - bStrength > 0 )? bRow - bStrength : - 1;
 		
 		for( int row = bRow; row > min; row-- )
 		{
 			Tile crossing	= this.map.tile( row, bCol );
 			
-			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) ) 
-			{
+			if( crossing.type() == "beamsource" || 
+				( crossing.type() == "beam" && crossing.hidden() == false && 
+				   crossing.beamsource() != null && crossing.beamsource().row() != bRow &&
+				   crossing.beamsource().col() != bCol
+				)
+			) {
 				return row; 
 			}
 		}
@@ -385,16 +394,20 @@ public class MapArea
 	{
 		int bRow		= beamsource.row();
 		int bCol		= beamsource.col() + 1;		
-		int bStrength	= beamsource.strength();
-		
+		int curStrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
+		int bStrength	= beamsource.strength() - curStrength;
 		int max			= ( bCol + bStrength < this.map.cols() )? bCol + bStrength : this.map.cols();
 		
 		for( int col = bCol; col < max; col++ )
 		{
 			Tile crossing	= this.map.tile( bRow, col );
 			
-			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) ) 
-			{
+			if( crossing.type() == "beamsource" || 
+				( crossing.type() == "beam" && crossing.hidden() == false && 
+				   crossing.beamsource() != null && crossing.beamsource().row() != bRow &&
+				   crossing.beamsource().col() != bCol
+				)
+			) {
 				return col; 
 			}
 		}
@@ -405,17 +418,21 @@ public class MapArea
 	private int getBottomPossibleBeams( Tile beamsource )
 	{
 		int bRow		= beamsource.row() + 1;
-		int bCol		= beamsource.col();		
-		int bStrength	= beamsource.strength();
-		
+		int bCol		= beamsource.col();
+		int curStrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
+		int bStrength	= beamsource.strength() - curStrength;
 		int max			= ( bRow + bStrength < this.map.rows() )? bRow + bStrength : this.map.rows();
 		
 		for( int row = bRow; row < max; row++ )
 		{
 			Tile crossing	= this.map.tile( row, bCol );
 			
-			if( crossing.type() == "beamsource" || ( crossing.type() == "beam" && crossing.hidden() == false ) ) 
-			{
+			if( crossing.type() == "beamsource" || 
+				( crossing.type() == "beam" && crossing.hidden() == false && 
+				   crossing.beamsource() != null && crossing.beamsource().row() != bRow &&
+				   crossing.beamsource().col() != bCol
+				)
+			) {
 				return row; 
 			}
 		}
