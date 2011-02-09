@@ -90,6 +90,7 @@ public class MapArea
 				}
 			} else 
 			{
+				MapArea.this.assignBeamsToSource( row, col, MapArea.this.snapsource );
 				MapArea.this.snapsource = null;
 				MapArea.this.clearPrepaintedBeams();
 				MapArea.this.triggerTiles( row, col, false );
@@ -498,6 +499,7 @@ public class MapArea
 				if( tile.type() == "field" || ( tile.type() == "beam" && tile.hidden() == true ) )
 				{
 					this.map.tile( row, col ).image( this.tileset.tile( 1 ).image() );
+					this.map.tile( row, col ).isPrebeam( false );
 					this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
 				}
 			}
@@ -511,6 +513,7 @@ public class MapArea
 		for( int col = fromCol; col < toCol; col++ )
 		{
 			this.map.tile( inRow, col ).image( this.tileset.tile( 2 ).image() );
+			this.map.tile( inRow, col ).isPrebeam( true );
 			this.m.addDirtyRegion( this.scroll, inRow * 32, col * 32, 32, 32 );
 		}
 		
@@ -522,6 +525,7 @@ public class MapArea
 		for( int row = fromRow; row < toRow; row++ )
 		{
 			this.map.tile( row, inCol ).image( this.tileset.tile( 2 ).image() );
+			this.map.tile( row, inCol ).isPrebeam( true );
 			this.m.addDirtyRegion( this.scroll, inCol * 32, row * 32, 32, 32 );
 		}
 		
@@ -546,5 +550,47 @@ public class MapArea
 				this.prepaintBeams( row, col );
 			}
 		}
+	}
+	
+	private void assignBeamsToSource( int row, int col, Tile beamsource )
+	{
+		if( this.isInArea( row, col ) && beamsource != null )
+		{
+			int bRow	= beamsource.row();
+			int bCol	= beamsource.col();
+			
+			int maxRows	= this.map.rows();
+			int maxCols	= this.map.cols();
+			
+			for( int cntRow = 0; cntRow < maxRows; cntRow++ )
+			{
+				Tile beam	= this.map.tile( cntRow, bCol );
+				
+				if( beam.isPrebeam() == true )
+				{
+					beam.setBeamMaster( beamsource );
+					beam.hidden( false );
+					beam.image( this.tileset.tile( 2 ).image() );
+					
+					this.m.addDirtyRegion( this.scroll, cntRow * 32, bCol * 32, 32, 32 );
+				}
+			}
+			
+			for( int cntCol = 0; cntCol < maxCols; cntCol++ )
+			{
+				Tile beam	= this.map.tile( bRow, cntCol );
+				
+				if( beam.isPrebeam() == true )
+				{
+					beam.setBeamMaster( beamsource );
+					beam.image( this.tileset.tile( 2 ).image() );
+					beam.hidden( false );
+					
+					this.m.addDirtyRegion( this.scroll, bRow * 32, cntCol * 32, 32, 32 );
+				}
+			}
+		}
+		
+		this.scroll.repaint();
 	}
 }
