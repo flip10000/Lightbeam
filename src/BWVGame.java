@@ -6,6 +6,7 @@ public class BWVGame
 {
 	public static void main( String args[] )
 	{
+		// Quandel Kommentar!!!
 		// Erzeugen des GameBuilders ( Screenerhintergrund kann individuell angepast werden):
 		Core gameCore	= new Core( "./src/fx/Game/screener.gif" );
 
