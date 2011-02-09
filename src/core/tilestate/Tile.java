@@ -20,7 +20,8 @@ public class Tile implements Serializable
 	private transient BufferedImage image		= null;
 	private transient boolean focused			= false;
 	private boolean hidden						= false;
-
+	private boolean prebeam						= false;
+	
 	public final static int HORIZONTAL		= 0;
 	public final static int VERTICAL		= 1;
 	
@@ -57,6 +58,7 @@ public class Tile implements Serializable
 	public void focus( boolean blFocus )		{ this.focused = blFocus;				}
 	public void color( Color color )			{ this.color = color;					}
 	public void image( BufferedImage image )	{ this.image = image;					}
+	public void isPrebeam( boolean prebeam )	{ this.prebeam = prebeam;				}			
 	
 	// Geta - Methoden
 	public int direction()						{ return this.axis;						}
@@ -70,4 +72,5 @@ public class Tile implements Serializable
 	public boolean focused()					{ return this.focused;					}
 	public boolean hidden()						{ return this.hidden;					}
 	public Color color()						{ return this.color;					}
+	public boolean isPrebeam()					{ return this.prebeam;					}
 }
