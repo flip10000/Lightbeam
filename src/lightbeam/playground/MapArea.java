@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -79,7 +78,7 @@ public class MapArea
 		{
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
-			
+
 			if( MapArea.this.snapsource == null || MapArea.this.isBeamsource( row, col ) == true )
 			{
 				MapArea.this.clearPrepaintedBeams();
@@ -106,7 +105,7 @@ public class MapArea
 		{
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
-			
+
 			MapArea.this.triggerTiles( row, col, false );
 		}});
 	}
@@ -130,7 +129,6 @@ public class MapArea
 				Tile tile				= this.map.tile( row, col );
 
 				BufferedImage imgTile	= tile.image();
-				
 				int strength			= tile.strength();
 				
 				g.drawImage( imgTile, col * 32, row * 32, this.panel );
@@ -329,6 +327,7 @@ public class MapArea
 		
 		for( int cntCol = col; cntCol < toRight; cntCol++ )
 		{
+
 			preparePossibleBeam( this.map.tile( row, cntCol ) );
 		}
 		
@@ -342,102 +341,202 @@ public class MapArea
 	
 	private int getLeftPossibleBeams( Tile beamsource )
 	{
-		int bRow		= beamsource.row();
-		int bCol		= beamsource.col() - 1;
-		int curStrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
-		int bStrength	= beamsource.strength() - curStrength;
-		int min 		= ( ( bCol - bStrength ) > 0 )? bCol - bStrength : - 1;
-		
-		for( int col = bCol; col > min; col-- )
+		// Source-Stärke:
+		int strength	= beamsource.strength();
+		// Letzter Beam des Sources von links:
+		int left		= beamsource.col();
+		// Erstes vorkommendes Hindernis:
+		int min_crossed	= -1;
+		// Minumum der Source:
+		int min_source	= -1;
+		// Zeile des Sources:
+		int row			= beamsource.row();
+		// Spalte des Sources:
+		int col			= beamsource.col();
+		// Source-Verbrauch Gesamt:
+		int used		= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
+
+		// 1) Col-Position des ersten Hindernisses
+		// 2) Anzahl der eigenen Beams des Sources von links
+		for( int cntCol = col - 1; cntCol > -1; cntCol-- )
 		{
-			Tile crossing	= this.map.tile( bRow, col );
+			Tile cross	= this.map.tile( row, cntCol );
 			
-			if( crossing.type() == "beamsource" || 
-				( crossing.type() == "beam" && crossing.hidden() == false &&
-				   crossing.beamsource() != null && crossing.beamsource().row() != bRow &&
-				   crossing.beamsource().col() != bCol
+			// Col-Position des ersten Hindernisses:
+			if( min_crossed == -1 &&
+				cross.type() == "beamsource" || 
+				( cross.type() == "beam" && cross.hidden() == false &&
+				  cross.beamsource().row() != row &&
+				  cross.beamsource().col() != col
 				)
 			) {
-				return col;
+				min_crossed = cntCol;
+			}
+			
+			// Anzahl der eigenen Beams des Sources von links:
+			if( cross.type() == "beam" && cross.hidden() == false &&
+				cross.beamsource() != null && 
+				cross.beamsource().row() == row &&
+				cross.beamsource().col() == col
+			) {
+				left = cntCol;
 			}
 		}
 		
-		return min;
+		min_source	= left + used - strength - 1;
+
+		return ( min_source > min_crossed )? min_source : min_crossed;
 	}
 	
 	private int getTopPossibleBeams( Tile beamsource )
 	{
-		int bRow		= beamsource.row() - 1;
-		int bCol		= beamsource.col();
-		int curStrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
-		int bStrength	= beamsource.strength() - curStrength;
-		int min			= ( bRow - bStrength > 0 )? bRow - bStrength : - 1;
-		
-		for( int row = bRow; row > min; row-- )
+		// Source-Stärke:
+		int strength	= beamsource.strength();
+		// Letzter Beam des Sources von oben:
+		int top			= beamsource.row();
+		// Erstes vorkommendes Hindernis:
+		int min_crossed	= -1;
+		// Minumum der Source:
+		int min_source	= -1;
+		// Zeile des Sources:
+		int row			= beamsource.row();
+		// Spalte des Sources:
+		int col			= beamsource.col();
+		// Source-Verbrauch Gesamt:
+		int used		= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
+
+		// 1) Row-Position des ersten Hindernisses
+		// 2) Anzahl der eigenen Beams des Sources von oben
+		for( int cntRow = row - 1; cntRow > -1; cntRow-- )
 		{
-			Tile crossing	= this.map.tile( row, bCol );
+			Tile cross	= this.map.tile( cntRow, col );
 			
-			if( crossing.type() == "beamsource" || 
-				( crossing.type() == "beam" && crossing.hidden() == false && 
-				   crossing.beamsource() != null && crossing.beamsource().row() != bRow &&
-				   crossing.beamsource().col() != bCol
+			// Col-Position des ersten Hindernisses:
+			if( min_crossed == -1 &&
+				cross.type() == "beamsource" || 
+				( cross.type() == "beam" && cross.hidden() == false &&
+				  cross.beamsource().row() != row &&
+				  cross.beamsource().col() != col
 				)
 			) {
-				return row; 
+				min_crossed = cntRow;
+			}
+			
+			// Anzahl der eigenen Beams des Sources von links:
+			if( cross.type() == "beam" && cross.hidden() == false &&
+				cross.beamsource() != null && 
+				cross.beamsource().row() == row &&
+				cross.beamsource().col() == col
+			) {
+				top = cntRow;
 			}
 		}
-		
-		return min;	
+System.out.println(min_crossed);		
+		min_source	= top + used - strength - 1;
+
+		return ( min_source > min_crossed )? min_source : min_crossed;
 	}
 	
 	private int getRightPossibleBeams( Tile beamsource )
 	{
-		int bRow		= beamsource.row();
-		int bCol		= beamsource.col() + 1;		
-		int curStrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
-		int bStrength	= beamsource.strength() - curStrength;
-		int max			= ( bCol + bStrength < this.map.cols() )? bCol + bStrength : this.map.cols();
-		
-		for( int col = bCol; col < max; col++ )
+		// Kartenbreite:
+		int cols		= this.map.cols();
+		// Source-Stärke:
+		int strength	= beamsource.strength();
+		// Letzter Beam des Sources von rechts:
+		int right		= beamsource.col();
+		// Erstes vorkommendes Hindernis:
+		int max_crossed	= cols;
+		// Minumum der Source:
+		int max_source	= cols;
+		// Zeile des Sources:
+		int row			= beamsource.row();
+		// Spalte des Sources:
+		int col			= beamsource.col();
+		// Source-Verbrauch Gesamt:
+		int used		= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
+
+		// 1) Row-Position des ersten Hindernisses
+		// 2) Anzahl der eigenen Beams des Sources von oben
+		for( int cntCol = col + 1; cntCol < cols; cntCol++ )
 		{
-			Tile crossing	= this.map.tile( bRow, col );
+			Tile cross	= this.map.tile( row, cntCol );
 			
-			if( crossing.type() == "beamsource" || 
-				( crossing.type() == "beam" && crossing.hidden() == false && 
-				   crossing.beamsource() != null && crossing.beamsource().row() != bRow &&
-				   crossing.beamsource().col() != bCol
+			// Col-Position des ersten Hindernisses:
+			if( max_crossed == cols &&
+				cross.type() == "beamsource" || 
+				( cross.type() == "beam" && cross.hidden() == false &&
+				  cross.beamsource().row() != row &&
+				  cross.beamsource().col() != col
 				)
 			) {
-				return col; 
+				max_crossed = cntCol;
+			}
+			
+			// Anzahl der eigenen Beams des Sources von links:
+			if( cross.type() == "beam" && cross.hidden() == false &&
+				cross.beamsource() != null && 
+				cross.beamsource().row() == row &&
+				cross.beamsource().col() == col
+			) {
+				right = cntCol;
 			}
 		}
 		
-		return max;	
+		max_source	= right + strength - used + 1;
+
+		return ( max_source < max_crossed )? max_source : max_crossed;
 	}
 	
 	private int getBottomPossibleBeams( Tile beamsource )
 	{
-		int bRow		= beamsource.row() + 1;
-		int bCol		= beamsource.col();
-		int curStrength	= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
-		int bStrength	= beamsource.strength() - curStrength;
-		int max			= ( bRow + bStrength < this.map.rows() )? bRow + bStrength : this.map.rows();
-		
-		for( int row = bRow; row < max; row++ )
+		// Kartenhöhe:
+		int rows		= this.map.rows();
+		// Source-Stärke:
+		int strength	= beamsource.strength();
+		// Letzter Beam des Sources von unten:
+		int bottom		= beamsource.row();
+		// Erstes vorkommendes Hindernis:
+		int max_crossed	= rows;
+		// Minumum der Source:
+		int max_source	= rows;
+		// Zeile des Sources:
+		int row			= beamsource.row();
+		// Spalte des Sources:
+		int col			= beamsource.col();
+		// Source-Verbrauch Gesamt:
+		int used		= this.map.filter( "beam", beamsource ).depends( beamsource ).size();
+
+		// 1) Row-Position des ersten Hindernisses
+		// 2) Anzahl der eigenen Beams des Sources von oben
+		for( int cntRow = row + 1; cntRow < rows; cntRow++ )
 		{
-			Tile crossing	= this.map.tile( row, bCol );
+			Tile cross	= this.map.tile( cntRow, col );
 			
-			if( crossing.type() == "beamsource" || 
-				( crossing.type() == "beam" && crossing.hidden() == false && 
-				   crossing.beamsource() != null && crossing.beamsource().row() != bRow &&
-				   crossing.beamsource().col() != bCol
+			// Col-Position des ersten Hindernisses:
+			if( max_crossed == rows &&
+				cross.type() == "beamsource" || 
+				( cross.type() == "beam" && cross.hidden() == false &&
+				  cross.beamsource().row() != row &&
+				  cross.beamsource().col() != col
 				)
 			) {
-				return row; 
+				max_crossed = cntRow;
+			}
+			
+			// Anzahl der eigenen Beams des Sources von links:
+			if( cross.type() == "beam" && cross.hidden() == false &&
+				cross.beamsource() != null && 
+				cross.beamsource().row() == row &&
+				cross.beamsource().col() == col
+			) {
+				bottom = cntRow;
 			}
 		}
 		
-		return max;	
+		max_source	= bottom + strength - used + 1;
+
+		return ( max_source < max_crossed )? max_source : max_crossed;
 	}
 	
 	private void preparePossibleBeam( Tile pBeam )
@@ -478,7 +577,7 @@ public class MapArea
 		int toTop		= this.getTopPossibleBeams( this.snapsource );
 		int toRight		= this.getRightPossibleBeams( this.snapsource );
 		int toBottom	= this.getBottomPossibleBeams( this.snapsource );
-		
+
 		this.clearPrepaintedBeams();
 
 		if( mouseRow == bRow && mouseCol > toLeft && mouseCol < toRight )
@@ -531,6 +630,7 @@ public class MapArea
 		{
 			this.map.tile( inRow, col ).image( this.tileset.tile( 2 ).image() );
 			this.map.tile( inRow, col ).isPrebeam( true );
+
 			this.m.addDirtyRegion( this.scroll, inRow * 32, col * 32, 32, 32 );
 		}
 		
@@ -543,6 +643,7 @@ public class MapArea
 		{
 			this.map.tile( row, inCol ).image( this.tileset.tile( 2 ).image() );
 			this.map.tile( row, inCol ).isPrebeam( true );
+
 			this.m.addDirtyRegion( this.scroll, inCol * 32, row * 32, 32, 32 );
 		}
 		
@@ -585,6 +686,10 @@ public class MapArea
 				
 				if( beam.isPrebeam() == true )
 				{
+					beam.isPrebeam( false );
+					
+					if( beam.type() != "beam" ) { beam.type( "beam" ); }
+					
 					beam.setBeamMaster( beamsource );
 					beam.hidden( false );
 					beam.image( this.tileset.tile( 2 ).image() );
@@ -599,6 +704,10 @@ public class MapArea
 				
 				if( beam.isPrebeam() == true )
 				{
+					beam.isPrebeam( false );
+					
+					if( beam.type() != "beam" ) { beam.type( "beam" ); }
+					
 					beam.setBeamMaster( beamsource );
 					beam.image( this.tileset.tile( 2 ).image() );
 					beam.hidden( false );
