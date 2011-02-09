@@ -27,12 +27,14 @@ import lightbeam.tiles.TileField;
 
 public class MapArea
 {
+	// Testkommentar für Quandel!!
 	private AbstractTileSetFactory tileset		= null;
 	private JPanel panel						= null;
 	private JScrollPane scroll					= new JScrollPane();
 	
 	final static Color CBLUE					= new Color( 3, 115, 210, 110 );
 	final static Color CRED						= new Color( 255, 0, 0, 100 );
+	final static Color CYELLOW					= new Color( 255, 212, 0, 100 );
 	final static Color CGREEN					= new Color( 76, 188, 64, 100 );
 	final static Color CTRANSPARENT				= new Color( 255, 255, 255, 0 );	
 		
@@ -79,21 +81,32 @@ public class MapArea
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
 
-			if( MapArea.this.snapsource == null || MapArea.this.isBeamsource( row, col ) == true )
+			if( ( MapArea.this.snapsource == null || MapArea.this.isBeamsource( row, col ) == true ) &&
+				MapArea.this.map.tile( row, col ).type() != "field" &&
+				MapArea.this.map.tile( row, col ).type() != "beam"
+			)
 			{
 				MapArea.this.clearPrepaintedBeams();
 				
 				if( MapArea.this.isInArea( row, col ) )
 				{
+					MapArea.this.map.tile( row, col ).color( MapArea.CYELLOW );
+					MapArea.this.m.addDirtyRegion( MapArea.this.scroll, MapArea.this.map.tile( row, col ).row() * 32, MapArea.this.map.tile( row, col ).col() * 32, 32, 32 );
+
 					MapArea.this.triggerTiles( row, col, true );
-					MapArea.this.snapsource	= MapArea.this.map.tile( row, col);
+					MapArea.this.snapsource	= MapArea.this.map.tile( row, col );
 				}
 			} else 
 			{
+				Tile snapsource	= MapArea.this.snapsource;
+				
+				if( snapsource != null )	{ snapsource.color( MapArea.CTRANSPARENT ); }
+				
 				MapArea.this.assignBeamsToSource( row, col, MapArea.this.snapsource );
 				MapArea.this.snapsource = null;
 				MapArea.this.clearPrepaintedBeams();
 				MapArea.this.triggerTiles( row, col, false );
+				
 			}
 		}});
 		
@@ -431,7 +444,7 @@ public class MapArea
 				top = cntRow;
 			}
 		}
-System.out.println(min_crossed);		
+		
 		min_source	= top + used - strength - 1;
 
 		return ( min_source > min_crossed )? min_source : min_crossed;
@@ -630,7 +643,7 @@ System.out.println(min_crossed);
 		{
 			this.map.tile( inRow, col ).image( this.tileset.tile( 2 ).image() );
 			this.map.tile( inRow, col ).isPrebeam( true );
-
+			
 			this.m.addDirtyRegion( this.scroll, inRow * 32, col * 32, 32, 32 );
 		}
 		
