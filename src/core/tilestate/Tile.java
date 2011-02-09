@@ -12,6 +12,7 @@ public class Tile implements Serializable
 	private static final long serialVersionUID = 303946875953233384L;
 	private String type							= null;
 	private int strength						= 0;
+	private int strength_used					= 0;
 	private int axis							= 0;
 	private Tile parent							= null;
 	private int row								= 0;
@@ -54,12 +55,12 @@ public class Tile implements Serializable
 	}
 	
 	public void hidden( boolean hidden )		{ this.hidden = hidden;					}
-	
 	public void focus( boolean blFocus )		{ this.focused = blFocus;				}
 	public void color( Color color )			{ this.color = color;					}
 	public void image( BufferedImage image )	{ this.image = image;					}
 	public void isPrebeam( boolean prebeam )	{ this.prebeam = prebeam;				}			
 	public void type( String type )				{ this.type = type;						}
+	public void usedStrength( int strength)		{ this.strength_used = strength;		}
 	
 	// Geta - Methoden
 	public int direction()						{ return this.axis;						}
@@ -74,4 +75,5 @@ public class Tile implements Serializable
 	public boolean hidden()						{ return this.hidden;					}
 	public Color color()						{ return this.color;					}
 	public boolean isPrebeam()					{ return this.prebeam;					}
+	public int usedStrength()					{ return this.strength_used;			}
 }
