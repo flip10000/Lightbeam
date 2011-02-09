@@ -27,7 +27,6 @@ import lightbeam.tiles.TileField;
 
 public class MapArea
 {
-	// Testkommentar für Quandel!!
 	private AbstractTileSetFactory tileset		= null;
 	private JPanel panel						= null;
 	private JScrollPane scroll					= new JScrollPane();
