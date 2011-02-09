@@ -106,7 +106,6 @@ public class MapArea
 				MapArea.this.snapsource = null;
 				MapArea.this.clearPrepaintedBeams();
 				MapArea.this.triggerTiles( row, col, false );
-				
 			}
 		}});
 		
@@ -651,8 +650,8 @@ public class MapArea
 		int previewBeamsUsed	= this.map.filterOnImages( previewPreBeamsUsed, this.tileset.tile( 2 ).image() ).size();
 		int sumUsed				= readyBeamsUsed + previewBeamsUsed;
 		
-		if( sumUsed == this.snapsource.strength() ) { this.snapsource.color( MapArea.CBLUE ); }
-		
+		if( sumUsed == this.snapsource.strength() ) { this.snapsource.color( MapArea.CBLUE ); 	}
+		else										{ this.snapsource.color( MapArea.CYELLOW );	}
 		this.snapsource.usedStrength( sumUsed );		
 	}
 
