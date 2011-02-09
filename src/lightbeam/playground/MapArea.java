@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -83,17 +84,17 @@ public class MapArea
 			if( ( MapArea.this.snapsource == null || MapArea.this.isBeamsource( row, col ) == true ) &&
 				MapArea.this.map.tile( row, col ).type() != "field" &&
 				MapArea.this.map.tile( row, col ).type() != "beam"
-			)
-			{
+			) {
 				MapArea.this.clearPrepaintedBeams();
 				
 				if( MapArea.this.isInArea( row, col ) )
 				{
+					MapArea.this.triggerTiles( row, col, true );
+					MapArea.this.snapsource	= MapArea.this.map.tile( row, col );
 					MapArea.this.map.tile( row, col ).color( MapArea.CYELLOW );
 					MapArea.this.m.addDirtyRegion( MapArea.this.scroll, MapArea.this.map.tile( row, col ).row() * 32, MapArea.this.map.tile( row, col ).col() * 32, 32, 32 );
 
-					MapArea.this.triggerTiles( row, col, true );
-					MapArea.this.snapsource	= MapArea.this.map.tile( row, col );
+					MapArea.this.scroll.repaint();
 				}
 			} else 
 			{
@@ -152,23 +153,32 @@ public class MapArea
 				// Margin, etc. in Relation zum parentTile !!!
 				if( strength > 0 && tile.type() == "beamsource" )
 				{
+					int bStrength	= strength;
+					
+					if( this.snapsource != null && 
+						this.snapsource.row() == row &&
+						this.snapsource.col() == col
+					) {
+						bStrength = this.snapsource.strength() - this.snapsource.usedStrength();
+					}
+					
 					g.setColor( new Color( 0, 0, 0, 255 ) );
 					
-					if( strength < 100 )
+					if( bStrength < 100 )
 					{
 						g.setFont( new Font( "Arial", Font.BOLD, 22 ) );
 						
-						if( strength < 10 )
+						if( bStrength < 10 )
 						{
-							g.drawString( strength+"", ( col * 32 ) + 11, ( row * 32 ) + 24 );		
+							g.drawString( bStrength+"", ( col * 32 ) + 11, ( row * 32 ) + 24 );		
 						} else
 						{
-							g.drawString( strength+"", ( col * 32 ) + 4, ( row * 32 ) + 24 );		
+							g.drawString( bStrength+"", ( col * 32 ) + 4, ( row * 32 ) + 24 );
 						}
 					} else
 					{
 						g.setFont( new Font( "Arial", Font.BOLD, 12 ) );
-						g.drawString( strength+"", ( col * 32 ) + 5, ( row * 32 ) + 21 );
+						g.drawString( bStrength+"", ( col * 32 ) + 5, ( row * 32 ) + 21 );
 					}
 				} else if( strength == 0 && tile.type() == "beamsource" )
 				{
@@ -585,11 +595,14 @@ public class MapArea
 		int bRow		= this.snapsource.row();
 		int bCol		= this.snapsource.col();
 		
+		int rows		= this.map.rows();
+		int cols		= this.map.cols();
+		
 		int toLeft		= this.getLeftPossibleBeams( this.snapsource );
 		int toTop		= this.getTopPossibleBeams( this.snapsource );
 		int toRight		= this.getRightPossibleBeams( this.snapsource );
 		int toBottom	= this.getBottomPossibleBeams( this.snapsource );
-
+		
 		this.clearPrepaintedBeams();
 
 		if( mouseRow == bRow && mouseCol > toLeft && mouseCol < toRight )
@@ -611,6 +624,36 @@ public class MapArea
 				this.paintVerticalBeams( bRow + 1, mouseRow + 1, bCol );
 			}
 		}
+
+		ArrayList<Tile> previewPreBeamsUsed	= new ArrayList<Tile>();
+		
+		for( int row = 0; row < rows; row++ )
+		{
+			Tile preTile	= this.map.tile( row, bCol );
+			
+			if( preTile.type() == "field" || ( preTile.type() == "beam" && preTile.hidden() == true ) )
+			{
+				previewPreBeamsUsed.add( preTile );
+			}
+		}
+
+		for( int col = 0; col < cols; col++ )
+		{
+			Tile preTile	= this.map.tile( bRow, col );
+			
+			if( preTile.type() == "field" || ( preTile.type() == "beam" && preTile.hidden() == true ) )
+			{
+				previewPreBeamsUsed.add( preTile );
+			}
+		}
+		
+		int readyBeamsUsed		= this.map.filter( "beam", this.snapsource ).depends( this.snapsource ).size();
+		int previewBeamsUsed	= this.map.filterOnImages( previewPreBeamsUsed, this.tileset.tile( 2 ).image() ).size();
+		int sumUsed				= readyBeamsUsed + previewBeamsUsed;
+		
+		if( sumUsed == this.snapsource.strength() ) { this.snapsource.color( MapArea.CBLUE ); }
+		
+		this.snapsource.usedStrength( sumUsed );		
 	}
 
 	private void clearPrepaintedBeams()
@@ -684,6 +727,8 @@ public class MapArea
 	
 	private void assignBeamsToSource( int row, int col, Tile beamsource )
 	{
+		int strength_used	= 0;
+		
 		if( this.isInArea( row, col ) && beamsource != null )
 		{
 			int bRow	= beamsource.row();
@@ -707,6 +752,8 @@ public class MapArea
 					beam.image( this.tileset.tile( 2 ).image() );
 					
 					this.m.addDirtyRegion( this.scroll, cntRow * 32, bCol * 32, 32, 32 );
+					
+					++strength_used;
 				}
 			}
 			
@@ -725,6 +772,8 @@ public class MapArea
 					beam.hidden( false );
 					
 					this.m.addDirtyRegion( this.scroll, bRow * 32, cntCol * 32, 32, 32 );
+					
+					++strength_used;
 				}
 			}
 		}
