@@ -271,7 +271,7 @@ public class TileArray implements Serializable
 			Tile child	= this.filteredTiles.get( cntFiltered );
 			Tile parent	= child.parent();
 			
-			if( parent.row() == source.row() && parent.col() == source.col() )
+			if( parent.row() == source.row() && parent.col() == source.col() && child.hidden() == false )
 			{
 				foundTiles.add( child );
 			}
