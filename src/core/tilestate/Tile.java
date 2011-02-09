@@ -59,6 +59,7 @@ public class Tile implements Serializable
 	public void color( Color color )			{ this.color = color;					}
 	public void image( BufferedImage image )	{ this.image = image;					}
 	public void isPrebeam( boolean prebeam )	{ this.prebeam = prebeam;				}			
+	public void type( String type )				{ this.type = type;						}
 	
 	// Geta - Methoden
 	public int direction()						{ return this.axis;						}
