@@ -287,7 +287,7 @@ public class MapArea
 		{
 			for( int col = 0; col < cols; col++ ) 
 			{
-				this.map.setTile( row, col ).withState( this.tileset.getSelected() );
+				this.map.setTile( row, col ).withState( this.tileset.tile( 1 ) );
 			}
 		}
 	}
