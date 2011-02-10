@@ -1,7 +1,5 @@
 package core.tilestate;
 
-
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,12 +7,17 @@ import java.util.ArrayList;
 
 public class TileArray implements Serializable
 {
-	private static final long serialVersionUID 	= 5567438036750252438L;
-
+	private static final long serialVersionUID 		= 5567438036750252438L;
+	
+	public final static int MODE_READY				= 0;
+	public final static int MODE_PREVIEW			= 1;
+	
 	private int rows, cols;
 	private int setRow, setCol;
 	private Tile[][] tiles;
-	private ArrayList<Tile> filteredTiles 		= null;
+	private transient Tile[][] pretiles;
+	private transient Tile[][] conttiles;
+	private transient ArrayList<Tile> filteredTiles	= null;
 	
 	public TileArray() {}
 	
@@ -31,21 +34,6 @@ public class TileArray implements Serializable
 		
 		this.rows	= rows;
 		this.cols	= cols;
-	}
-	
-	public void setSize( int rows )
-	{
-		Tile tmpArray[][] = new Tile[rows][];
-		
-		for( int i = 0; i < rows; i++ )
-		{
-			tmpArray[i]	= new Tile[this.rows];
-			
-			for( int j = 0; j < this.cols; j++ ) { tmpArray[i][j] = this.tiles[i][j]; }
-		}
-		
-		this.rows	= rows;
-		this.tiles	= tmpArray;
 	}
 	
 	public void addRow( ITileState tileState )
@@ -299,95 +287,28 @@ public class TileArray implements Serializable
 		return foundTiles;
 	}
 	
-	public void mode( int mode, int row, int col )
+	public void mode( int mode )
 	{
-		if( mode == Tile.MODE_PREVIEW )
+		if( mode == TileArray.MODE_PREVIEW )
 		{
-			// Zeilen in Spalte "col" ( bis auf Tile in Zeile "row" und Spalte "col" ) 
-			// in den Preview-Modus versetzen:
-			// 1) Anfangszustand für den Preview-Modus des jew. Tiles speichern.
-			// 2) Tile in Preview-Modus versetzen.
-			// 3) Anfangzustand an Tiles im Preview-Modus übergeben.
+			if( this.conttiles == null ) { this.conttiles = this.tiles.clone(); }
+			this.pretiles	= new Tile[this.rows][this.cols];
+			
 			for( int cntRow = 0; cntRow < this.rows; cntRow++ )
 			{
-				if( cntRow != row )
+				this.pretiles[cntRow]	= new Tile[this.cols];
+				
+				for( int cntCol = 0; cntCol < this.cols; cntCol++ )
 				{
-					Tile modeTile		= this.tile( cntRow, col );
-					Tile parent			= modeTile.parent();
-					Color color			= modeTile.color();
-					BufferedImage image	= modeTile.image();
-					String type			= modeTile.type();
-					
-					modeTile.preview( true );
-					
-					modeTile.parent( parent );
-					modeTile.color( color );
-					modeTile.image( image );
-					modeTile.type( type );
+					this.pretiles[cntRow][cntCol]	= (Tile)this.tiles[cntRow][cntCol].clone();
 				}
 			}
 			
-			// Spalten in Zeile "row" ( bis auf Tile in Zeile "row" und Spalte "col" )
-			// in den Preview-Modus versetzen:
-			// 1) Anfangszustand für den Preview-Modus des jew. Tiles speichern.
-			// 2) Tile in Preview-Modus versetzen.
-			// 3) Anfangzustand an Tiles im Preview-Modus übergeben.
-			for( int cntCol = 0; cntCol < this.cols; cntCol++ )
-			{
-				if( cntCol != col )
-				{
-					Tile modeTile		= this.tile( row, cntCol );
-					Tile parent			= modeTile.parent();
-					Color color			= modeTile.color();
-					BufferedImage image	= modeTile.image();
-					String type			= modeTile.type();
-					
-					modeTile.preview( true );
-					
-					modeTile.parent( parent );
-					modeTile.color( color );
-					modeTile.image( image );
-					modeTile.type( type );
-				}
-			}
-			
-			// Tile in Zeile "row" und Spalte "col" in den Preview-Modus versetzen:
-			// 1) Anfangszustand für den Preview-Modus speichern.
-			// 2) Tile in Preview-Modus versetzen.
-			// 3) Anfangzustand an Tile im Preview-Modus übergeben.
-			Tile modeTile		= this.tile( row, col );
-			Tile parent			= modeTile.parent();
-			Color color			= modeTile.color();
-			BufferedImage image	= modeTile.image();
-			String type			= modeTile.type();
-			
-			modeTile.preview( true );
-			
-			modeTile.parent( parent );
-			modeTile.color( color );
-			modeTile.image( image );
-			modeTile.type( type );
-		} else if( mode == Tile.MODE_READY )
+			this.tiles		= this.pretiles.clone();
+		} else if( mode == TileArray.MODE_READY )
 		{
-			// Zeilen in Spalte "col" ( bis auf Tile in Zeile "row" und Spalte "col" ) 
-			// in den Ready-Modus versetzen:
-			for( int cntRow = 0; cntRow < this.rows; cntRow++ )
-			{
-				if( cntRow != row ) { this.tile( cntRow, col ).preview( false ); }
-			}
-			
-			// Spalten in Zeile "row" ( bis auf Tile in Zeile "row" und Spalte "col" )
-			// in den Ready-Modus versetzen:
-			for( int cntCol = 0; cntCol < this.cols; cntCol++ )
-			{
-				if( cntCol != col )
-				{
-					this.tile( row, cntCol ).preview( false );
-				}
-			}
-			
-			// Tile in Zeile "row" und Spalte "col" in den Preview-Modus versetzen:
-			this.tile( row, col ).preview( false );
+			this.tiles		= this.conttiles.clone();
+			this.pretiles	= null;
 		}
 	}
 }
