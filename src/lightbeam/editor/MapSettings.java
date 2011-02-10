@@ -143,8 +143,8 @@ public class MapSettings extends GameObjects
 	{
 		this.oldTileState	= null;
 		this.curTileState	= null;
-		
+
 		this.txtRows.setText( rows + "" );
-		this.txtRows.setText( cols + "" );
+		this.txtCols.setText( cols + "" );
 	}
 }
