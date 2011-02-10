@@ -81,10 +81,8 @@ public class MapArea
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
 
-			if( ( MapArea.this.snapsource == null || MapArea.this.isBeamsource( row, col ) == true ) &&
-				MapArea.this.map.tile( row, col ).type() != "field" &&
-				MapArea.this.map.tile( row, col ).type() != "beam"
-			) {
+			if( MapArea.this.snapsource == null || MapArea.this.isBeamsource( row, col ) == true )
+			{
 				MapArea.this.clearPrepaintedBeams();
 				
 				if( MapArea.this.isInArea( row, col ) )
@@ -99,8 +97,12 @@ public class MapArea
 			} else 
 			{
 				Tile snapsource	= MapArea.this.snapsource;
-				
-				if( snapsource != null )	{ snapsource.color( MapArea.CTRANSPARENT ); }
+
+				if( snapsource != null )	
+				{
+					MapArea.this.map.tile( snapsource.row(), snapsource.col() ).focus( false );
+					snapsource.color( MapArea.CTRANSPARENT ); 
+				}
 				
 				MapArea.this.assignBeamsToSource( row, col, MapArea.this.snapsource );
 				MapArea.this.snapsource = null;
@@ -159,6 +161,10 @@ public class MapArea
 						this.snapsource.col() == col
 					) {
 						bStrength = this.snapsource.strength() - this.snapsource.usedStrength();
+					} else if( this.snapsource == null && tile.type() == "beamsource" && tile.focused() == true )
+					{
+						bStrength	= tile.strength() - this.map.filter( "beam", tile ).depends( tile ).size();
+						tile.focus( false );
 					}
 					
 					g.setColor( new Color( 0, 0, 0, 255 ) );
@@ -715,6 +721,7 @@ public class MapArea
 				
 				if( this.isBeamsource( row, col ) )
 				{
+					this.map.tile( row, col ).focus( true );
 					this.hilightPossibleBeams( row, col );
 				}
 			} else
@@ -726,8 +733,6 @@ public class MapArea
 	
 	private void assignBeamsToSource( int row, int col, Tile beamsource )
 	{
-		int strength_used	= 0;
-		
 		if( this.isInArea( row, col ) && beamsource != null )
 		{
 			int bRow	= beamsource.row();
@@ -751,8 +756,6 @@ public class MapArea
 					beam.image( this.tileset.tile( 2 ).image() );
 					
 					this.m.addDirtyRegion( this.scroll, cntRow * 32, bCol * 32, 32, 32 );
-					
-					++strength_used;
 				}
 			}
 			
@@ -771,8 +774,6 @@ public class MapArea
 					beam.hidden( false );
 					
 					this.m.addDirtyRegion( this.scroll, bRow * 32, cntCol * 32, 32, 32 );
-					
-					++strength_used;
 				}
 			}
 		}
