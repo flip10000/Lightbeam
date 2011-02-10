@@ -1,6 +1,7 @@
 package lightbeam.editor;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -31,6 +32,9 @@ public class MapArea
 	private AbstractTileSetFactory tileset		= null;
 	private JPanel panel						= null;
 	private JScrollPane scroll					= new JScrollPane();
+	
+	final static Cursor CURSOR_HAND				= new Cursor( Cursor.HAND_CURSOR );
+	final static Cursor CURSOR_DEFAULT			= new Cursor( Cursor.DEFAULT_CURSOR );
 	
 	private RepaintManager m					= null;
 	private TileArray map						= null;
@@ -589,7 +593,17 @@ public class MapArea
 		int maxRow	= MapArea.this.map.rows();
 		int maxCol	= MapArea.this.map.cols();
 		
-		return ( row < maxRow && col < maxCol && row > -1 && col > -1 )? true : false;
+		if( row < maxRow && col < maxCol && row > -1 && col > -1 )
+		{
+			this.scroll.setCursor( MapArea.CURSOR_HAND );
+			
+			return true;
+		} else
+		{
+			this.scroll.setCursor( MapArea.CURSOR_DEFAULT );
+			
+			return false;
+		}
 	}
 	
 	private int[] getTileArea( int row, int col )
