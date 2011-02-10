@@ -128,16 +128,11 @@ public class MapArea
 				if( MapArea.this.manipSource == null )
 				{
 					MapArea.this.doHilightPossibleBeams( row, col );
-				} else if( MapArea.this.isBeamsource( row, col ) )
+				} else 
 				{
-//					MapArea.this.map.mode( Tile.MODE_PREVIEW, row, col );
-//					MapArea.this.map.tile( row, col ).color( Tile.CGREEN );
-//					
-//					MapArea.this.scroll.repaint();
+					MapArea.this.prepaintBeams( row, col );
 				}
 			}
-
-//			MapArea.this.triggerTiles( row, col, false );
 		}});
 	}
 	
@@ -397,7 +392,7 @@ public class MapArea
 		if( this.isBeamsource( row, col ) == true )
 		{
 			this.focusedSource	= this.map.tile( row, col );
-			this.map.mode( Tile.MODE_PREVIEW, row, col );
+			this.map.mode( TileArray.MODE_PREVIEW );
 			this.hilightPossibleBeams( this.map.tile( row, col ) );
 		}
 	}
@@ -445,7 +440,10 @@ public class MapArea
 		}
 		
 		// Beamsource grün hervorheben:
-		this.focusedSource.color( Tile.CGREEN );
+		int fRow	= this.focusedSource.row();
+		int fCol	= this.focusedSource.col();
+		
+		this.map.tile( fRow, fCol ).color( Tile.CGREEN );
 		
 		this.scroll.repaint();
 	}
@@ -459,14 +457,8 @@ public class MapArea
 	{
 		if( this.focusedSource != null )
 		{
-			int fRow	= this.focusedSource.row();
-			int fCol	= this.focusedSource.col();
-			
-			int rows	= this.map.rows();
-			int cols	= this.map.cols();			
-			
 			// Zurück in den Ready-Mode: 
-			this.map.mode( Tile.MODE_READY, fRow, fCol );
+			this.map.mode( TileArray.MODE_READY );
 			
 			// paintComponent-Clip-Bereich vorbereiten:
 			// 1) Alle Zeilen der Spalte "col":
@@ -694,69 +686,73 @@ public class MapArea
 	
 	private void prepaintBeams( int mouseRow, int mouseCol )
 	{
-//		int bRow		= this.snapsource.row();
-//		int bCol		= this.snapsource.col();
-//		
-//		int rows		= this.map.rows();
-//		int cols		= this.map.cols();
-//		
-//		int toLeft		= this.getLeftPossibleBeams( this.snapsource );
-//		int toTop		= this.getTopPossibleBeams( this.snapsource );
-//		int toRight		= this.getRightPossibleBeams( this.snapsource );
-//		int toBottom	= this.getBottomPossibleBeams( this.snapsource );
-//		
-//		this.clearPrepaintedBeams();
-//
-//		if( mouseRow == bRow && mouseCol > toLeft && mouseCol < toRight )
-//		{
-//			if( mouseCol < bCol )
-//			{
-//				this.paintHorizontalBeams( mouseCol, bCol, bRow );
-//			} else if( mouseCol > bCol )
-//			{
-//				this.paintHorizontalBeams( bCol + 1, mouseCol + 1, bRow );
-//			}
-//		} else if( mouseCol == bCol && mouseRow > toTop && mouseRow < toBottom )
-//		{
-//			if( mouseRow < bRow )
-//			{
-//				this.paintVerticalBeams( mouseRow, bRow, bCol );
-//			} else if( mouseRow > bRow )
-//			{
-//				this.paintVerticalBeams( bRow + 1, mouseRow + 1, bCol );
-//			}
-//		}
-//
-//		ArrayList<Tile> previewPreBeamsUsed	= new ArrayList<Tile>();
-//		
-//		for( int row = 0; row < rows; row++ )
-//		{
-//			Tile preTile	= this.map.tile( row, bCol );
-//			
-//			if( preTile.type() == "field" || ( preTile.type() == "beam" && preTile.hidden() == true ) )
-//			{
-//				previewPreBeamsUsed.add( preTile );
-//			}
-//		}
-//
-//		for( int col = 0; col < cols; col++ )
-//		{
-//			Tile preTile	= this.map.tile( bRow, col );
-//			
-//			if( preTile.type() == "field" || ( preTile.type() == "beam" && preTile.hidden() == true ) )
-//			{
-//				previewPreBeamsUsed.add( preTile );
-//			}
-//		}
-//		
-//		int readyBeamsUsed		= this.map.filter( "beam", this.snapsource ).depends( this.snapsource ).size();
-//		int previewBeamsUsed	= this.map.filterOnImages( previewPreBeamsUsed, this.tileset.tile( 2 ).image() ).size();
-//		int sumUsed				= readyBeamsUsed + previewBeamsUsed;
-//		
-//		if( sumUsed == this.snapsource.strength() ) { this.snapsource.color( MapArea.CBLUE ); 	}
-//		else										{ this.snapsource.color( MapArea.CYELLOW );	}
-//		
-//		this.snapsource.usedStrength( sumUsed );		
+		int mRow		= this.manipSource.row();
+		int mCol		= this.manipSource.col();
+		
+		int rows		= this.map.rows();
+		int cols		= this.map.cols();
+		
+		int toLeft		= this.getLeftPossibleBeams( this.manipSource );
+		int toTop		= this.getTopPossibleBeams( this.manipSource );
+		int toRight		= this.getRightPossibleBeams( this.manipSource );
+		int toBottom	= this.getBottomPossibleBeams( this.manipSource );
+		
+		this.clearPrepaintedBeams();
+
+		if( mouseRow == mRow && mouseCol > toLeft && mouseCol < toRight )
+		{
+			if( mouseCol < mCol )
+			{
+				this.scroll.setCursor( MapArea.CURSOR_HAND );
+				this.paintHorizontalBeams( mouseCol, mCol, mRow );
+			} else if( mouseCol > mCol )
+			{
+				this.scroll.setCursor( MapArea.CURSOR_HAND );
+				this.paintHorizontalBeams( mCol + 1, mouseCol + 1, mRow );
+			}
+		} else if( mouseCol == mCol && mouseRow > toTop && mouseRow < toBottom )
+		{
+			if( mouseRow < mRow )
+			{
+				this.scroll.setCursor( MapArea.CURSOR_HAND );
+				this.paintVerticalBeams( mouseRow, mRow, mCol );
+			} else if( mouseRow > mRow )
+			{
+				this.scroll.setCursor( MapArea.CURSOR_HAND );
+				this.paintVerticalBeams( mRow + 1, mouseRow + 1, mCol );
+			}
+		}
+
+		ArrayList<Tile> previewPreBeamsUsed	= new ArrayList<Tile>();
+		
+		for( int row = 0; row < rows; row++ )
+		{
+			Tile preTile	= this.map.tile( row, mCol );
+			
+			if( preTile.type() == "field" || ( preTile.type() == "beam" && preTile.hidden() == true ) )
+			{
+				previewPreBeamsUsed.add( preTile );
+			}
+		}
+
+		for( int col = 0; col < cols; col++ )
+		{
+			Tile preTile	= this.map.tile( mRow, col );
+			
+			if( preTile.type() == "field" || ( preTile.type() == "beam" && preTile.hidden() == true ) )
+			{
+				previewPreBeamsUsed.add( preTile );
+			}
+		}
+		
+		int readyBeamsUsed		= this.map.filter( "beam", this.manipSource ).depends( this.manipSource ).size();
+		int previewBeamsUsed	= this.map.filterOnImages( previewPreBeamsUsed, this.tileset.tile( 2 ).image() ).size();
+		int sumUsed				= readyBeamsUsed + previewBeamsUsed;
+		
+		if( sumUsed == this.manipSource.strength() ) 	{ this.manipSource.color( Tile.CBLUE ); 	}
+		else											{ this.manipSource.color( Tile.CYELLOW );	}
+		
+//		this.manipSource.usedStrength( sumUsed );		
 	}
 
 	private void clearPrepaintedBeams()
@@ -786,10 +782,7 @@ public class MapArea
 	{
 		for( int col = fromCol; col < toCol; col++ )
 		{
-//			this.map.tile( inRow, col ).isPrebeam( true );			
 			this.map.tile( inRow, col ).image( this.tileset.tile( 2 ).image() );
-			
-			this.m.addDirtyRegion( this.scroll, inRow * 32, col * 32, 32, 32 );
 		}
 		
 		this.scroll.repaint();
@@ -799,10 +792,7 @@ public class MapArea
 	{
 		for( int row = fromRow; row < toRow; row++ )
 		{
-//			this.map.tile( row, inCol ).isPrebeam( true );			
 			this.map.tile( row, inCol ).image( this.tileset.tile( 2 ).image() );
-
-			this.m.addDirtyRegion( this.scroll, inCol * 32, row * 32, 32, 32 );
 		}
 		
 		this.scroll.repaint();
