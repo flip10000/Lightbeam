@@ -307,38 +307,38 @@ public class MapArea
 	
 	private void updateTile( int row, int col )
 	{
-		if( isInArea( row, col ) == true )
+		if( this.isInArea( row, col ) == true )
 		{
 			Tile trigger	= this.map.tile( row, col );
-			Tile beamsource	= getParent( row, col );
+			Tile beamsource	= this.getParent( row, col );
 			
 			if( beamsource == null || trigger.type() == "beamsource" )
 			{
 				if( this.tileset.getSelected().type() == "field" )
 				{
-					removeBeams( trigger );
+					this.removeBeams( trigger );
 				}
 				
 				drawTile( row, col );					
 				
 				if( isBeamsource( row, col ) == true )
 				{
-					setBeams( row, col );
-					highlightBeams( row, col );
-					highlightBeamsource( trigger );
+					this.setBeams( row, col );
+					this.highlightBeams( row, col );
+					this.highlightBeamsource( trigger );
 					
-					m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
+					this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
 				}
-			} else if( this.tileset.getSelected().type() == "field" )
+			} else if( beamsource != null && this.tileset.getSelected().type() == "field" )
 			{
 				int bRow	= beamsource.row();
 				
 				if( row == bRow )
 				{
-					removeBeams( beamsource, trigger, Tile.HORIZONTAL, col );
+					this.removeBeams( beamsource, trigger, Tile.HORIZONTAL, col );
 				} else
 				{
-					removeBeams( beamsource, trigger, Tile.VERTICAL, row );
+					this.removeBeams( beamsource, trigger, Tile.VERTICAL, row );
 				}
 			}
 			
@@ -388,10 +388,9 @@ public class MapArea
 		int row			= trigger.row();
 		int col			= trigger.col();
 		int strength	= this.map.filter( "beam", source ).depends( source ).size();
-		
-		source.strength( strength );
-		
-		m.addDirtyRegion( this.scroll, col * 32, row * 32, 32, 32 );
+	
+		this.map.tile( source.row(), source.col() ).strength( strength );
+		this.m.addDirtyRegion( this.scroll, col * 32, row * 32, 32, 32 );
 		
 		this.scroll.repaint(); 
 	}
