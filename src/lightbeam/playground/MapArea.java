@@ -93,6 +93,7 @@ public class MapArea
 					{
 						if( mSource.row() == fSource.row() && mSource.col() == fSource.col() )
 						{
+							//
 							MapArea.this.manipSource	= null;
 							MapArea.this.doHilightPossibleBeams( row, col );
 						}
