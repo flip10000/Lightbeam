@@ -94,7 +94,7 @@ public class MapArea
 					
 					if( focusedType == "beam" )
 					{
-						beamsource 	= beamsource.beamsource();
+						beamsource 	= beamsource.parent();
 					}
 					
 					MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
@@ -430,8 +430,8 @@ public class MapArea
 		
 		if( type == "beam" || type == "beamsource" )
 		{
-			if( type == "beam" ) 	{ return tile.beamsource(); }
-			else					{ return tile;				}
+			if( type == "beam" ) 	{ return tile.parent();	}
+			else					{ return tile;			}
 		} else
 		{
 			return null;
