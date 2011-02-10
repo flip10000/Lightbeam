@@ -6,10 +6,17 @@ import java.io.Serializable;
 
 public class Tile implements Serializable
 {
-	/**
-	 * 
-	 */
+	public final transient static Color CBLUE			= new Color( 3, 115, 210, 110 );
+	public final transient static Color CRED			= new Color( 255, 0, 0, 100 );
+	public final transient static Color CYELLOW			= new Color( 255, 212, 0, 100 );
+	public final transient static Color CGREEN			= new Color( 76, 188, 64, 100 );
+	public final transient static Color CTRANSPARENT	= new Color( 255, 255, 255, 0 );	
+	
+	public final static int MODE_READY			= 0;
+	public final static int MODE_PREVIEW		= 1;
+	
 	private static final long serialVersionUID = 303946875953233384L;
+	
 	private String type							= null;
 	private int strength						= 0;
 	private int strength_used					= 0;
@@ -19,9 +26,16 @@ public class Tile implements Serializable
 	private int col								= 0;
 	private Color color							= new Color( 255, 255, 255, 0 );
 	private transient BufferedImage image		= null;
+
 	private transient boolean focused			= false;
 	private boolean hidden						= false;
-	private boolean prebeam						= false;
+	
+	private String pretype						= null;
+	private Tile preparent						= null;
+	private Color precolor						= new Color( 255, 255, 255, 0 );
+	private transient BufferedImage preimage	= null;	
+
+	private boolean preview						= false;
 	
 	public final static int HORIZONTAL		= 0;
 	public final static int VERTICAL		= 1;
@@ -40,13 +54,6 @@ public class Tile implements Serializable
 	}
 	
 	// Seta - Methoden
-	public void strength( int strength ) 			{ this.strength 	= strength;		}
-	public void setDirection( int axis )			{ this.axis			= axis;			}
-	public void setBeamMaster( Tile beamsource )
-	{
-		this.parent		= beamsource;
-	}
-	
 	public void setTileState( ITileState tileState )	
 	{ 
 		this.type		= tileState.type();
@@ -54,26 +61,69 @@ public class Tile implements Serializable
 		this.hidden		= tileState.hidden();
 	}
 	
+	public void strength( int strength ) 			{ this.strength 	= strength;		}
+	
+	public void setDirection( int axis )			{ this.axis			= axis;			}
+	
+	public void parent( Tile parentTile )
+	{
+		if( this.preview == true )	{ this.preparent = parentTile;	}
+		else						{ this.parent = parentTile;		}
+	}
+
+	public void color( Color color )			
+	{
+		if( this.preview == true )	{ this.precolor = color; 	}
+		else						{ this.color = color;		}
+	}
+
+	public void image( BufferedImage image )	
+	{ 
+		if( this.preview == true )	{ this.preimage = image; 	}
+		else						{ this.image = image;		}
+	}
+
+	public void type( String type )				
+	{ 
+		if( this.preview == true ) 	{ this.pretype = type;	}
+		else						{ this.type = type; 	}
+	}
+	
 	public void hidden( boolean hidden )		{ this.hidden = hidden;					}
 	public void focus( boolean blFocus )		{ this.focused = blFocus;				}
-	public void color( Color color )			{ this.color = color;					}
-	public void image( BufferedImage image )	{ this.image = image;					}
-	public void isPrebeam( boolean prebeam )	{ this.prebeam = prebeam;				}			
-	public void type( String type )				{ this.type = type;						}
+	public void preview( boolean mode )			{ this.preview = mode;					}
 	public void usedStrength( int strength)		{ this.strength_used = strength;		}
 	
 	// Geta - Methoden
+	public Tile parent()						
+	{ 
+		if( this.preview == true ) 	{ return this.preparent; 	}
+		else						{ return this.parent;		} 					
+	}
+
+	public Color color() 
+	{
+		if( this.preview == true ) 	{ return this.precolor;	}
+		else						{ return this.color;	}
+	}
+	
+	public BufferedImage image()				
+	{
+		if( this.preview == true )	{ return this.preimage; 	}
+		else						{ return this.image;		}
+	}
+
+	public String type()						
+	{
+		if( this.preview == true )	{ return this.pretype;		}
+		else						{ return this.type;			}						
+	}
+	
 	public int direction()						{ return this.axis;						}
-	public Tile beamsource()					{ return this.parent; 					}
-	public Tile parent()						{ return this.parent; 					}
-	public String type()						{ return this.type;						}
 	public int row()							{ return this.row;						}
 	public int col()							{ return this.col;						}
-	public BufferedImage image()				{ return this.image;					}
 	public int strength()						{ return this.strength;					}
 	public boolean focused()					{ return this.focused;					}
 	public boolean hidden()						{ return this.hidden;					}
-	public Color color()						{ return this.color;					}
-	public boolean isPrebeam()					{ return this.prebeam;					}
 	public int usedStrength()					{ return this.strength_used;			}
 }
