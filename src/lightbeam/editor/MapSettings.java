@@ -1,6 +1,7 @@
 package lightbeam.editor;
 
 
+import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -22,10 +23,18 @@ public class MapSettings extends GameObjects
 	private JTextField txtRows		= new JTextField();
 	private JTextField txtCols		= new JTextField();
 	
+	private JButton btnRowsUp		= new JButton();
+	private JButton btnRowsDown		= new JButton();
+	private JButton btnColsUp		= new JButton();
+	private JButton btnColsDown		= new JButton();
+	
 	private ITileState oldTileState	= null;
 	private ITileState curTileState	= null;
 	
 	private MapArea maparea			= null;
+
+	final static Cursor CURSOR_HAND				= new Cursor( Cursor.HAND_CURSOR );
+	final static Cursor CURSOR_DEFAULT			= new Cursor( Cursor.DEFAULT_CURSOR );
 	
 	private int lblWidth			= 59;
 	private int txtWidth			= 30;
@@ -68,10 +77,9 @@ public class MapSettings extends GameObjects
 		this.txtCols.setEditable( false );
 
 		// Spielfeldzeile hinzufügen: 
-		JButton btnRowsUp	= new JButton();
-		btnRowsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
-		btnRowsUp.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y, btnWidth, btnHeight );
-		btnRowsUp.addMouseListener( new MouseAdapter(){public void mouseReleased(MouseEvent e){
+		this.btnRowsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
+		this.btnRowsUp.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y, btnWidth, btnHeight );
+		this.btnRowsUp.addMouseListener( new MouseAdapter(){public void mouseReleased(MouseEvent e){
 			oldTileState	= MapSettings.this.eTileset.getSelected();
 			curTileState	= MapSettings.this.eTileset.tile( 1 );
 
@@ -82,23 +90,38 @@ public class MapSettings extends GameObjects
 			int amountRows	= Integer.parseInt( MapSettings.this.txtRows.getText() ) + 1;
 			MapSettings.this.txtRows.setText( amountRows + "" );
 		}});
-
+		this.btnRowsUp.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
+		{
+			MapSettings.this.btnRowsUp.setCursor( MapSettings.CURSOR_HAND );
+		}});
+		this.btnRowsUp.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
+		{
+			MapSettings.this.btnRowsUp.setCursor( MapSettings.CURSOR_DEFAULT );
+		}});
+		
 		// Spielfeldzeile entfernen:
-		JButton btnRowsDown	= new JButton();
-		btnRowsDown.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnDown.png" ) );
-		btnRowsDown.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y + txtRows.getBounds().height - btnHeight, btnWidth, btnHeight );
-		btnRowsDown.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
+		this.btnRowsDown.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnDown.png" ) );
+		this.btnRowsDown.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y + txtRows.getBounds().height - btnHeight, btnWidth, btnHeight );
+		this.btnRowsDown.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
 			if( MapSettings.this.maparea.delRow() == true )
 			{
 				int amountRows	= Integer.parseInt( MapSettings.this.txtRows.getText() ) - 1;
 				MapSettings.this.txtRows.setText( amountRows + "" );
 			}
 		}});
+		this.btnRowsDown.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
+		{
+			MapSettings.this.btnRowsDown.setCursor( MapSettings.CURSOR_HAND );
+		}});
+		this.btnRowsDown.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
+		{
+			MapSettings.this.btnRowsDown.setCursor( MapSettings.CURSOR_DEFAULT );
+		}});
 
-		JButton btnColsUp	= new JButton();
-		btnColsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
-		btnColsUp.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y, btnWidth, btnHeight );
-		btnColsUp.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
+		
+		this.btnColsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
+		this.btnColsUp.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y, btnWidth, btnHeight );
+		this.btnColsUp.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
 			oldTileState	= MapSettings.this.eTileset.getSelected();
 			curTileState	= MapSettings.this.eTileset.tile( 1 );
 			
@@ -109,32 +132,48 @@ public class MapSettings extends GameObjects
 			int amountCols	= Integer.parseInt( MapSettings.this.txtCols.getText() ) + 1;
 			MapSettings.this.txtCols.setText( amountCols + "" );
 		}});
+		this.btnColsUp.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
+		{
+			MapSettings.this.btnColsUp.setCursor( MapSettings.CURSOR_HAND );
+		}});
+		this.btnColsUp.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
+		{
+			MapSettings.this.btnColsUp.setCursor( MapSettings.CURSOR_DEFAULT );
+		}});
 
-		JButton btnColsDown	= new JButton();
-		btnColsDown.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnDown.png" ) );
-		btnColsDown.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y + txtRows.getBounds().height - btnHeight, btnWidth, btnHeight );
-		btnColsDown.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
+
+		this.btnColsDown.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnDown.png" ) );
+		this.btnColsDown.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y + txtRows.getBounds().height - btnHeight, btnWidth, btnHeight );
+		this.btnColsDown.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
 			if( MapSettings.this.maparea.delCol() == true )
 			{
 				int amountCols	= Integer.parseInt( MapSettings.this.txtCols.getText() ) - 1;
 				MapSettings.this.txtCols.setText( amountCols + "" );
 			}
 		}});
+		this.btnColsDown.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
+		{
+			MapSettings.this.btnColsDown.setCursor( MapSettings.CURSOR_HAND );
+		}});
+		this.btnColsDown.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
+		{
+			MapSettings.this.btnColsDown.setCursor( MapSettings.CURSOR_DEFAULT );
+		}});
 		
 		int iWidth	= margin_left + lblWidth + txtWidth + btnWidth + margin_right;
 		int iHeight	= txtCols.getBounds().y + txtCols.getBounds().height + margin_bottom;
 		
-		panelSettings.add( lblRows );
-		panelSettings.add( txtRows );
-		panelSettings.add( btnRowsUp );
-		panelSettings.add( btnRowsDown );
+		this.panelSettings.add( lblRows );
+		this.panelSettings.add( this.txtRows );
+		this.panelSettings.add( this.btnRowsUp );
+		this.panelSettings.add( this.btnRowsDown );
 		
-		panelSettings.add( lblCols );
-		panelSettings.add( txtCols );
-		panelSettings.add( btnColsUp );
-		panelSettings.add( btnColsDown );
+		this.panelSettings.add( lblCols );
+		this.panelSettings.add( this.txtCols );
+		this.panelSettings.add( this.btnColsUp );
+		this.panelSettings.add( this.btnColsDown );
 		
-		panelSettings.setBounds( 5, 5 , iWidth, iHeight );	
+		this.panelSettings.setBounds( 5, 5 , iWidth, iHeight );	
 	}
 	
 	public JPanel panel() { return this.panelSettings; }
