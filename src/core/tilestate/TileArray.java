@@ -1,5 +1,7 @@
 package core.tilestate;
 
+
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,7 +9,8 @@ import java.util.ArrayList;
 
 public class TileArray implements Serializable
 {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID 	= 5567438036750252438L;
+
 	private int rows, cols;
 	private int setRow, setCol;
 	private Tile[][] tiles;
@@ -165,7 +168,7 @@ public class TileArray implements Serializable
 	public void withState( ITileState tileState, Tile beamsource ) 
 	{
 		this.withState( tileState );
-		this.tiles[this.setRow][this.setCol].setBeamMaster( beamsource );
+		this.tiles[this.setRow][this.setCol].parent( beamsource );
 	}
 	
 	public void withState( ITileState tileState ) 
@@ -287,13 +290,105 @@ public class TileArray implements Serializable
 			Tile child	= this.filteredTiles.get( cntFiltered );
 			Tile parent	= child.parent();
 			
-			if( parent.row() == source.row() && parent.col() == source.col() && child.hidden() == false )
+			if( parent != null && parent.row() == source.row() && parent.col() == source.col() && child.hidden() == false )
 			{
 				foundTiles.add( child );
 			}
 		}
 		
 		return foundTiles;
+	}
+	
+	public void mode( int mode, int row, int col )
+	{
+		if( mode == Tile.MODE_PREVIEW )
+		{
+			// Zeilen in Spalte "col" ( bis auf Tile in Zeile "row" und Spalte "col" ) 
+			// in den Preview-Modus versetzen:
+			// 1) Anfangszustand für den Preview-Modus des jew. Tiles speichern.
+			// 2) Tile in Preview-Modus versetzen.
+			// 3) Anfangzustand an Tiles im Preview-Modus übergeben.
+			for( int cntRow = 0; cntRow < this.rows; cntRow++ )
+			{
+				if( cntRow != row )
+				{
+					Tile modeTile		= this.tile( cntRow, col );
+					Tile parent			= modeTile.parent();
+					Color color			= modeTile.color();
+					BufferedImage image	= modeTile.image();
+					String type			= modeTile.type();
+					
+					modeTile.preview( true );
+					
+					modeTile.parent( parent );
+					modeTile.color( color );
+					modeTile.image( image );
+					modeTile.type( type );
+				}
+			}
+			
+			// Spalten in Zeile "row" ( bis auf Tile in Zeile "row" und Spalte "col" )
+			// in den Preview-Modus versetzen:
+			// 1) Anfangszustand für den Preview-Modus des jew. Tiles speichern.
+			// 2) Tile in Preview-Modus versetzen.
+			// 3) Anfangzustand an Tiles im Preview-Modus übergeben.
+			for( int cntCol = 0; cntCol < this.cols; cntCol++ )
+			{
+				if( cntCol != col )
+				{
+					Tile modeTile		= this.tile( row, cntCol );
+					Tile parent			= modeTile.parent();
+					Color color			= modeTile.color();
+					BufferedImage image	= modeTile.image();
+					String type			= modeTile.type();
+					
+					modeTile.preview( true );
+					
+					modeTile.parent( parent );
+					modeTile.color( color );
+					modeTile.image( image );
+					modeTile.type( type );
+				}
+			}
+			
+			// Tile in Zeile "row" und Spalte "col" in den Preview-Modus versetzen:
+			// 1) Anfangszustand für den Preview-Modus speichern.
+			// 2) Tile in Preview-Modus versetzen.
+			// 3) Anfangzustand an Tile im Preview-Modus übergeben.
+			Tile modeTile		= this.tile( row, col );
+			Tile parent			= modeTile.parent();
+			Color color			= modeTile.color();
+			BufferedImage image	= modeTile.image();
+			String type			= modeTile.type();
+			
+			modeTile.preview( true );
+			
+			modeTile.parent( parent );
+			modeTile.color( color );
+			modeTile.image( image );
+			modeTile.type( type );
+		} else if( mode == Tile.MODE_READY )
+		{
+			// Zeilen in Spalte "col" ( bis auf Tile in Zeile "row" und Spalte "col" ) 
+			// in den Ready-Modus versetzen:
+			for( int cntRow = 0; cntRow < this.rows; cntRow++ )
+			{
+				if( cntRow != row ) { this.tile( cntRow, col ).preview( false ); }
+			}
+			
+			// Spalten in Zeile "row" ( bis auf Tile in Zeile "row" und Spalte "col" )
+			// in den Ready-Modus versetzen:
+			for( int cntCol = 0; cntCol < this.cols; cntCol++ )
+			{
+				if( cntCol != col )
+				{
+					this.tile( row, cntCol ).preview( false );
+				}
+			}
+			
+			// Tile in Zeile "row" und Spalte "col" in den Preview-Modus versetzen:
+			this.tile( row, col ).preview( false );
+		}
 	}
 }
 
