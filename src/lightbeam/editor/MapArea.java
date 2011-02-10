@@ -72,13 +72,7 @@ public class MapArea
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
 		{
-			int row	= e.getY() / 32;
-			int col = e.getX() / 32;
-			
-			if( MapArea.this.isInArea( row, col ) )
-			{
-				MapArea.this.updateTile( row, col );
-			}
+			MapArea.this.updateTile( ( e.getY() / 32 ), ( e.getX() / 32 ) );
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
