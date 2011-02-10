@@ -67,21 +67,7 @@ public class MapArea
 		
 		this.panel.addMouseListener(new MouseAdapter(){public void mouseClicked( MouseEvent e ) 
 		{
-			int row	= e.getY() / 32;
-			int col = e.getX() / 32;
-			
-			String focusedType	= MapArea.this.setFocused( row, col );
-			String selectedType	= MapArea.this.tileset.getSelected().type();
-
-			if( "beam" == focusedType && selectedType != "field" )
-			{
-				Tile beamsource 	= MapArea.this.map.tile( row, col ).beamsource();
-
-				MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
-			} else
-			{
-				MapArea.this.updateTile( row, col );
-			}
+			MapArea.this.updateTile( ( e.getY() / 32 ), ( e.getX() / 32 ) );
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
@@ -89,8 +75,10 @@ public class MapArea
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
 			
-			MapArea.this.setFocused( row, col );
-			MapArea.this.updateTile( row, col );
+			if( MapArea.this.isInArea( row, col ) )
+			{
+				MapArea.this.updateTile( row, col );
+			}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
@@ -98,20 +86,23 @@ public class MapArea
 			int row	= e.getY() / 32;
 			int col = e.getX() / 32;
 			
-			String focusedType	= MapArea.this.setFocused( row, col );
-
-			if( focusedType == "beam" || focusedType == "beamsource" )
+			if( MapArea.this.isInArea( row, col ) )
 			{
-				Tile beamsource	= MapArea.this.map.tile( row, col );
-				
-				if( focusedType == "beam" )
+				String focusedType	= MapArea.this.map.tile( row, col ).type();
+	
+				if( focusedType == "beam" || focusedType == "beamsource" )
 				{
-					beamsource 	= beamsource.beamsource();
+					Tile beamsource	= MapArea.this.map.tile( row, col );
+					
+					if( focusedType == "beam" )
+					{
+						beamsource 	= beamsource.beamsource();
+					}
+					
+					MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
+					MapArea.this.highlightBeamsource( beamsource );
 				}
-				
-				MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
-				MapArea.this.highlightBeamsource( beamsource );
-			}			
+			}
 		}});
 	}
 	
@@ -643,17 +634,6 @@ public class MapArea
 		} else
 		{
 			return false;
-		}
-	}
-	
-	private String setFocused( int row, int col )
-	{
-		if( this.isInArea( row, col ) )
-		{
-			return this.map.tile( row, col ).type();
-		} else
-		{
-			return null;
 		}
 	}
 	
