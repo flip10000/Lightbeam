@@ -1,11 +1,13 @@
 package lightbeam.editor;
 
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +30,12 @@ public class TilePalette extends JPanel
 	private static final long serialVersionUID = -8202226823179889444L;
 	private ITileState curTile				= null;
 	private AbstractTileSetFactory tileset	= null;
+	
 	BufferedImage highlightLeft				= null;
 	BufferedImage highlightRight			= null;
+	
+	final static Cursor CURSOR_HAND			= new Cursor( Cursor.HAND_CURSOR );
+	final static Cursor CURSOR_DEFAULT		= new Cursor( Cursor.DEFAULT_CURSOR );
 	
 	private int marginLeft					= 10;
 	private int marginTop					= 20;
@@ -52,6 +58,17 @@ public class TilePalette extends JPanel
 		{
 			TilePalette.this.setTile( e.getY(), e.getX() );
 		}});	
+		
+		this.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
+		{
+			if( TilePalette.this.isInArea( e.getY(), e.getX() ) )
+			{
+				TilePalette.this.setCursor( TilePalette.CURSOR_HAND );
+			} else
+			{
+				TilePalette.this.setCursor( TilePalette.CURSOR_DEFAULT );
+			}
+		}});
 		
 		try 
 		{
@@ -89,18 +106,34 @@ public class TilePalette extends JPanel
 		g.drawImage( this.highlightRight, 84, 80, this );
 	}
 	
-	private void setTile( int row, int col )
+	private void setTile( int mY, int mX )
 	{
-		int colfix	= ( col - marginLeft ) / 32;
-		int rowfix	= ( row - marginTop ) / 32;
-		int tileID	= rowfix * 2 + colfix;
-
-		if( tileID < this.tileset.length() )
+		if( this.isInArea( mY, mX ) )
 		{
-			this.curTile	= this.tileset.tile( tileID );
+			int colfix	= ( mX - marginLeft ) / 32;
+			int rowfix	= ( mY - marginTop ) / 32;
+			
+			this.curTile	= this.tileset.tile( ( rowfix * 2 ) + colfix );
 			this.tileset.setSelected( this.curTile );
+			
+			this.repaint();
 		}
+	}
+	
+	private boolean isInArea( int mY, int mX )
+	{
+		int dY		= mY - this.marginTop;
+		int dX		= mX - this.marginLeft;
+
+		int row		= ( mY - marginTop ) / 32;
+		int col		= ( mX - marginLeft ) / 32;
 		
-		this.repaint();
+		if( dY > -1 && row < 1 && dX > -1 && col < 2 )
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
 	}
 }
