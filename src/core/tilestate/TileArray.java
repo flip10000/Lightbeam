@@ -1,9 +1,7 @@
 package core.tilestate;
 
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
-
 
 public class TileArray implements Serializable
 {
@@ -17,7 +15,6 @@ public class TileArray implements Serializable
 	private Tile[][] tiles;
 	private int mode								= TileArray.MODE_READY;
 	
-	private transient Tile[][] pretiles;
 	private transient Tile[][] conttiles;
 	private transient ArrayList<Tile> filteredTiles	= null;
 	
@@ -280,28 +277,24 @@ public class TileArray implements Serializable
 	{
 		if( mode == TileArray.MODE_PREVIEW && this.mode != TileArray.MODE_PREVIEW )
 		{
-			this.mode	= mode;
-			
-			if( this.conttiles == null ) { this.conttiles = this.tiles.clone(); }
-			this.pretiles	= new Tile[this.rows][this.cols];
+			this.mode		= mode;
+			this.conttiles 	= new Tile[this.rows][this.cols];
 			
 			for( int cntRow = 0; cntRow < this.rows; cntRow++ )
 			{
-				this.pretiles[cntRow]	= new Tile[this.cols];
+				this.conttiles[cntRow]	= new Tile[this.cols];
 				
 				for( int cntCol = 0; cntCol < this.cols; cntCol++ )
 				{
-					this.pretiles[cntRow][cntCol]	= (Tile)this.tiles[cntRow][cntCol].clone();
+					this.conttiles[cntRow][cntCol]	= (Tile)this.tiles[cntRow][cntCol].clone();
 				}
 			}
-			
-			this.tiles		= this.pretiles.clone();
 		} else if( mode == TileArray.MODE_READY && this.mode != TileArray.MODE_READY )
 		{
 			this.mode		= mode;
 			
 			this.tiles		= this.conttiles.clone();
-			this.pretiles	= null;
+			this.conttiles	= null;
 		}
 	}
 	
