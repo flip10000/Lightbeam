@@ -37,7 +37,6 @@ public class MapArea
 	
 	private RepaintManager m					= null;
 	private TileArray map						= null;
-	private int[] oldFocused 					= new int[2];
 	private Tile focusedSource					= null;
 	private Tile manipSource					= null;
 //	private TileArray oldMap					= null;
@@ -65,7 +64,7 @@ public class MapArea
 		// MapArray init:
 		this.initMap( rows, cols );
 		
-		scroll.setViewportView( this.panel );
+		this.scroll.setViewportView( this.panel );
 		this.panel.setDoubleBuffered( true );
 		this.initScrollpane();
 		
@@ -80,9 +79,17 @@ public class MapArea
 			{
 				if( MapArea.this.isBeamsource( row, col ) == true )
 				{
+					Tile fSource	= MapArea.this.focusedSource;
+					
+					if( MapArea.this.manipSource != null && !fSource.equals( MapArea.this.manipSource ) )
+					{
+						MapArea.this.manipSource	= null;
+						MapArea.this.doHilightPossibleBeams( row, col );
+//						MapArea.this.
+					}
+					
 					Tile source 	= MapArea.this.map.tile( row, col );
 					Tile mSource	= MapArea.this.manipSource;
-					Tile fSource	= MapArea.this.focusedSource;
 					
 					if( mSource == null ) 	
 					{ 
@@ -92,7 +99,6 @@ public class MapArea
 					{
 						if( mSource.row() == fSource.row() && mSource.col() == fSource.col() )
 						{
-							//
 							MapArea.this.manipSource	= null;
 							MapArea.this.doHilightPossibleBeams( row, col );
 						}
@@ -110,9 +116,11 @@ public class MapArea
 					MapArea.this.scroll.repaint();
 				} else 
 				{
-					MapArea.this.doHilightPossibleBeams( row, col );
+					MapArea.this.map.mode( TileArray.MODE_READY );
 					MapArea.this.focusedSource 	= null;
 					MapArea.this.manipSource	= null;
+					
+					MapArea.this.scroll.repaint();
 				}
 			}
 		}});
@@ -124,11 +132,14 @@ public class MapArea
 			
 			if( MapArea.this.isInArea( row, col ) )
 			{
-				if( MapArea.this.manipSource == null )
+				if( MapArea.this.manipSource == null || MapArea.this.isBeamsource( row, col ) )
 				{
 					MapArea.this.doHilightPossibleBeams( row, col );
-				} else 
+				} 
+				
+				if( MapArea.this.manipSource != null ) 
 				{
+					MapArea.this.doHilightPossibleBeams( row, col );
 					MapArea.this.prepaintBeams( row, col );
 				}
 			}
@@ -212,7 +223,6 @@ public class MapArea
 	{
 		//Hier wird nun eine Feste größe des JPanel gesetzt.
 		this.panel.setPreferredSize( new Dimension( this.map.rows() * 32, this.map.cols() * 32 ) );
-		
 		this.scroll.setViewportView( this.panel );
 	}
 	
@@ -304,53 +314,6 @@ public class MapArea
 		}
 	}
 	
-	
-	private Tile getFocused( int row, int col )
-	{
-		if( this.isInArea( row, col ) )
-		{
-			this.oldFocused[0]	= row;
-			this.oldFocused[1]	= col;
-			
-			return this.map.tile( row, col );
-		} else
-		{
-			return null;
-		}
-	}
-	
-	private void paintFocused( int row, int col )
-	{
-		
-		if( this.oldFocused != null )
-		{
-			int oldRow		= this.oldFocused[0];
-			int oldCol		= this.oldFocused[1];
-
-			this.map.tile( oldRow, oldCol ).color( Tile.CTRANSPARENT );
-			this.m.addDirtyRegion( this.scroll, oldRow * 32, oldCol * 32, 32, 32 );
-		}
-		
-		if( MapArea.this.isInArea( row, col ) )
-		{
-			Tile tile	= this.getFocused( row, col );
-			
-			if( tile.type() == "field" || ( tile.type() == "beam" && tile.hidden() ) )
-			{
-				tile.color( Tile.CBLUE );
-				
-				this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
-			} else if( tile.type() == "beamsource" )
-			{
-				tile.color( Tile.CGREEN );
-				
-				this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
-			}
-			
-			this.scroll.repaint();
-		}
-	}
-	
 	/*
 	 * Prüft, ob es sich bei dem Tile um ein Beamsource handelt.
 	 * 
@@ -394,6 +357,8 @@ public class MapArea
 			this.focusedSource	= this.map.tile( row, col );
 			this.hilightPossibleBeams( this.map.tile( row, col ) );
 		}
+		
+		this.scroll.repaint();
 	}
 
 	
@@ -443,8 +408,6 @@ public class MapArea
 		int fCol	= this.focusedSource.col();
 		
 		this.map.tile( fRow, fCol ).color( Tile.CGREEN );
-		
-		this.scroll.repaint();
 	}
 	
 	/*
@@ -454,15 +417,36 @@ public class MapArea
 	 */
 	private void dehilightPossibleBeams()
 	{
-		if( this.focusedSource != null )
+		if( this.focusedSource != null && this.manipSource == null )
 		{
 			// Zurück in den Ready-Mode: 
 			this.map.mode( TileArray.MODE_READY );
+		} else if( this.focusedSource != null && this.manipSource != null )
+		{
+			int fRow	= this.focusedSource.row();
+			int fCol	= this.focusedSource.col();
 			
-			// paintComponent-Clip-Bereich vorbereiten:
-			// 1) Alle Zeilen der Spalte "col":
+			int mRow	= this.manipSource.row();
+			int mCol	= this.manipSource.col();
 			
-			this.scroll.repaint();
+			int rows	= this.map.rows();
+			int cols	= this.map.cols();
+			
+			if( fRow != mRow || fCol != mCol )
+			{
+				for( int row = 0; row < rows; row++ )
+				{
+					this.map.tile( row, fCol ).color( Tile.CTRANSPARENT );
+				}
+				
+				for( int col = 0; col < cols; col++ )
+				{
+					this.map.tile( fRow, col ).color( Tile.CTRANSPARENT );
+				}
+			}
+			
+			this.hilightPossibleBeams( this.manipSource );
+			this.focusedSource.color( Tile.CTRANSPARENT );
 		}
 	}
 	
