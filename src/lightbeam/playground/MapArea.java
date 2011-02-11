@@ -422,6 +422,7 @@ public class MapArea
 		{
 			// Zurück in den Ready-Mode: 
 			this.map.mode( TileArray.MODE_READY );
+			
 		} else if( this.focusedSource != null && this.manipSource != null )
 		{
 			int fRow	= this.focusedSource.row();
@@ -723,7 +724,7 @@ public class MapArea
 			{
 				Tile tile	= this.map.tile( row, col );
 				
-				if( tile.type() == "beam" )
+				if( tile.type() == "beam" && tile.parent().equals( this.manipSource ) )
 				{
 					this.map.setTile( row, col ).withState( this.tileset.tile( 1 ) );
 					this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
@@ -737,13 +738,11 @@ public class MapArea
 	private void paintHorizontalBeams( int fromCol, int toCol, int inRow )
 	{
 		for( int col = fromCol; col < toCol; col++ )
-		{
+		{	
 			this.map.setTile( inRow, col ).withState( this.tileset.tile( 2 ) );
 			this.map.tile( inRow, col ).parent( this.manipSource );
 			this.map.tile( inRow, col ).color( Tile.CBLUE );
 		}
-		
-		this.scroll.repaint();
 	}
 	
 	private void paintVerticalBeams( int fromRow, int toRow, int inCol )
@@ -754,8 +753,6 @@ public class MapArea
 			this.map.tile( row, inCol ).parent( this.manipSource );
 			this.map.tile( row, inCol ).color( Tile.CBLUE );
 		}
-		
-		this.scroll.repaint();
 	}
 	
 	private void assignBeamsToSource()
