@@ -16,6 +16,7 @@ public class Tile implements Serializable, Cloneable
 	
 	private String type							= null;
 	private int strength						= 0;
+	private int consumption						= 0;
 	private int axis							= 0;
 	private Tile parent							= null;
 	private int row								= 0;
@@ -50,30 +51,32 @@ public class Tile implements Serializable, Cloneable
 		this.hidden		= tileState.hidden();
 	}
 	
-	public void setDirection( int axis )		{ this.axis = axis;			}
-	public void strength( int strenght )		{ this.strength = strenght;	}
-	public void parent( Tile parentTile )		{ this.parent = parentTile;	}
-	public void color( Color color )			{ this.color = color;		}
-	public void image( BufferedImage image )	{ this.image = image;		}
-	public void type( String type )				{ this.type = type;			}
-	public void hidden( boolean hidden )		{ this.hidden = hidden;		}
-	public void focus( boolean blFocus )		{ this.focused = blFocus;	}
+	public void setDirection( int axis )		{ this.axis = axis;					}
+	public void strength( int strenght )		{ this.strength = strenght;			}
+	public void consumption( int consumption )	{ this.consumption = consumption;	}
+	public void parent( Tile parentTile )		{ this.parent = parentTile;			}
+	public void color( Color color )			{ this.color = color;				}
+	public void image( BufferedImage image )	{ this.image = image;				}
+	public void type( String type )				{ this.type = type;					}
+	public void hidden( boolean hidden )		{ this.hidden = hidden;				}
+	public void focus( boolean blFocus )		{ this.focused = blFocus;			}
 	
 	// Geta - Methoden
-	public Tile parent()						{ return this.parent; 		}
-	public Color color()						{ return this.color;		}
-	public BufferedImage image()				{ return this.image;		}
-	public String type()						{ return this.type;			}
-	public int direction()						{ return this.axis;			}
-	public int row()							{ return this.row;			}
-	public int col()							{ return this.col;			}
-	public int strength()						{ return this.strength;		}
-	public boolean focused()					{ return this.focused;		}
-	public boolean hidden()						{ return this.hidden;		}
+	public Tile parent()						{ return this.parent; 				}	
+	public Color color()						{ return this.color;				}
+	public BufferedImage image()				{ return this.image;				}
+	public String type()						{ return this.type;					}
+	public int direction()						{ return this.axis;					}
+	public int row()							{ return this.row;					}
+	public int col()							{ return this.col;					}
+	public int strength()						{ return this.strength;				}
+	public int consumption()					{ return this.consumption;			}
+	public boolean focused()					{ return this.focused;				}
+	public boolean hidden()						{ return this.hidden;				}
 	
 	protected Object clone()
 	{
-		try 									{ return (Tile)super.clone(); }	 
+		try 									{ return (Tile)super.clone(); 	}	 
 		catch (CloneNotSupportedException e) 	{ return null;					}
 	}
 }
