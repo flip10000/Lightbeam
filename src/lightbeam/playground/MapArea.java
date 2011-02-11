@@ -85,7 +85,6 @@ public class MapArea
 					{
 						MapArea.this.manipSource	= null;
 						MapArea.this.doHilightPossibleBeams( row, col );
-//						MapArea.this.
 					}
 					
 					Tile source 	= MapArea.this.map.tile( row, col );
@@ -116,7 +115,12 @@ public class MapArea
 					MapArea.this.scroll.repaint();
 				} else 
 				{
-					MapArea.this.map.mode( TileArray.MODE_READY );
+					if( MapArea.this.manipSource != null ) 
+					{ 
+						MapArea.this.assignBeamsToSource(); 
+					}
+					
+					MapArea.this.map.mode( TileArray.MODE_READY );	
 					MapArea.this.focusedSource 	= null;
 					MapArea.this.manipSource	= null;
 					
@@ -178,16 +182,13 @@ public class MapArea
 				{
 					int bStrength	= strength;
 					
-//					if( this.snapsource != null && 
-//						this.snapsource.row() == row &&
-//						this.snapsource.col() == col
-//					) {
-//						bStrength = this.snapsource.strength() - this.snapsource.usedStrength();
-//					} else if( this.snapsource == null && tile.type() == "beamsource" && tile.focused() == true )
-//					{
-//						bStrength	= tile.strength() - this.map.filter( "beam", tile ).depends( tile ).size();
-//						tile.focus( false );
-//					}
+					if( this.map.mode() == TileArray.MODE_PREVIEW )
+					{
+						bStrength	= tile.strength() - tile.consumption();
+					} else
+					{
+						bStrength	= tile.strength();
+					}
 					
 					g.setColor( new Color( 0, 0, 0, 255 ) );
 					
@@ -672,9 +673,6 @@ public class MapArea
 		int mRow		= this.manipSource.row();
 		int mCol		= this.manipSource.col();
 		
-		int rows		= this.map.rows();
-		int cols		= this.map.cols();
-		
 		int toLeft		= this.getLeftPossibleBeams( this.manipSource );
 		int toTop		= this.getTopPossibleBeams( this.manipSource );
 		int toRight		= this.getRightPossibleBeams( this.manipSource );
@@ -705,37 +703,13 @@ public class MapArea
 				this.paintVerticalBeams( mRow + 1, mouseRow + 1, mCol );
 			}
 		}
+		
+		int consumption	= this.map.filter( "beam", this.manipSource ).depends( this.manipSource ).size();
 
-		ArrayList<Tile> previewPreBeamsUsed	= new ArrayList<Tile>();
+		if( consumption == this.manipSource.strength() )	{ this.manipSource.color( Tile.CBLUE ); 	}
+		else												{ this.manipSource.color( Tile.CYELLOW );	}
 		
-		for( int row = 0; row < rows; row++ )
-		{
-			Tile preTile	= this.map.tile( row, mCol );
-			
-			if( preTile.type() == "field" || ( preTile.type() == "beam" && preTile.hidden() == true ) )
-			{
-				previewPreBeamsUsed.add( preTile );
-			}
-		}
-
-		for( int col = 0; col < cols; col++ )
-		{
-			Tile preTile	= this.map.tile( mRow, col );
-			
-			if( preTile.type() == "field" || ( preTile.type() == "beam" && preTile.hidden() == true ) )
-			{
-				previewPreBeamsUsed.add( preTile );
-			}
-		}
-		
-		int readyBeamsUsed		= this.map.filter( "beam", this.manipSource ).depends( this.manipSource ).size();
-		int previewBeamsUsed	= this.map.filterOnImages( previewPreBeamsUsed, this.tileset.tile( 2 ).image() ).size();
-		int sumUsed				= readyBeamsUsed + previewBeamsUsed;
-		
-		if( sumUsed == this.manipSource.strength() ) 	{ this.manipSource.color( Tile.CBLUE ); 	}
-		else											{ this.manipSource.color( Tile.CYELLOW );	}
-		
-//		this.manipSource.usedStrength( sumUsed );		
+		this.manipSource.consumption( consumption );		
 	}
 
 	private void clearPrepaintedBeams()
@@ -749,10 +723,9 @@ public class MapArea
 			{
 				Tile tile	= this.map.tile( row, col );
 				
-				if( tile.type() == "field" || ( tile.type() == "beam" ) )
+				if( tile.type() == "beam" )
 				{
-					this.map.tile( row, col ).image( this.tileset.tile( 1 ).image() );
-//					this.map.tile( row, col ).isPrebeam( false );
+					this.map.setTile( row, col ).withState( this.tileset.tile( 1 ) );
 					this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
 				}
 			}
@@ -765,7 +738,9 @@ public class MapArea
 	{
 		for( int col = fromCol; col < toCol; col++ )
 		{
-			this.map.tile( inRow, col ).image( this.tileset.tile( 2 ).image() );
+			this.map.setTile( inRow, col ).withState( this.tileset.tile( 2 ) );
+			this.map.tile( inRow, col ).parent( this.manipSource );
+			this.map.tile( inRow, col ).color( Tile.CBLUE );
 		}
 		
 		this.scroll.repaint();
@@ -775,66 +750,25 @@ public class MapArea
 	{
 		for( int row = fromRow; row < toRow; row++ )
 		{
-			this.map.tile( row, inCol ).image( this.tileset.tile( 2 ).image() );
+			this.map.setTile( row, inCol ).withState( this.tileset.tile( 2 ) );
+			this.map.tile( row, inCol ).parent( this.manipSource );
+			this.map.tile( row, inCol ).color( Tile.CBLUE );
 		}
 		
 		this.scroll.repaint();
 	}
 	
-	private void assignBeamsToSource( int row, int col, Tile beamsource )
+	private void assignBeamsToSource()
 	{
-		if( this.isInArea( row, col ) && beamsource != null )
-		{
-			int bRow	= beamsource.row();
-			int bCol	= beamsource.col();
-			
-			int maxRows	= this.map.rows();
-			int maxCols	= this.map.cols();
-			
-			for( int cntRow = 0; cntRow < maxRows; cntRow++ )
-			{
-				Tile beam	= this.map.tile( cntRow, bCol );
-				
-//				if( beam.isPrebeam() == true )
-//				{
-//					beam.isPrebeam( false );
-					
-					if( beam.type() != "beam" ) { beam.type( "beam" ); }
-					
-					beam.parent( beamsource );
-					beam.hidden( false );
-					beam.image( this.tileset.tile( 2 ).image() );
-					
-					this.m.addDirtyRegion( this.scroll, cntRow * 32, bCol * 32, 32, 32 );
-//				}
-			}
-			
-			for( int cntCol = 0; cntCol < maxCols; cntCol++ )
-			{
-				Tile beam	= this.map.tile( bRow, cntCol );
-				
-//				if( beam.isPrebeam() == true )
-//				{
-//					beam.isPrebeam( false );
-					
-					if( beam.type() != "beam" ) { beam.type( "beam" ); }
-					
-					beam.parent( beamsource );
-					beam.image( this.tileset.tile( 2 ).image() );
-					beam.hidden( false );
-					
-					this.m.addDirtyRegion( this.scroll, bRow * 32, cntCol * 32, 32, 32 );
-//				} else if( beam.type() == "beam" )
-//				{
-//					beam.setBeamMaster( null );
-//					beam.image( this.tileset.tile( 1 ).image() );
-//					beam.hidden( true );
-//
-//					this.m.addDirtyRegion( this.scroll, bRow * 32, cntCol * 32, 32, 32 );
-//				}
-			}
-		}
+		ArrayList<Tile> childs	= this.map.filter( "beam", this.manipSource ).depends( this.manipSource );
+		int amountChilds		= childs.size();
 		
-		this.scroll.repaint();
+		for( int cntChild = 0; cntChild < amountChilds; cntChild++ )
+		{
+			Tile child	= childs.get( cntChild );
+			child.color( Tile.CTRANSPARENT );
+			
+			this.map.pushReady( child, child.row(), child.col() );
+		}		
 	}
 }
