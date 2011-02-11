@@ -15,6 +15,8 @@ public class TileArray implements Serializable
 	private int rows, cols;
 	private int setRow, setCol;
 	private Tile[][] tiles;
+	private int mode								= TileArray.MODE_READY;
+	
 	private transient Tile[][] pretiles;
 	private transient Tile[][] conttiles;
 	private transient ArrayList<Tile> filteredTiles	= null;
@@ -289,8 +291,10 @@ public class TileArray implements Serializable
 	
 	public void mode( int mode )
 	{
-		if( mode == TileArray.MODE_PREVIEW )
+		if( mode == TileArray.MODE_PREVIEW && this.mode != TileArray.MODE_PREVIEW )
 		{
+			this.mode	= mode;
+			
 			if( this.conttiles == null ) { this.conttiles = this.tiles.clone(); }
 			this.pretiles	= new Tile[this.rows][this.cols];
 			
@@ -305,8 +309,10 @@ public class TileArray implements Serializable
 			}
 			
 			this.tiles		= this.pretiles.clone();
-		} else if( mode == TileArray.MODE_READY )
+		} else if( mode == TileArray.MODE_READY && this.mode != TileArray.MODE_READY )
 		{
+			this.mode		= mode;
+			
 			this.tiles		= this.conttiles.clone();
 			this.pretiles	= null;
 		}
