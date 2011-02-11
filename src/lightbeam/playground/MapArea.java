@@ -12,7 +12,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -391,8 +390,8 @@ public class MapArea
 		
 		if( this.isBeamsource( row, col ) == true )
 		{
-			this.focusedSource	= this.map.tile( row, col );
 			this.map.mode( TileArray.MODE_PREVIEW );
+			this.focusedSource	= this.map.tile( row, col );
 			this.hilightPossibleBeams( this.map.tile( row, col ) );
 		}
 	}
