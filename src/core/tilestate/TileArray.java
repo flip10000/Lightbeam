@@ -202,21 +202,6 @@ public class TileArray implements Serializable
 		return this;
 	}
 	
-	public ArrayList<Tile> filterOnImages( ArrayList<Tile>tiles, BufferedImage image )
-	{
-		ArrayList<Tile> filtered	= new ArrayList<Tile>();
-		int amount	= tiles.size();
-		
-		for( int cntTiles = 0; cntTiles < amount; cntTiles++ )
-		{
-			Tile tile	= tiles.get( cntTiles );
-			
-			if( tile.image().equals( image ) ) { filtered.add( tile ); }
-		}
-		
-		return filtered;
-	}
-	
 	public ArrayList<Tile> find( int axis, ArrayList<Tile> tiles )
 	{
 		ArrayList<Tile> foundTiles	= new ArrayList<Tile>();
@@ -289,6 +274,8 @@ public class TileArray implements Serializable
 		return foundTiles;
 	}
 	
+	public int mode() { return this.mode; }
+	
 	public void mode( int mode )
 	{
 		if( mode == TileArray.MODE_PREVIEW && this.mode != TileArray.MODE_PREVIEW )
@@ -316,6 +303,11 @@ public class TileArray implements Serializable
 			this.tiles		= this.conttiles.clone();
 			this.pretiles	= null;
 		}
+	}
+	
+	public void pushReady( Tile tile, int row, int col )
+	{
+		this.conttiles[row][col]	= tile;
 	}
 }
 
