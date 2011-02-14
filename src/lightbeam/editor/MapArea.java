@@ -185,8 +185,18 @@ public class MapArea
 					) {
 						MapArea.this.dehilightPossibleBeams( MapArea.this.focusedSource );
 						MapArea.this.defocusBeamsource();
+					} else if(
+						MapArea.this.manipSource != null &&
+						( 
+							MapArea.this.isField( row, col ) || MapArea.this.isBeam( row, col ) ||
+							MapArea.this.manipSource.row() == row || MapArea.this.manipSource.col() == col
+						)
+					) {
+						MapArea.this.prepaintBeams( row, col );
+						MapArea.this.hilightPossibleBeams( MapArea.this.manipSource );
 					}
 				}
+				
 				MapArea.this.scroll.repaint();
 //				if( MapArea.this.manipSource == null || MapArea.this.isBeamsource( row, col ) )
 //				{
@@ -444,6 +454,20 @@ public class MapArea
 	{
 		return ( this.map.tile( row, col ).type() == "field" )? true : false;
 	}
+	
+	/*
+	 * Prüft, ob es sich bei dem Tile um ein Beam handelt.
+	 * 
+	 * @param row Zeile, welche es zu prüfen gilt
+	 * @param col Spalte, welche es zu prüfen gilt
+	 * 
+	 * @return boolean
+	 */
+	private boolean isBeam( int row, int col )
+	{
+		return ( this.map.tile( row, col ).type() == "beam" )? true : false;
+	}
+	
 
 	/*
 	 * 1) Bereitet das Hervorheben möglicher Beams vor (Possible-Beam-Hilighting)
@@ -775,7 +799,7 @@ public class MapArea
 	{
 		int mRow		= this.manipSource.row();
 		int mCol		= this.manipSource.col();
-		
+
 		int toLeft		= this.getLeftPossibleBeams( this.manipSource );
 		int toTop		= this.getTopPossibleBeams( this.manipSource );
 		int toRight		= this.getRightPossibleBeams( this.manipSource );
@@ -810,13 +834,13 @@ public class MapArea
 				this.paintVerticalBeams( mRow + 1, mouseRow + 1, mCol );
 			}
 		}
-		
-		int consumption	= this.map.filter( "beam", this.manipSource ).depends( this.manipSource ).size();
-
-		if( consumption == this.manipSource.strength() )	{ this.manipSource.color( Tile.CBLUE ); 	}
-		else												{ this.manipSource.color( Tile.CYELLOW );	}
-		
-		this.manipSource.consumption( consumption );		
+//		
+//		int consumption	= this.map.filter( "beam", this.manipSource ).depends( this.manipSource ).size();
+//
+//		if( consumption == this.manipSource.strength() )	{ this.manipSource.color( Tile.CBLUE ); 	}
+//		else												{ this.manipSource.color( Tile.CYELLOW );	}
+//		
+//		this.manipSource.consumption( consumption );		
 	}
 
 	private void clearPrepaintedBeams()
