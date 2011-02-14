@@ -9,6 +9,10 @@ public class TileArray implements Serializable
 	
 	public final static int MODE_READY				= 0;
 	public final static int MODE_PREVIEW			= 1;
+	public final static int TILE_FROM_LEFT			= 0;
+	public final static int TILE_FROM_TOP			= 1;	
+	public final static int TILE_FROM_RIGHT			= 2;
+	public final static int TILE_FROM_BOTTOM		= 3;
 	
 	private int rows, cols;
 	private int setRow, setCol;
@@ -301,6 +305,33 @@ public class TileArray implements Serializable
 	public void pushReady( Tile tile, int row, int col )
 	{
 		this.conttiles[row][col]	= tile;
+	}
+	
+	public ArrayList diff()
+	{
+		if( this.mode == TileArray.MODE_PREVIEW )
+		{
+			ArrayList<Tile> diffs	= new ArrayList<Tile>();
+			
+			for( int row = 0; row < this.rows; row++ )
+			{
+				for( int col = 0; col < this.cols; col++ )
+				{
+					Tile ready		= this.conttiles[row][col];
+					Tile preview	= this.tiles[row][col];
+					
+					if( !ready.equals( preview ) )
+					{
+						diffs.add( (Tile)preview.clone() );
+					}
+				}
+			}
+			
+			return diffs;
+		} else
+		{
+			return null;
+		}
 	}
 }
 
