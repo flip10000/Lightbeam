@@ -34,8 +34,9 @@ public class Playground extends GamePlayground
 	private JMenu jfile						= new JMenu( "Datei" );
 	
 	private JMenuItem jsavegame				= new JMenu( "Spielstand" );
-	private JMenuItem jsavegame_load		= new JMenuItem( "Neu" );
+	private JMenuItem jsavegame_new			= new JMenuItem( "Neu" );
 	private JMenuItem jsavegame_save		= new JMenuItem( "Speichern" );
+	private JMenuItem jsavegame_load		= new JMenuItem( "Laden" );
 	
 	private JMenuItem jkarte				= new JMenuItem( "Karte öffnen" );
 	
@@ -137,6 +138,31 @@ public class Playground extends GamePlayground
 	
 	private void loadGame()
 	{
+		try 
+		{
+			JFileChooser loadDialog	= new JFileChooser();
+			
+			loadDialog.showOpenDialog( this.frame );
+			
+			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
+			BufferedInputStream buf	= new BufferedInputStream( file );
+			ObjectInputStream read 	= new ObjectInputStream( buf );
+ 
+			TileArray map 			= (TileArray) read.readObject();
+			String 	mapName			= (String) read.readObject();
+
+			this.mapArea.setMap( map, true );
+			this.mapArea.setMapName( mapName );
+			this.mapArea.reload();
+			
+			read.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
 	}	
 	
 	private void saveGame()
