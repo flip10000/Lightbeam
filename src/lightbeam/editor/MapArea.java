@@ -85,7 +85,7 @@ public class MapArea
 					MapArea.this.editBeamsource( row, col );
 				} else if( MapArea.this.isField( row, col ) && MapArea.this.manipSource != null )
 				{
-					MapArea.this.saveBeamsource();
+					MapArea.this.saveBeamsource( MapArea.this.map.tile( row, col ) );
 					MapArea.this.leavePreviewMode();
 					MapArea.this.manipSource = null;
 				} else if( 
@@ -95,6 +95,11 @@ public class MapArea
 					MapArea.this.leavePreviewMode();
 					MapArea.this.manipSource = null;	
 					MapArea.this.editBeamsource( row, col );
+				} else if( MapArea.this.manipSource != null )
+				{
+					MapArea.this.saveBeamsource( MapArea.this.map.tile( row, col ) );
+					MapArea.this.manipSource = null;
+					MapArea.this.leavePreviewMode();
 				}
 				
 				MapArea.this.scroll.repaint();
@@ -1006,8 +1011,27 @@ public class MapArea
 		this.hilightPossibleBeams( this.manipSource );
 	}
 	
-	private void saveBeamsource()
+	private void saveBeamsource( Tile tileClicked )
 	{
+		if( 
+			( tileClicked.parent() != null && tileClicked.parent().row() == this.manipSource.row() && tileClicked.parent().col() == this.manipSource.col() ) ||
+			( tileClicked.row() == this.manipSource.row() && tileClicked.col() == this.manipSource.col() )
+		) {
+			ArrayList<Tile> diffs	= this.map.diff();
+			int lenDiff				= diffs.size();
+			
+			for( int cntDiff = 0; cntDiff < lenDiff; cntDiff++ )
+			{
+				Tile diff	= diffs.get( cntDiff );
+				
+				if( diff.type() != "beamsource" )
+				{
+					diff.color( Tile.CTRANSPARENT );
+					this.map.pushReady( diff, diff.row(), diff.col() );
+				}
+			}
+		}
+		
 		this.dehilightPossibleBeams( this.manipSource );
 		this.map.tile( this.manipSource.row(), this.manipSource.col() ).color( Tile.CTRANSPARENT );
 	}
