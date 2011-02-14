@@ -21,6 +21,7 @@ public class Tile implements Serializable, Cloneable
 	private Tile parent							= null;
 	private int row								= 0;
 	private int col								= 0;
+	private boolean isSolution					= false;
 	private Color color							= new Color( 255, 255, 255, 0 );
 	private transient BufferedImage image		= null;
 
@@ -60,6 +61,7 @@ public class Tile implements Serializable, Cloneable
 	public void type( String type )				{ this.type = type;					}
 	public void hidden( boolean hidden )		{ this.hidden = hidden;				}
 	public void focus( boolean blFocus )		{ this.focused = blFocus;			}
+	public void solution( boolean isSolution )	{ this.isSolution = isSolution;		}
 	
 	// Geta - Methoden
 	public Tile parent()						{ return this.parent; 				}	
@@ -73,6 +75,7 @@ public class Tile implements Serializable, Cloneable
 	public int consumption()					{ return this.consumption;			}
 	public boolean focused()					{ return this.focused;				}
 	public boolean hidden()						{ return this.hidden;				}
+	public boolean solution()					{ return this.isSolution;			}
 	
 	protected Object clone()
 	{
