@@ -88,7 +88,7 @@ public class TilePalette extends JPanel
 		int row			= 0;
 		int col			= 0;
 		
-		int amount		= this.tileset.length();
+		int amount		= 2;
 		
 		for( int i = 0; i < amount; i++ )
 		{
