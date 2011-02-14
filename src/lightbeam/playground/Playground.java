@@ -12,12 +12,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+import lightbeam.editor.Editor;
 
 import core.GamePlayground;
 import core.tilestate.TileArray;
@@ -29,18 +34,12 @@ public class Playground extends GamePlayground
 	private JPanel left_panel				= new JPanel();
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
-	private JMenuBar menuBar				= new JMenuBar();
 	
-	private JMenu jfile						= new JMenu( "Datei" );
-	
-	private JMenuItem jsavegame				= new JMenu( "Spielstand" );
-	private JMenuItem jsavegame_new			= new JMenuItem( "Neu" );
-	private JMenuItem jsavegame_save		= new JMenuItem( "Speichern" );
-	private JMenuItem jsavegame_load		= new JMenuItem( "Laden" );
-	
-	private JMenuItem jkarte				= new JMenuItem( "Karte öffnen" );
-	
-	private JMenuItem jfile_close			= new JMenuItem( "Beenden" );
+	private JToolBar toolBar				= null;
+	private JButton saveButton				= null;
+	private JButton openMapButton			= null;
+	private JButton openGameButton 			= null;
+	private JButton closeButton				= null;
 	
 	private int initRows					= 10;
 	private int initCols					= 10;	
@@ -50,14 +49,7 @@ public class Playground extends GamePlayground
 		//Setzen eines Fenstertitels
 		this.frame.setTitle( "Spiel - spielen" );
 		
-        this.jsavegame.add( this.jsavegame_load );
-        this.jsavegame.add( this.jsavegame_save );
-        
-        this.jfile.add( this.jsavegame );
-        this.jfile.add( this.jkarte );        
-        this.jfile.add( this.jfile_close );
-        
-        this.menuBar.add( this.jfile );
+		this.toolBar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
         		
 		this.mapArea				= new MapArea( this.gTileset, this.initRows, this.initCols );		
 		
@@ -66,40 +58,51 @@ public class Playground extends GamePlayground
 
 		this.frame.setLayout( new BorderLayout() );
  
-		this.frame.add( this.menuBar, BorderLayout.NORTH );
+		this.frame.add( this.toolBar,BorderLayout.NORTH );
 		this.frame.add( this.left_panel, BorderLayout.WEST );
 		this.frame.add( this.mapArea.getScrollPane() , BorderLayout.CENTER );
 
-		// Größe des Fensters setzen
-		this.frame.setSize( 800, 600 );
-		this.frame.setLocationRelativeTo( null );
-
-		this.jfile_close.addActionListener(new ActionListener(){
+		//ToolBar füllen
+		// Neue map ertellen:
+		ImageIcon openImage = new ImageIcon("src/fx/Toolbar/open.png");
+		this.openGameButton = new JButton(openImage);
+		this.openGameButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				Playground.this.closePlayground();
+				Playground.this.loadGame();
 			}
-		});	
-		
+		});		
+		this.toolBar.add(this.openGameButton);
 		// Map laden/öffnen:
-		this.jkarte.addActionListener(new ActionListener(){
+		this.openMapButton = new JButton(openImage);
+		this.openMapButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				Playground.this.loadMap();
 			}
 		});
 		
-		// Spiel speichern:
-		this.jsavegame_save.addActionListener(new ActionListener(){
+		this.toolBar.add(this.openMapButton);	
+		// Map speichern:
+		ImageIcon saveImage = new ImageIcon("src/fx/Toolbar/save.png");
+		this.saveButton = new JButton(saveImage);
+		this.saveButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				Playground.this.saveGame();
 			}
 		});
-		
-		// Spiel laden:
-		this.jsavegame_load.addActionListener(new ActionListener(){
+		this.toolBar.add(this.saveButton);
+		// Editor schließen:
+		ImageIcon closeImage = new ImageIcon("src/fx/Toolbar/close.png");
+		this.closeButton = new JButton(closeImage);
+		this.closeButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				Playground.this.loadGame();
+				Playground.this.closePlayground();
 			}
-		});		
+		});	
+		this.toolBar.add(this.closeButton);
+		
+		// Größe des Fensters setzen
+		this.frame.setSize( 800, 600 );
+		this.frame.setLocationRelativeTo( null );
 	}
 	
 	public JFrame getFrame()			{ return this.frame;				}
