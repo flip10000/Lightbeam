@@ -266,6 +266,13 @@ public class MapArea
 					{ 
 						newTile.hidden( true );
 						newTile.image( this.tileset.tile( 1 ).image() );
+					} else
+					{
+						if( type.equals( "beam" ) &&
+							this.map.tile( row, col ).hidden() == true  
+						) {
+							this.map.tile( row, col ).image( this.tileset.tile( 1 ).image() );
+						}
 					}
 				} else if( type.equals( "beamsource" ) )
 				{
