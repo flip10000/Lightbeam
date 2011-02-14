@@ -77,19 +77,24 @@ public class MapArea
 
 			if( MapArea.this.isInArea( row, col ) )
 			{
-				if( ( MapArea.this.isField( row, col ) ) 
-					&& MapArea.this.manipSource == null )
+				if( MapArea.this.isField( row, col ) && MapArea.this.manipSource == null )
 				{
 					MapArea.this.drawBeamsource( row, col );
-				} else if( MapArea.this.isBeamsource( row, col ) )
+				} else if( MapArea.this.isBeamsource( row, col ) && MapArea.this.manipSource == null )
 				{
-					MapArea.this.saveBeamsource();
 					MapArea.this.editBeamsource( row, col );
 				} else if( MapArea.this.isField( row, col ) && MapArea.this.manipSource != null )
 				{
 					MapArea.this.saveBeamsource();
 					MapArea.this.leavePreviewMode();
 					MapArea.this.manipSource = null;
+				} else if( 
+					MapArea.this.isBeamsource( row, col ) && MapArea.this.manipSource != null &&
+					( MapArea.this.manipSource.row() != row || MapArea.this.manipSource.col() != col )
+				) {
+					MapArea.this.leavePreviewMode();
+					MapArea.this.manipSource = null;	
+					MapArea.this.editBeamsource( row, col );
 				}
 				
 				MapArea.this.scroll.repaint();
@@ -547,12 +552,6 @@ public class MapArea
 				this.map.tile( sRow, col ).color( Tile.CTRANSPARENT );
 			}
 		}
-		
-//		if( this.manipSource != null && 
-//			( this.manipSource.row() != source.row() || this.manipSource.col() != source.col() )
-//		) {
-//			this.manipSource.color( Tile.CTRANSPARENT );
-//		}
 	}
 	
 	private int getLeftPossibleBeams( Tile beamsource )
