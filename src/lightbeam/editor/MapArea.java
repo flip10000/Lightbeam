@@ -172,11 +172,13 @@ public class MapArea
 						( MapArea.this.manipSource.row() != row || MapArea.this.manipSource.col() != col )
 					) {
 						MapArea.this.focusBeamsource( row, col );
+						MapArea.this.hilightPossibleBeams( MapArea.this.focusedSource );
 					} else if(
 						!MapArea.this.isBeamsource( row, col ) &&
 						MapArea.this.focusedSource != null && MapArea.this.manipSource != null &&
 						( MapArea.this.focusedSource.row() != MapArea.this.manipSource.row() || MapArea.this.focusedSource.col() != MapArea.this.manipSource.col() )
 					) {
+						MapArea.this.dehilightPossibleBeams( MapArea.this.focusedSource );
 						MapArea.this.defocusBeamsource();
 					}
 				}
@@ -447,7 +449,7 @@ public class MapArea
 	 */
 	private void doHilightPossibleBeams( int row, int col )
 	{
-		this.dehilightPossibleBeams();
+		this.dehilightPossibleBeams( this.map.tile( row, col ) );
 		
 		if( this.isBeamsource( row, col ) == true )
 		{
@@ -513,28 +515,44 @@ public class MapArea
 	 * alle hervorgehobenen möglichen Beams wieder auf ihren
 	 * Ready-Zustand gesetzt.
 	 */
-	private void dehilightPossibleBeams()
+	private void dehilightPossibleBeams( Tile source )
 	{
+		int sRow	= source.row();
+		int sCol	= source.col();
+		
+		int mRow	= -1;
+		int mCol	= -1;
+
+		int rows	= this.map.rows();
+		int cols	= this.map.cols();
+		
 		if( this.manipSource != null )
 		{
-			int mRow	= this.manipSource.row();
-			int mCol	= this.manipSource.col();
-			
-			int rows	= this.map.rows();
-			int cols	= this.map.cols();
-			
-			for( int row = 0; row < rows; row++ )
-			{
-				this.map.tile( row, mCol ).color( Tile.CTRANSPARENT );
-			}
-			
-			for( int col = 0; col < cols; col++ )
-			{
-				this.map.tile( mRow, col ).color( Tile.CTRANSPARENT );
-			}
-			
-			this.manipSource.color( Tile.CTRANSPARENT );
+			mRow	= this.manipSource.row();
+			mCol	= this.manipSource.col();
 		}
+		
+		for( int row = 0; row < rows; row++ )
+		{
+			if( row != mRow )
+			{
+				this.map.tile( row, sCol ).color( Tile.CTRANSPARENT );
+			}
+		}
+		
+		for( int col = 0; col < cols; col++ )
+		{
+			if( col != mCol )
+			{
+				this.map.tile( sRow, col ).color( Tile.CTRANSPARENT );
+			}
+		}
+		
+//		if( this.manipSource != null && 
+//			( this.manipSource.row() != source.row() || this.manipSource.col() != source.col() )
+//		) {
+//			this.manipSource.color( Tile.CTRANSPARENT );
+//		}
 	}
 	
 	private int getLeftPossibleBeams( Tile beamsource )
@@ -967,7 +985,8 @@ public class MapArea
 	
 	private void saveBeamsource()
 	{
-		this.dehilightPossibleBeams();
+		this.dehilightPossibleBeams( this.manipSource );
+		this.map.tile( this.manipSource.row(), this.manipSource.col() ).color( Tile.CTRANSPARENT );
 	}
 	
 	private void focusBeamsource( int row, int col )
