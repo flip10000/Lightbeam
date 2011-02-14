@@ -89,6 +89,7 @@ public class MapArea
 				{
 					MapArea.this.saveBeamsource();
 					MapArea.this.leavePreviewMode();
+					MapArea.this.manipSource = null;
 				}
 				
 				MapArea.this.scroll.repaint();
@@ -165,10 +166,21 @@ public class MapArea
 			
 			if( MapArea.this.isInArea( row, col ) )
 			{
-				if( MapArea.this.isBeamsource( row, col ) )
+				if( MapArea.this.map.mode() == TileArray.MODE_PREVIEW )
 				{
-					MapArea.this.focusedSource = MapArea.this.map.tile( row, col );
+					if( MapArea.this.isBeamsource( row, col ) &&
+						( MapArea.this.manipSource.row() != row || MapArea.this.manipSource.col() != col )
+					) {
+						MapArea.this.focusBeamsource( row, col );
+					} else if(
+						!MapArea.this.isBeamsource( row, col ) &&
+						MapArea.this.focusedSource != null && MapArea.this.manipSource != null &&
+						( MapArea.this.focusedSource.row() != MapArea.this.manipSource.row() || MapArea.this.focusedSource.col() != MapArea.this.manipSource.col() )
+					) {
+						MapArea.this.defocusBeamsource();
+					}
 				}
+				MapArea.this.scroll.repaint();
 //				if( MapArea.this.manipSource == null || MapArea.this.isBeamsource( row, col ) )
 //				{
 //					MapArea.this.doHilightPossibleBeams( row, col );
@@ -250,7 +262,7 @@ public class MapArea
 				
 				g.drawImage( imgTile, col * 32, row * 32, this.panel );
 				g.setColor( tile.color() );
-				g.fillRect( ( col * 32 ), ( row * 32 ), 32, 32 );				
+				g.fillRect( ( col * 32 ), ( row * 32 ), 32, 32 );
 				
 				// Ich denke max 999 Beams/Beamsource sollten reichen!
 				// Keine Lust auf Relative Größenermittlung der FontSizes sowie Padding,
@@ -287,8 +299,9 @@ public class MapArea
 					}
 				} else if( strength == 0 && tile.type() == "beamsource" )
 				{
+					g.setColor( new Color( 0, 0, 0, 255 ) );
 					g.setFont( new Font( "Arial", Font.BOLD, 22 ) );
-					g.setColor( Color.RED );
+//					g.setColor( Color.RED );
 					g.drawString( "!", ( col * 32 ) + 13, ( row * 32 ) + 24 );
 					g.setColor( new Color( 149, 47, 49, 100 ) );
 					g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
@@ -489,10 +502,10 @@ public class MapArea
 		}
 		
 		// Beamsource grün hervorheben:
-		int fRow	= this.focusedSource.row();
-		int fCol	= this.focusedSource.col();
-		
-		this.map.tile( fRow, fCol ).color( Tile.CGREEN );
+//		int fRow	= this.focusedSource.row();
+//		int fCol	= this.focusedSource.col();
+//		
+//		this.map.tile( fRow, fCol ).color( Tile.CGREEN );
 	}
 	
 	/*
@@ -502,33 +515,22 @@ public class MapArea
 	 */
 	private void dehilightPossibleBeams()
 	{
-		if( this.focusedSource != null && this.manipSource == null )
+		if( this.manipSource != null )
 		{
-			// Zurück in den Ready-Mode: 
-			this.map.mode( TileArray.MODE_READY );
-
-		} else if( this.focusedSource != null && this.manipSource != null )
-		{
-			int fRow	= this.focusedSource.row();
-			int fCol	= this.focusedSource.col();	
-			
 			int mRow	= this.manipSource.row();
 			int mCol	= this.manipSource.col();
 			
 			int rows	= this.map.rows();
 			int cols	= this.map.cols();
 			
-			if( fRow != mRow || fCol != mCol )
+			for( int row = 0; row < rows; row++ )
 			{
-				for( int row = 0; row < rows; row++ )
-				{
-					this.map.tile( row, mCol ).color( Tile.CTRANSPARENT );
-				}
-				
-				for( int col = 0; col < cols; col++ )
-				{
-					this.map.tile( mRow, col ).color( Tile.CTRANSPARENT );
-				}
+				this.map.tile( row, mCol ).color( Tile.CTRANSPARENT );
+			}
+			
+			for( int col = 0; col < cols; col++ )
+			{
+				this.map.tile( mRow, col ).color( Tile.CTRANSPARENT );
 			}
 			
 			this.manipSource.color( Tile.CTRANSPARENT );
@@ -955,7 +957,6 @@ public class MapArea
 	private void editBeamsource( int row, int col )
 	{
 		this.manipSource	= this.map.tile( row, col );
-		this.focusedSource	= this.manipSource;		
 		int mRow			= this.manipSource.row();
 		int mCol			= this.manipSource.col();
 		
@@ -967,8 +968,17 @@ public class MapArea
 	private void saveBeamsource()
 	{
 		this.dehilightPossibleBeams();
-		
-		this.manipSource	= null;
+	}
+	
+	private void focusBeamsource( int row, int col )
+	{
+		this.focusedSource = MapArea.this.map.tile( row, col );
+		this.map.tile( row, col ).color( Tile.CGREEN );
+	}
+	
+	private void defocusBeamsource()
+	{
+		this.map.tile( this.focusedSource.row(), this.focusedSource.col() ).color( Tile.CTRANSPARENT );
 		this.focusedSource	= null;
 	}
 	
