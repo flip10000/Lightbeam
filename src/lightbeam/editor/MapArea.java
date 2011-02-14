@@ -380,7 +380,7 @@ public class MapArea
 			try 
 			{
 				this.map.setTile( row, col ).withState( new TileField() );
-				
+				this.map.tile( row, col ).solution( false );
 				m.addDirtyRegion( this.scroll, col * 32, row * 32, 32, 32 );
 			} catch (IOException e) 
 			{
@@ -557,6 +557,7 @@ public class MapArea
 				{
 					this.map.setTile( cntRow, col ).withState( new TileBeam(), beamsource );
 					this.map.tile( cntRow, col ).setDirection( Tile.VERTICAL );
+					this.map.tile( cntRow, col ).solution( true );
 				}
 				catch (IOException e) { e.printStackTrace(); }
 			}
@@ -572,6 +573,7 @@ public class MapArea
 					{ 
 						this.map.setTile( row, cntCol ).withState( new TileBeam(), beamsource );
 						this.map.tile( row, cntCol ).setDirection( Tile.HORIZONTAL );
+						this.map.tile( row, cntCol ).solution( true );
 					} catch (IOException e) 
 					{ 
 						e.printStackTrace(); 
