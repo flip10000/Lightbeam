@@ -154,7 +154,7 @@ public class Editor extends GameEditor
 			TileArray map 			= (TileArray) read.readObject();
 			String 	mapName			= (String) read.readObject();
 
-			this.mapArea.setMap( map );
+//			this.mapArea.setMap( map );
 			this.mapArea.setMapName( mapName );
 			this.mapArea.reload();
 			
@@ -170,7 +170,7 @@ public class Editor extends GameEditor
 	
 	private void newMap()
 	{
-		this.mapArea.resetMap( this.initRows, this.initCols );
+//		this.mapArea.resetMap( this.initRows, this.initCols );
 		this.mapsettings.resetSettings( this.initRows, this.initCols );
 	}
 	
