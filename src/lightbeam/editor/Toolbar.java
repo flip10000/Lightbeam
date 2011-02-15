@@ -1,6 +1,7 @@
 package lightbeam.editor;
 
 import java.awt.ComponentOrientation;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -42,6 +43,16 @@ public class Toolbar
 		this.btnOpen.setBounds( new Rectangle( this.btnNew.getBounds().x + this.btnNew.getBounds().width, 3, 32, 32 ) );
 		this.btnSave.setBounds( new Rectangle( this.btnOpen.getBounds().x +this.btnOpen.getBounds().width, 3, 32, 32 ) );
 		this.btnClose.setBounds( new Rectangle( this.toolBar.getPreferredSize().width - 50, 3, 32, 32 ) );
+
+		this.btnNew.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
+		this.btnOpen.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
+		this.btnClose.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
+		this.btnSave.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
+		
+		this.btnNew.setToolTipText( "Neues Spielfeld anlegen!" );
+		this.btnOpen.setToolTipText( "Gespeichertes Spielfeld öffnen!" );
+		this.btnSave.setToolTipText( "Aktuelles Spielfeld speichern!" );
+		this.btnClose.setToolTipText( "Editor schließen!" );
 		
 		this.toolBar.add( this.btnNew );
 		this.toolBar.add( this.btnOpen );
