@@ -3,6 +3,8 @@ package lightbeam.editor;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -30,6 +32,11 @@ public class Editor extends GameEditor
 	
 	public Editor()
 	{
+		// Größe des Fensters setzen
+		this.frame.setSize( 800, 600 );
+		this.frame.setMinimumSize( new Dimension( 484, 404 ) );
+		this.frame.setLocationRelativeTo( null );		
+		
 		//Setzen eines Fenstertitels
 		this.frame.setTitle( "Karte - erstellen/verändern" );
 		this.toolbar			= new Toolbar( this );
@@ -52,9 +59,17 @@ public class Editor extends GameEditor
 		this.frame.add( this.left_panel, BorderLayout.WEST );
 		this.frame.add( this.mapArea.getScrollPane() , BorderLayout.CENTER );
 		
-		// Größe des Fensters setzen
-		this.frame.setSize( 800, 600 );
-		this.frame.setLocationRelativeTo( null );		
+		this.frame.addComponentListener(new ComponentListener() 
+		{
+			public void componentResized( ComponentEvent arg0 ) 	
+			{
+				Editor.this.toolbar.refreshSize();
+			}
+			public void componentHidden(ComponentEvent arg0) 	{}
+			public void componentMoved(ComponentEvent arg0) 	{}
+
+			public void componentShown(ComponentEvent arg0) 	{}
+		});
 	}
 
 
@@ -89,6 +104,11 @@ public class Editor extends GameEditor
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void refreshSize()
+	{
+		
 	}
 	
 	public void loadMap()
