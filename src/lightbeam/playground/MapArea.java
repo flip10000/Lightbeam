@@ -18,12 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.RepaintManager;
 
 import core.tilefactory.AbstractTileSetFactory;
-import core.tilestate.ITileState;
 import core.tilestate.Tile;
 import core.tilestate.TileArray;
 
-import lightbeam.tiles.TileBeam;
-import lightbeam.tiles.TileBeamsource;
 import lightbeam.tiles.TileField;
 
 public class MapArea
@@ -80,7 +77,7 @@ public class MapArea
 				if( MapArea.this.isBeamsource( row, col ) == true )
 				{
 					Tile fSource	= MapArea.this.focusedSource;
-					
+
 					if( MapArea.this.manipSource != null && !fSource.equals( MapArea.this.manipSource ) )
 					{
 						MapArea.this.manipSource	= null;
@@ -122,8 +119,8 @@ public class MapArea
 				} else 
 				{
 					if( MapArea.this.manipSource != null && 
-						MapArea.this.map.tile( row, col ).type() != "field" &&
-						MapArea.this.map.tile( row, col ).type() == "beam" && 
+						!MapArea.this.map.tile( row, col ).type().equals( "field" ) &&
+						MapArea.this.map.tile( row, col ).type().equals( "beam" ) && 
 						MapArea.this.map.tile( row, col ).hidden() == false
 					) { 
 						MapArea.this.assignBeamsToSource(); 
@@ -187,7 +184,7 @@ public class MapArea
 				// Ich denke max 999 Beams/Beamsource sollten reichen!
 				// Keine Lust auf Relative Größenermittlung der FontSizes sowie Padding,
 				// Margin, etc. in Relation zum parentTile !!!
-				if( strength > 0 && tile.type() == "beamsource" )
+				if( strength > 0 && tile.type().equals( "beamsource" ) )
 				{
 					int bStrength	= strength;
 					
@@ -217,7 +214,7 @@ public class MapArea
 						g.setFont( new Font( "Arial", Font.BOLD, 12 ) );
 						g.drawString( bStrength+"", ( col * 32 ) + 5, ( row * 32 ) + 21 );
 					}
-				} else if( strength == 0 && tile.type() == "beamsource" )
+				} else if( strength == 0 && tile.type().equals( "beamsource" ) )
 				{
 					g.setFont( new Font( "Arial", Font.BOLD, 22 ) );
 					g.setColor( Color.RED );
@@ -242,8 +239,7 @@ public class MapArea
 	public void setMap( TileArray map, Boolean savegame )			
 	{ 
 		this.map 			= map;
-		
-		ITileState newTile	= null;
+
 		int rows			= this.map.rows();
 		int cols			= this.map.cols();
 		
@@ -251,38 +247,33 @@ public class MapArea
 		{
 			for( int col = 0; col < cols; col++ )
 			{
-				String type			= this.map.tile( row, col ).type();
+				Tile curTile	= this.map.tile( row, col );
 				
-				if( type.equals( "field" ) )
+				if( curTile.type().equals( "beamsource" ) )
 				{
-					try 						{ newTile = new TileField(); 		}
-					catch( IOException e ) 		{ e.printStackTrace();				}
-				} else if( type.equals( "beam" ) )
+					this.map.tile( row, col ).image( this.tileset.tile( 0 ).image() );
+				} else if( curTile.type().equals( "beam" ) || curTile.type().equals( "field" ) )
 				{
-					try 						{ newTile = new TileBeam(); 		}
-					catch( IOException e ) 		{ e.printStackTrace();				}
-					
-					if( savegame == false  )	
-					{ 
-						newTile.hidden( true );
-						newTile.image( this.tileset.tile( 1 ).image() );
-					} else
+					if( savegame == false && curTile.type().equals( "beam" ) && curTile.solution() == true)
 					{
-						if( type.equals( "beam" ) &&
-							this.map.tile( row, col ).hidden() == true  
-						) {
-							this.map.tile( row, col ).image( this.tileset.tile( 1 ).image() );
-						}
+						Tile parent	= this.map.tile( row, col ).parent();
+						
+						try 					{ this.map.setTile( row, col ).withState( new TileField() ); 	}
+						catch( IOException e )	{ e.printStackTrace();											}
+						
+						this.map.tile( row, col ).parent( parent );
+						this.map.tile( row, col ).solution( true );
+					} else if( savegame == true )
+					{
+						BufferedImage img	= ( curTile.type().equals( "field" ) )? this.tileset.tile( 1 ).image() : this.tileset.tile( 2 ).image();
+						
+						this.map.tile( row, col ).image( img ); 
 					}
-				} else if( type.equals( "beamsource" ) )
-				{
-					try 						{ newTile = new TileBeamsource(); 	}
-					catch( IOException e ) 		{ e.printStackTrace();				}
 				}
-				
-				this.map.tile( row, col ).setTileState( newTile );
 			}
 		}
+	
+		this.scroll.repaint();
 	}
 	
 	public void setMapName( String mapName )	{ this.mapName = mapName; 	}
@@ -341,7 +332,7 @@ public class MapArea
 	 */
 	private boolean isBeamsource( int row, int col )
 	{
-		return ( this.map.tile( row, col ).type() == "beamsource" )? true : false; 
+		return ( this.map.tile( row, col ).type().equals( "beamsource" ) )? true : false; 
 	}
 
 	/*
@@ -354,7 +345,7 @@ public class MapArea
 	 */
 	private boolean isField( int row, int col )
 	{
-		return ( this.map.tile( row, col ).type() == "field" )? true : false;
+		return ( this.map.tile( row, col ).type().equals( "field" ) )? true : false;
 	}
 
 	/*
@@ -377,7 +368,6 @@ public class MapArea
 		
 		this.scroll.repaint();
 	}
-
 	
 	/*
 	 * Hebt mögliche Beams blau hervor (Possible-Beam-Hilighting)
@@ -493,8 +483,8 @@ public class MapArea
 			
 			// Col-Position des ersten Hindernisses:
 			if( min_crossed == -1 &&
-				( cross.type() == "beamsource" || 
-				  ( cross.type() == "beam" && cross.hidden() == false &&
+				( cross.type().equals( "beamsource" ) || 
+				  ( cross.type().equals( "beam" ) && cross.hidden() == false &&
 				    cross.parent().row() != row &&
 				    cross.parent().col() != col
 				  )
@@ -504,7 +494,7 @@ public class MapArea
 			}
 			
 			// Anzahl der eigenen Beams des Sources von links:
-			if( cross.type() == "beam" && cross.hidden() == false &&
+			if( cross.type().equals( "beam" ) && cross.hidden() == false &&
 				cross.parent() != null && 
 				cross.parent().row() == row &&
 				cross.parent().col() == col
@@ -543,8 +533,8 @@ public class MapArea
 			
 			// Col-Position des ersten Hindernisses:
 			if( min_crossed == -1 &&
-				( cross.type() == "beamsource" || 
-				  ( cross.type() == "beam" && cross.hidden() == false &&
+				( cross.type().equals( "beamsource" ) || 
+				  ( cross.type().equals( "beam" ) && cross.hidden() == false &&
 				    cross.parent().row() != row &&
 				    cross.parent().col() != col
 				  )
@@ -554,7 +544,7 @@ public class MapArea
 			}
 			
 			// Anzahl der eigenen Beams des Sources von links:
-			if( cross.type() == "beam" && cross.hidden() == false &&
+			if( cross.type().equals( "beam" ) && cross.hidden() == false &&
 				cross.parent() != null && 
 				cross.parent().row() == row &&
 				cross.parent().col() == col
@@ -595,8 +585,8 @@ public class MapArea
 			
 			// Col-Position des ersten Hindernisses:
 			if( max_crossed == cols &&
-				( cross.type() == "beamsource" || 
-				  ( cross.type() == "beam" && cross.hidden() == false &&
+				( cross.type().equals( "beamsource" ) || 
+				  ( cross.type().equals( "beam" ) && cross.hidden() == false &&
 				    cross.parent().row() != row &&
 				    cross.parent().col() != col
 				  )
@@ -606,7 +596,7 @@ public class MapArea
 			}
 			
 			// Anzahl der eigenen Beams des Sources von links:
-			if( cross.type() == "beam" && cross.hidden() == false &&
+			if( cross.type().equals( "beam" ) && cross.hidden() == false &&
 				cross.parent() != null && 
 				cross.parent().row() == row &&
 				cross.parent().col() == col
@@ -647,8 +637,8 @@ public class MapArea
 			
 			// Col-Position des ersten Hindernisses:
 			if( max_crossed == rows &&
-				( cross.type() == "beamsource" || 
-				  ( cross.type() == "beam" && cross.hidden() == false &&
+				( cross.type().equals( "beamsource" ) || 
+				  ( cross.type().equals( "beam" ) && cross.hidden() == false &&
 				    cross.parent().row() != row &&
 				    cross.parent().col() != col
 			      )
@@ -658,7 +648,7 @@ public class MapArea
 			}
 			
 			// Anzahl der eigenen Beams des Sources von links:
-			if( cross.type() == "beam" && cross.hidden() == false &&
+			if( cross.type().equals( "beam" ) && cross.hidden() == false &&
 				cross.parent() != null && 
 				cross.parent().row() == row &&
 				cross.parent().col() == col
@@ -674,11 +664,11 @@ public class MapArea
 	
 	private void preparePossibleBeam( Tile pBeam )
 	{
-		if( pBeam.type() == "field" )
+		if( pBeam.type().equals( "field" ) )
 		{
 			pBeam.color( Tile.CBLUE );
 			this.m.addDirtyRegion( this.scroll, pBeam.row() * 32, pBeam.col() * 32, 32, 32 );
-		} else if( pBeam.type() == "beam" )
+		} else if( pBeam.type().equals( "beam" ) )
 		{
 			pBeam.color( Tile.CBLUE );
 			this.m.addDirtyRegion( this.scroll, pBeam.row() * 32, pBeam.col() * 32, 32, 32 );
@@ -767,7 +757,7 @@ public class MapArea
 				{
 					Tile tile	= this.map.tile( inRow, col );
 					
-					if( tile.type() == "beam" &&
+					if( tile.type().equals( "beam" ) &&
 						tile.hidden() == false &&
 						tile.parent() != null && 
 						tile.parent().row() == this.manipSource.row() &&
@@ -784,7 +774,7 @@ public class MapArea
 				{
 					Tile tile	= this.map.tile( inRow, col );
 					
-					if( tile.type() == "beam" &&
+					if( tile.type().equals( "beam" ) &&
 						tile.hidden() == false &&
 						tile.parent() != null && 
 						tile.parent().row() == this.manipSource.row() &&
@@ -810,7 +800,7 @@ public class MapArea
 				{
 					Tile tile	= this.map.tile( row, inCol );
 					
-					if( tile.type() == "beam" &&
+					if( tile.type().equals( "beam" ) &&
 						tile.hidden() == false &&
 						tile.parent() != null && 
 						tile.parent().row() == this.manipSource.row() &&
@@ -827,7 +817,7 @@ public class MapArea
 				{
 					Tile tile	= this.map.tile( row, inCol );
 					
-					if( tile.type() == "beam" &&
+					if( tile.type().equals( "beam" ) &&
 						tile.hidden() == false &&
 						tile.parent() != null && 
 						tile.parent().row() == this.manipSource.row() &&

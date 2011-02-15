@@ -56,7 +56,6 @@ public class Core implements Observer
 	public void addGame( String pkgGame ) { this.pkgGames.add( pkgGame ); }
 	
 	// Laden der Spiele-Packages per Class-Reflection:
-	@SuppressWarnings({ "unchecked", "unchecked", "unchecked", "unchecked" })
 	public void load()
 	{
 		// Anzahl der übergebenen Spiele ermitteln:

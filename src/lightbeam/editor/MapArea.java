@@ -88,11 +88,11 @@ public class MapArea
 			{
 				String focusedType	= MapArea.this.map.tile( row, col ).type();
 	
-				if( focusedType == "beam" || focusedType == "beamsource" )
+				if( focusedType.equals( "beam" ) || focusedType.equals( "beamsource" ) )
 				{
 					Tile beamsource	= MapArea.this.map.tile( row, col );
 					
-					if( focusedType == "beam" )
+					if( focusedType.equals( "beam" ) )
 					{
 						beamsource 	= beamsource.parent();
 					}
@@ -176,10 +176,10 @@ public class MapArea
 				
 				if( tile.focused() == true )
 				{
-					if( tile.type() == "beam" )
+					if( tile.type().equals( "beam" ) )
 					{
 						g.setColor( new Color( 255, 0, 0, 135 ) );
-					} else if( tile.type() == "beamsource" )
+					} else if( tile.type().equals( "beamsource" ) )
 					{
 						g.setColor( new Color( 3, 115, 210, 135 ) );
 					}
@@ -190,7 +190,7 @@ public class MapArea
 				// Ich denke max 999 Beams/Beamsource sollten reichen!
 				// Keine Lust auf Relative Größenermittlung der FontSizes sowie Padding,
 				// Margin, etc. in Relation zum parentTile !!!
-				if( strength > 0 && tile.type() == "beamsource" )
+				if( strength > 0 && tile.type().equals( "beamsource" ) )
 				{
 					g.setColor( new Color( 0, 0, 0, 255 ) );
 					
@@ -210,7 +210,7 @@ public class MapArea
 						g.setFont( new Font( "Arial", Font.BOLD, 12 ) );
 						g.drawString( strength+"", ( col * 32 ) + 5, ( row * 32 ) + 21 );
 					}
-				} else if( strength == 0 && tile.type() == "beamsource" )
+				} else if( strength == 0 && tile.type().equals( "beamsource" ) )
 				{
 					g.setFont( new Font( "Arial", Font.BOLD, 22 ) );
 					g.setColor( Color.RED );
@@ -298,7 +298,7 @@ public class MapArea
 		String type			= this.map.tile( row, col ).type();
 		String selType		= selected.type(); 
 
-		if( type != "beam" || selType == "field" )
+		if( !type.equals( "beam" ) || selType.equals( "field" ) )
 		{
 			this.map.setTile( row, col ).withState( selected );
 			
@@ -316,9 +316,9 @@ public class MapArea
 			Tile trigger	= this.map.tile( row, col );
 			Tile beamsource	= this.getParent( row, col );
 			
-			if( beamsource == null || trigger.type() == "beamsource" )
+			if( beamsource == null || trigger.type().equals( "beamsource" ) )
 			{
-				if( this.tileset.getSelected().type() == "field" )
+				if( this.tileset.getSelected().type().equals( "field" ) )
 				{
 					this.removeBeams( trigger );
 				}
@@ -333,7 +333,7 @@ public class MapArea
 					
 					this.m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
 				}
-			} else if( beamsource != null && this.tileset.getSelected().type() == "field" )
+			} else if( beamsource != null && this.tileset.getSelected().type().equals( "field" ) )
 			{
 				int bRow	= beamsource.row();
 				
@@ -413,7 +413,8 @@ public class MapArea
 			try 
 			{
 				this.map.setTile( row, col ).withState( new TileField() );
-				
+				this.map.tile( row, col ).solution( false );
+
 				m.addDirtyRegion( this.scroll, col * 32, row * 32, 32, 32 );
 			} catch (IOException e) 
 			{
@@ -428,10 +429,10 @@ public class MapArea
 		Tile tile	= this.map.tile( row, col );
 		String type	= tile.type();
 		
-		if( type == "beam" || type == "beamsource" )
+		if( type.equals( "beam" ) || type.equals( "beamsource" ) )
 		{
-			if( type == "beam" ) 	{ return tile.parent();	}
-			else					{ return tile;			}
+			if( type.equals( "beam" ) )	{ return tile.parent();	}
+			else						{ return tile;			}
 		} else
 		{
 			return null;
@@ -451,7 +452,7 @@ public class MapArea
 			{
 				Tile tile	= this.map.tile( row, col );
 			
-				if( tile.type() == "beamsource" ) 
+				if( tile.type().equals( "beamsource" ) ) 
 				{ 
 					tile.focus( false );
 					m.addDirtyRegion( this.scroll, row * 32, col * 32, 32, 32 );
@@ -497,7 +498,7 @@ public class MapArea
 	private void setBeams( int row, int col )
 	{
 //		this.oldMap			= this.map;
-		
+
 		Tile beamsource		= this.map.tile( row, col );
 		int beamstrength	= 0;
 
@@ -516,12 +517,13 @@ public class MapArea
 
 			if( cntCol < col )
 			{
-				if( ( tile.type() == "beamsource" || tile.type() == "beam" ) ) {
+				if( ( tile.type().equals( "beamsource" ) || tile.type().equals( "beam" ) ) )
+				{
 					startCol	= tile.col() + 1;
 				}
 			} else if( cntCol > col )
 			{
-				if( ( tile.type() == "beamsource" || tile.type() == "beam" ) &&
+				if( ( tile.type().equals( "beamsource" ) || tile.type().equals( "beam" ) ) &&
 					cntCol < endCol
 				) {
 					endCol		= tile.col();
@@ -535,13 +537,13 @@ public class MapArea
 			
 			if( cntRow < row )
 			{
-				if( ( tile.type() == "beamsource" || tile.type() == "beam" ) )
+				if( ( tile.type().equals( "beamsource" ) || tile.type().equals( "beam" ) ) )
 				{
 					startRow	= tile.row() + 1;
 				} 
 			} else if( cntRow > row )
 			{
-				if( ( tile.type() == "beamsource" || tile.type() == "beam" ) &&
+				if( ( tile.type().equals( "beamsource" ) || tile.type().equals( "beam" ) ) &&
 					cntRow < endRow
 				) {
 					endRow	= tile.row();
@@ -637,7 +639,7 @@ public class MapArea
 	{
 		Tile seltile	= this.map.tile( row, col );
 
-		if( seltile.type() == "beamsource" )
+		if( seltile.type().equals( "beamsource" ) )
 		{
 			return true;
 		} else
@@ -657,7 +659,7 @@ public class MapArea
 			{
 				Tile src	= this.map.tile( pos, col );
 				
-				if( src.type() == "beamsource" )
+				if( src.type().equals( "beamsource" ) )
 				{
 					removeBeams( src );
 					try 
@@ -676,7 +678,7 @@ public class MapArea
 			{
 				Tile src	= this.map.tile( row, pos );
 				
-				if( src.type() == "beamsource" )
+				if( src.type().equals( "beamsource" ) )
 				{
 					removeBeams( src );
 					try 
@@ -703,7 +705,7 @@ public class MapArea
 			{
 				Tile source	= this.map.tile( row, col );
 				
-				if( source.type() == "beamsource" )
+				if( source.type().equals( "beamsource" ) )
 				{
 					ArrayList<Tile> beams	= this.map.filter( "beam", source ).depends( source );
 					

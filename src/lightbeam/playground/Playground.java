@@ -16,21 +16,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
-
-import lightbeam.editor.Editor;
 
 import core.GamePlayground;
 import core.tilestate.TileArray;
 
 public class Playground extends GamePlayground
 {
-	public MapSettings mapsettings			= null;
-	
 	private JPanel left_panel				= new JPanel();
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
@@ -106,8 +99,6 @@ public class Playground extends GamePlayground
 	}
 	
 	public JFrame getFrame()			{ return this.frame;				}
-	
-	public MapSettings getMapSettings()	{ return this.mapsettings;			}
 	public TilePalette getPalette() 	{ return this.palette;				}
 	public JPanel getPanel() 			{ return this.left_panel;			}
 	

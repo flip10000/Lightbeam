@@ -187,7 +187,7 @@ public class TileArray implements Serializable
 			Tile tile 		= tiles[cntRow][col];
 			String gType	= tile.type();
 			
-			if( gType == type ) { gTiles.add( tile ); }
+			if( gType.equals( type ) ) { gTiles.add( tile ); }
 		}
 		
 		for( int cntCol = 0; cntCol < this.cols; cntCol++ )
@@ -195,7 +195,7 @@ public class TileArray implements Serializable
 			Tile tile 		= tiles[row][cntCol];
 			String gType	= tile.type();
 			
-			if( gType == type ) { gTiles.add( tile ); }
+			if( gType.equals( type ) ) { gTiles.add( tile ); }
 		}
 		
 		this.filteredTiles	= gTiles;
@@ -307,7 +307,7 @@ public class TileArray implements Serializable
 		this.conttiles[row][col]	= tile;
 	}
 	
-	public ArrayList diff()
+	public ArrayList<Tile> diff()
 	{
 		if( this.mode == TileArray.MODE_PREVIEW )
 		{
