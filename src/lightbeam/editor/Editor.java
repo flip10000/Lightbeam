@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 import core.GameEditor;
 import core.tilestate.TileArray;
@@ -31,15 +31,12 @@ public class Editor extends GameEditor
 	private JPanel left_panel				= new JPanel();
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
-	private JMenuBar menuBar				= new JMenuBar();
 	
-	private JMenu jfile						= new JMenu( "Datei" );
-	
-	private JMenuItem jkarte				= new JMenu( "Karte" );
-	private JMenuItem jkarte_new			= new JMenuItem( "Neu" );
-	private JMenuItem jkarte_open			= new JMenuItem( "Öffnen" );
-	private JMenuItem jkarte_save			= new JMenuItem( "Speichern" );
-	private JMenuItem jfile_close			= new JMenuItem( "Beenden" );
+	private JToolBar toolBar				= null;
+	private JButton saveButton				= null;
+	private JButton newButton				= null;
+	private JButton openButton 				= null;
+	private JButton closeButton				= null;
 	
 	private int initRows					= 10;
 	private int initCols					= 10;	
@@ -49,15 +46,8 @@ public class Editor extends GameEditor
 		//Setzen eines Fenstertitels
 		this.frame.setTitle( "Karte - erstellen/verändern" );
 		
-        this.jkarte.add( this.jkarte_new );
-        this.jkarte.add( this.jkarte_open );
-        this.jkarte.add( this.jkarte_save );
+        this.toolBar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
         
-        this.jfile.add( this.jkarte );
-        this.jfile.add( this.jfile_close );
-        
-        this.menuBar.add( this.jfile );
-        		
 		this.mapArea				= new MapArea( this.eTileset, this.initRows, this.initCols );		
 		this.mapsettings			= new MapSettings( this.mapArea, this.initRows, this.initCols );		
 		this.palette				= new TilePalette( this.eTileset );
@@ -72,43 +62,56 @@ public class Editor extends GameEditor
 		
 		this.frame.setLayout( new BorderLayout() );
  
-		this.frame.add( this.menuBar, BorderLayout.NORTH );
+		this.frame.add( this.toolBar,BorderLayout.NORTH );
 		this.frame.add( this.left_panel, BorderLayout.WEST );
 		this.frame.add( this.mapArea.getScrollPane() , BorderLayout.CENTER );
 
-		// Größe des Fensters setzen
-		this.frame.setSize( 800, 600 );
-		this.frame.setLocationRelativeTo( null );		
 		
-		// Editor schließen:
-		this.jfile_close.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Editor.this.closeEditor();
-			}
-		});	
-		
-		// Map speichern:
-		this.jkarte_save.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Editor.this.saveMap();
-			}
-		});
-		
-		// Map laden/öffnen:
-		this.jkarte_open.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Editor.this.loadMap();
-			}
-		});
-		
+		//ToolBar füllen
 		// Neue map ertellen:
-		this.jkarte_new.addActionListener(new ActionListener(){
+		ImageIcon newImage = new ImageIcon("src/fx/Toolbar/newMap.png");
+		this.newButton = new JButton(newImage);
+		this.newButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				Editor.this.newMap();
 			}
 		});		
+		this.toolBar.add(this.newButton);
+		// Map laden/öffnen:
+		ImageIcon openImage = new ImageIcon("src/fx/Toolbar/open.png");
+		this.openButton = new JButton(openImage);
+		this.openButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				Editor.this.loadMap();
+			}
+		});
+		this.toolBar.add(this.openButton);	
+		// Map speichern:
+		ImageIcon saveImage = new ImageIcon("src/fx/Toolbar/save.png");
+		this.saveButton = new JButton(saveImage);
+		this.saveButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				Editor.this.saveMap();
+			}
+		});
+		this.toolBar.add(this.saveButton);
+		// Editor schließen:
+		ImageIcon closeImage = new ImageIcon("src/fx/Toolbar/close.png");
+		this.closeButton = new JButton(closeImage);
+		this.closeButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				Editor.this.closeEditor();
+			}
+		});	
+		this.toolBar.add(this.closeButton);
+		
+		// Größe des Fensters setzen
+		this.frame.setSize( 800, 600 );
+		this.frame.setLocationRelativeTo( null );		
+		
 	}
-	
+
+
 //	public void show() 					{ this.frame.setVisible( true ); 	}
 	public JFrame getFrame()			{ return this.frame;				}
 	
