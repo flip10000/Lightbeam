@@ -62,7 +62,7 @@ public class Core implements Observer
 		int gLen			= this.pkgGames.size();
 		
 		// Anzahl der Spiele an GUIScreeer zur Forschrittsanzeige übergeben:
-		Core.screener.setMaximum( gLen * 15 );
+		Core.screener.setMaximum( gLen * 23 );
 
 		for( int gCnt = 0; gCnt < gLen; gCnt++ )
 		{
