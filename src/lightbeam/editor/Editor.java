@@ -3,8 +3,6 @@ package lightbeam.editor;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -13,16 +11,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
-
 import core.GameEditor;
 import core.tilestate.TileArray;
-
 
 public class Editor extends GameEditor
 {
@@ -31,13 +24,7 @@ public class Editor extends GameEditor
 	private JPanel left_panel				= new JPanel();
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
-	
-	private JToolBar toolBar				= null;
-	private JButton saveButton				= null;
-	private JButton newButton				= null;
-	private JButton openButton 				= null;
-	private JButton closeButton				= null;
-	
+	private Toolbar toolbar					= null;
 	private int initRows					= 10;
 	private int initCols					= 10;	
 	
@@ -45,12 +32,11 @@ public class Editor extends GameEditor
 	{
 		//Setzen eines Fenstertitels
 		this.frame.setTitle( "Karte - erstellen/verändern" );
+		this.toolbar			= new Toolbar( this );
 		
-        this.toolBar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
-        
-		this.mapArea				= new MapArea( this.eTileset, this.initRows, this.initCols );		
-		this.mapsettings			= new MapSettings( this.mapArea, this.initRows, this.initCols );		
-		this.palette				= new TilePalette( this.eTileset );
+		this.mapArea			= new MapArea( this.eTileset, this.initRows, this.initCols );		
+		this.mapsettings		= new MapSettings( this.mapArea, this.initRows, this.initCols );		
+		this.palette			= new TilePalette( this.eTileset );
 		
 		this.palette.setBounds( new Rectangle( 5, this.mapsettings.panel().getBounds().y + this.mapsettings.panel().getBounds().height, 128, 128 ) );
 
@@ -62,53 +48,13 @@ public class Editor extends GameEditor
 		
 		this.frame.setLayout( new BorderLayout() );
  
-		this.frame.add( this.toolBar,BorderLayout.NORTH );
+		this.frame.add( this.toolbar.get() ,BorderLayout.NORTH );
 		this.frame.add( this.left_panel, BorderLayout.WEST );
 		this.frame.add( this.mapArea.getScrollPane() , BorderLayout.CENTER );
-
-		
-		//ToolBar füllen
-		// Neue map ertellen:
-		ImageIcon newImage = new ImageIcon("src/fx/Toolbar/newMap.png");
-		this.newButton = new JButton(newImage);
-		this.newButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Editor.this.newMap();
-			}
-		});		
-		this.toolBar.add(this.newButton);
-		// Map laden/öffnen:
-		ImageIcon openImage = new ImageIcon("src/fx/Toolbar/open.png");
-		this.openButton = new JButton(openImage);
-		this.openButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Editor.this.loadMap();
-			}
-		});
-		this.toolBar.add(this.openButton);	
-		// Map speichern:
-		ImageIcon saveImage = new ImageIcon("src/fx/Toolbar/save.png");
-		this.saveButton = new JButton(saveImage);
-		this.saveButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Editor.this.saveMap();
-			}
-		});
-		this.toolBar.add(this.saveButton);
-		// Editor schließen:
-		ImageIcon closeImage = new ImageIcon("src/fx/Toolbar/close.png");
-		this.closeButton = new JButton(closeImage);
-		this.closeButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Editor.this.closeEditor();
-			}
-		});	
-		this.toolBar.add(this.closeButton);
 		
 		// Größe des Fensters setzen
 		this.frame.setSize( 800, 600 );
 		this.frame.setLocationRelativeTo( null );		
-		
 	}
 
 
@@ -120,7 +66,9 @@ public class Editor extends GameEditor
 	public JPanel getPanel() 			{ return this.left_panel;			}
 //	public TileSet getTileset()			{ return this.tileSet;				}
 	
-	private void saveMap()
+	public MapArea getMap() { return this.mapArea; }
+	
+	public void saveMap()
 	{
 		try 
 		{
@@ -143,7 +91,7 @@ public class Editor extends GameEditor
 		}
 	}
 	
-	private void loadMap()
+	public void loadMap()
 	{
 		try {
 			JFileChooser loadDialog	= new JFileChooser();
@@ -171,7 +119,7 @@ public class Editor extends GameEditor
 		}				
 	}
 	
-	private void newMap()
+	public void newMap()
 	{
 //		this.mapArea.resetMap( this.initRows, this.initCols );
 		this.mapsettings.resetSettings( this.initRows, this.initCols );
