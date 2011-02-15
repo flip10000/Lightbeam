@@ -23,9 +23,9 @@ public class Toolbar
 	{
 		this.editor				= editor;
         this.toolBar			= new JToolBar( "Toolbar", JToolBar.HORIZONTAL );
+        this.toolBar.setComponentOrientation( ComponentOrientation.LEFT_TO_RIGHT );        
         this.toolBar.setLayout( null );
         this.toolBar.setPreferredSize( new Dimension( editor.getFrame().getWidth(), 38 ) );
-        this.toolBar.setComponentOrientation( ComponentOrientation.LEFT_TO_RIGHT );
         
 		// ToolBar füllen
 		ImageIcon imgNew		= new ImageIcon( "src/fx/Toolbar/newMap.png" );
@@ -41,6 +41,7 @@ public class Toolbar
 		this.btnNew.setBounds( new Rectangle( 16, 3, 32, 32 ) );
 		this.btnOpen.setBounds( new Rectangle( this.btnNew.getBounds().x + this.btnNew.getBounds().width, 3, 32, 32 ) );
 		this.btnSave.setBounds( new Rectangle( this.btnOpen.getBounds().x +this.btnOpen.getBounds().width, 3, 32, 32 ) );
+		this.btnClose.setBounds( new Rectangle( this.toolBar.getPreferredSize().width - 50, 3, 32, 32 ) );
 		
 		this.toolBar.add( this.btnNew );
 		this.toolBar.add( this.btnOpen );
@@ -75,6 +76,13 @@ public class Toolbar
 			}
 		});
         
+	}
+	
+	public void refreshSize()
+	{
+		System.out.println("x");
+        this.toolBar.setPreferredSize( new Dimension( editor.getFrame().getWidth(), 38 ) );
+		this.btnClose.setBounds( new Rectangle( this.toolBar.getPreferredSize().width - 50, 3, 32, 32 ) );
 	}
 	
 	public JToolBar get() { return this.toolBar; }
