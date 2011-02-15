@@ -473,29 +473,6 @@ public class MapArea
 		return ( this.map.tile( row, col ).type() == "beam" )? true : false;
 	}
 	
-
-	/*
-	 * 1) Bereitet das Hervorheben möglicher Beams vor (Possible-Beam-Hilighting)
-	 * 2) Führt das o.g. Hervorheben aus.
-	 * 
-	 * @param row Zeile, welche es hervorzuheben gilt 
-	 * @param col Spalte, welche es hervorzuheben gilt 
-	 */
-	private void doHilightPossibleBeams( int row, int col )
-	{
-		this.dehilightPossibleBeams( this.map.tile( row, col ) );
-		
-		if( this.isBeamsource( row, col ) == true )
-		{
-			this.map.mode( TileArray.MODE_PREVIEW );
-			this.focusedSource	= this.map.tile( row, col );
-			this.hilightPossibleBeams( this.map.tile( row, col ) );
-		}
-		
-		this.scroll.repaint();
-	}
-
-	
 	/*
 	 * Hebt mögliche Beams blau hervor (Possible-Beam-Hilighting)
 	 * 
@@ -839,13 +816,11 @@ public class MapArea
 				this.paintVerticalBeams( mRow + 1, mouseRow + 1, mCol );
 			}
 		}
-//		
-//		int consumption	= this.map.filter( "beam", this.manipSource ).depends( this.manipSource ).size();
-//
-//		if( consumption == this.manipSource.strength() )	{ this.manipSource.color( Tile.CBLUE ); 	}
-//		else												{ this.manipSource.color( Tile.CYELLOW );	}
-//		
-//		this.manipSource.consumption( consumption );		
+		
+
+		int strength	= this.map.filter( "beam", this.manipSource ).depends( this.manipSource ).size();
+		
+		this.manipSource.strength( strength );		
 	}
 
 	private void clearPrepaintedBeams()
@@ -975,23 +950,6 @@ public class MapArea
 		}
 	}
 	
-	private void assignBeamsToSource()
-	{
-		ArrayList<Tile> diffs	= this.map.diff();
-		int lenDiff				= diffs.size();
-		
-		for( int cntDiff = 0; cntDiff < lenDiff; cntDiff++ )
-		{
-			Tile diff	= diffs.get( cntDiff );
-			
-			if( diff.type() != "beamsource" )
-			{
-				diff.color( Tile.CTRANSPARENT );
-				this.map.pushReady( diff, diff.row(), diff.col() );
-			}
-		}
-	}
-	
 	private void drawBeamsource( int row, int col )
 	{
 		this.map.setTile( row, col ).withState( this.tileset.tile( 0 ) );
@@ -1033,7 +991,12 @@ public class MapArea
 		}
 		
 		this.dehilightPossibleBeams( this.manipSource );
+		
+		int strength	= this.map.filter( "beam", this.manipSource ).depends( this.manipSource ).size();
+		
+		this.map.tile( this.manipSource.row(), this.manipSource.col() ).strength( strength );
 		this.map.tile( this.manipSource.row(), this.manipSource.col() ).color( Tile.CTRANSPARENT );
+		this.map.pushReady( this.manipSource, this.manipSource.row(), this.manipSource.col() );
 	}
 	
 	private void focusBeamsource( int row, int col )
