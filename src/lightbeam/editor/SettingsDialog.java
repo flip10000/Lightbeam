@@ -41,7 +41,7 @@ public class SettingsDialog
 		this.inpPath.setText( this.setPath ); 
 		
 		this.panel.setLayout( null );
-		this.panel.setPreferredSize( new Dimension( 400, 200 ) );
+		this.panel.setPreferredSize( new Dimension( 400, 40 ) );
 		
 		this.lblPath.setBounds( new Rectangle( 10, 10, 70, 20 ) );
 		this.inpPath.setBounds( new Rectangle( 95, 10, 270, 20 ) );
