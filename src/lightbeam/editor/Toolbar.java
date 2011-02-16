@@ -107,14 +107,9 @@ public class Toolbar
 	
 	public void refreshSize()
 	{
-		System.out.println("x");
         this.toolBar.setPreferredSize( new Dimension( editor.getFrame().getWidth(), 38 ) );
 		this.btnClose.setBounds( new Rectangle( this.toolBar.getPreferredSize().width - 50, 3, 32, 32 ) );
-	}
-	
-	private void openSettings()
-	{
-		
+		this.btnSettings.setBounds( new Rectangle( this.btnClose.getBounds().x - 35, 3, 32, 32 ) );
 	}
 	
 	public JToolBar get() { return this.toolBar; }
