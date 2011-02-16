@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import lightbeam.editor.dialogs.SettingsDialog;
+
 public class Toolbar 
 {
 	private Editor editor					= null;
