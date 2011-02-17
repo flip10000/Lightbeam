@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import lightbeam.editor.dialogs.OpenDialog;
 import lightbeam.editor.dialogs.SaveDialog;
 import core.GameEditor;
 import core.tilestate.TileArray;
@@ -96,30 +97,33 @@ public class Editor extends GameEditor
 	
 	public void loadMap()
 	{
-		try {
-			JFileChooser loadDialog	= new JFileChooser();
-			
-			loadDialog.showOpenDialog( this.frame );
-			
-			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
-			BufferedInputStream buf	= new BufferedInputStream( file );
-			ObjectInputStream read 	= new ObjectInputStream( buf );
- 
-			TileArray map 			= (TileArray) read.readObject();
-			String 	mapName			= (String) read.readObject();
-
-			this.mapArea.setMap( map );
-			this.mapArea.setMapName( mapName );
-			this.mapArea.reload();
-			
-			read.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}				
+		OpenDialog dOpen	= new OpenDialog();
+		
+		dOpen.showDialog();
+//		try {
+//			JFileChooser loadDialog	= new JFileChooser();
+//			
+//			loadDialog.showOpenDialog( this.frame );
+//			
+//			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
+//			BufferedInputStream buf	= new BufferedInputStream( file );
+//			ObjectInputStream read 	= new ObjectInputStream( buf );
+// 
+//			TileArray map 			= (TileArray) read.readObject();
+//			String 	mapName			= (String) read.readObject();
+//
+//			this.mapArea.setMap( map );
+//			this.mapArea.setMapName( mapName );
+//			this.mapArea.reload();
+//			
+//			read.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}				
 	}
 	
 	public void newMap()
