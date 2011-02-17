@@ -30,6 +30,7 @@ public class Editor extends GameEditor
 	private Toolbar toolbar					= null;
 	private int initRows					= 10;
 	private int initCols					= 10;	
+	private String preTitle					= "Karte - erstellen/verändern - ";
 	
 	public Editor()
 	{
@@ -39,7 +40,7 @@ public class Editor extends GameEditor
 		this.frame.setLocationRelativeTo( null );		
 		
 		//Setzen eines Fenstertitels
-		this.frame.setTitle( "Karte - erstellen/verändern" );
+		this.frame.setTitle( this.preTitle + "<Neue Karte>" );
 		this.toolbar			= new Toolbar( this );
 		
 		this.mapArea			= new MapArea( this.eTileset, this.initRows, this.initCols );		
@@ -74,13 +75,10 @@ public class Editor extends GameEditor
 	}
 
 
-//	public void show() 					{ this.frame.setVisible( true ); 	}
 	public JFrame getFrame()			{ return this.frame;				}
-	
 	public MapSettings getMapSettings()	{ return this.mapsettings;			}
 	public TilePalette getPalette() 	{ return this.palette;				}
 	public JPanel getPanel() 			{ return this.left_panel;			}
-//	public TileSet getTileset()			{ return this.tileSet;				}
 	
 	public MapArea getMap() { return this.mapArea; }
 	
@@ -98,8 +96,9 @@ public class Editor extends GameEditor
 	
 	public void loadMap()
 	{
+		this.frame.setTitle( this.preTitle + "lade Karte..." );
 		OpenDialog dOpen	= new OpenDialog();
-		
+
 		dOpen.showDialog();
 		
 		ArrayList<Object> mapData	= dOpen.getMap();
@@ -111,8 +110,11 @@ public class Editor extends GameEditor
 		if( mapArea != null && mapName != null )
 		{
 			this.mapArea.setMap( mapArea );
-			this.mapArea.setMapName( mapName );
+			this.frame.setTitle( this.preTitle + "<"+mapName+">" );
 			this.mapArea.reload();
+		} else
+		{
+			this.frame.setTitle( this.preTitle + "<Neue Karte>" );
 		}
 	}
 	
