@@ -9,6 +9,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -100,30 +101,19 @@ public class Editor extends GameEditor
 		OpenDialog dOpen	= new OpenDialog();
 		
 		dOpen.showDialog();
-//		try {
-//			JFileChooser loadDialog	= new JFileChooser();
-//			
-//			loadDialog.showOpenDialog( this.frame );
-//			
-//			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
-//			BufferedInputStream buf	= new BufferedInputStream( file );
-//			ObjectInputStream read 	= new ObjectInputStream( buf );
-// 
-//			TileArray map 			= (TileArray) read.readObject();
-//			String 	mapName			= (String) read.readObject();
-//
-//			this.mapArea.setMap( map );
-//			this.mapArea.setMapName( mapName );
-//			this.mapArea.reload();
-//			
-//			read.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}				
+		
+		ArrayList<Object> mapData	= dOpen.getMap();
+		String mapName				= (String)mapData.get( 0 );
+		TileArray mapArea			= (TileArray)mapData.get( 1 );
+		String difficulty			= (String)mapData.get( 2 );
+		String status				= (String)mapData.get( 3 );
+
+		if( mapArea != null && mapName != null )
+		{
+			this.mapArea.setMap( mapArea );
+			this.mapArea.setMapName( mapName );
+			this.mapArea.reload();
+		}
 	}
 	
 	public void newMap()
