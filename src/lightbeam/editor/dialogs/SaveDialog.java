@@ -59,7 +59,7 @@ public class SaveDialog
 				String mapName			= inpMap.getText();
 				SettingsDialog dialog	= new SettingsDialog();
 				String pathMaps			= dialog.getPath();
-				
+
 				if( !pathMaps.equals( "" ) && !mapName.equals( "" ) )
 				{
 					this.proceedSaving( pathMaps, mapName );
@@ -99,35 +99,44 @@ public class SaveDialog
 	private String getMapName( String mapDest )
 	{
 		// ToDo: Prüfen, ob typ in mapDest == .map!
-		try 
+		int strLen	= mapDest.length() - this.extMap.length();
+		int strPos	= mapDest.lastIndexOf( this.extMap );
+		
+		if( strLen == strPos )
 		{
-			FileInputStream file	= new FileInputStream( mapDest );
-			BufferedInputStream buf	= new BufferedInputStream( file );
-	
 			try 
 			{
-				ObjectInputStream read	= new ObjectInputStream( buf );
+				FileInputStream file	= new FileInputStream( mapDest );
+				BufferedInputStream buf	= new BufferedInputStream( file );
+		
 				try 
 				{
-					String fMapName		= (String) read.readObject();
-					
-					read.close();
-					
-					return fMapName;
-				} catch (ClassNotFoundException e) 
+					ObjectInputStream read	= new ObjectInputStream( buf );
+					try 
+					{
+						String fMapName		= (String) read.readObject();
+						
+						read.close();
+						
+						return fMapName;
+					} catch (ClassNotFoundException e) 
+					{
+						// TODO Fehler ausgeben, das map nicht gepsiechert werden kann,
+						// da Zugriff auf vorhandene Dateien nichtm öglich ist, um zu überprüfen, ob
+						// map bereits vorhanden!
+						read.close();
+						
+						return null;
+					}
+				} catch( IOException e )
 				{
-					// TODO Fehler ausgeben, das map nicht gepsiechert werden kann,
-					// da Zugriff auf vorhandene Dateien nichtm öglich ist, um zu überprüfen, ob
-					// map bereits vorhanden!
-					read.close();
-					
 					return null;
 				}
-			} catch( IOException e )
+			} catch( FileNotFoundException e ) 
 			{
 				return null;
 			}
-		} catch( FileNotFoundException e ) 
+		} else
 		{
 			return null;
 		}		
