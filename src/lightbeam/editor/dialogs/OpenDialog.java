@@ -1,7 +1,9 @@
 package lightbeam.editor.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -13,10 +15,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.sql.RowSet;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -27,109 +31,42 @@ import lightbeam.editor.MapArea;
 
 public class OpenDialog
 {
+	private final String[] mapCols		= { "Kartenname", "Kartenstatus", "Schwierigkeitsgrad" };
+	private final String extMap			= ".map";
+	
 	private JOptionPane pane			= null;
+	private SettingsDialog dSettings	= new SettingsDialog();
 	private JPanel panel				= new JPanel();
 	private JLabel lblOpen				= new JLabel( "Kartenauswahl:" );
+	private String[][] mapRows			= null;
+	private DefaultTableModel mapModel 	= new DefaultTableModel( mapRows, mapCols );
+	private JTable mapTable				= new JTable( mapModel );
+	private JScrollPane scroll			= new JScrollPane( mapTable );
 	private MapArea mapArea				= null;
-	
-	private final String extMap			= ".map";
 	
 	public OpenDialog()	
 	{
 		this.panel.setLayout( null );
-		this.panel.setPreferredSize( new Dimension( 400, 40 ) );
+		this.panel.setPreferredSize( new Dimension( 400, 400 ) );
 		
-		this.lblOpen.setBounds( new Rectangle( 10, 10, 80, 20 ) );
+		this.lblOpen.setBounds( new Rectangle( 10, 10, 120, 20 ) );
+		this.scroll.setBounds( new Rectangle( 10, 30, 350, 350 ) );
+		this.mapTable.setBounds( new Rectangle( 10, 30, 350, 350 ) );
+		
+		this.mapTable.setFillsViewportHeight( true );
+		this.mapTable.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 		
 		this.panel.add( this.lblOpen );
-		
-		this.pane 		= new JOptionPane( this.panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION );
+		this.panel.add( this.scroll );
 	}
 	
 	public void showDialog()
 	{
-		SettingsDialog dSettings	= new SettingsDialog();
-		int maps					= 0;
+		this.resetTable();
+		this.fillRows();
 		
-		String[] cols		= { "Kartenname", "Kartenstatus", "Schwierigkeitsgrad" };
-		String rows[][];
-		
-		rows				= new String[1][];
-		rows[0]				= new String[3];
-		
-		rows[0][0]			= "kA"; 
-		rows[0][1]			= "kA";
-		rows[0][2]			= "kA";
-
-		String pathMaps		= dSettings.getPath();
-		
-		if( !pathMaps.equals( "" ) )
-		{
-			File dir				= new File( pathMaps );
-			
-			if( dir.exists() && dir.isDirectory() )
-			{
-				String[] files	= dir.list();
-				int amount		= files.length;
-				rows			= new String[amount][];
-				
-				for( int count = 0; count < amount; count++ )
-				{
-					String fDest			= pathMaps + "/" + files[count];
-					
-					try 
-					{
-						FileInputStream file	= new FileInputStream( fDest );
-						BufferedInputStream buf	= new BufferedInputStream( file );
-						
-						try 
-						{
-							ObjectInputStream read	= new ObjectInputStream( buf );
-//							TileArray map;
-							
-							try 
-							{
-//								map = (TileArray) read.readObject();
-//								
-								String 	mapName			= (String) read.readObject();
-								rows[maps]				= new String[3];
-								
-								rows[maps][0]			= mapName;
-								rows[maps][1]			= "kA";
-								rows[maps][2]			= "kA";
-//								this.mapArea.setMap( map );
-//								this.mapArea.setMapName( mapName );
-//								this.mapArea.reload();
-								maps++;
-								read.close();
-							} catch (ClassNotFoundException e) {
-								// TODO Auto-generated catch block
-								System.out.println("A");
-								read.close();
-							}
-						} catch( IOException e )
-						{
-//							e.printStackTrace();
-//							System.out.println("B");
-							// TODO Auto-generated catch block
-						}
-					} catch( FileNotFoundException e )
-					{
-						// TODO Auto-generated catch block
-					}
-				}
-			}
-		} 
-		
-		
-		for( int i=0;i<rows.length;i++ )
-		{
-			System.out.println(rows[i]);
-		}
-//		DefaultTableModel tableModel	= new DefaultTableModel();
-//		JTable mapTable	= new JTable( tableModel ); 
-//		
-//		this.pane.createDialog( "Karte öffnen" ).setVisible( true );
+		this.pane 		= new JOptionPane( this.panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION );		
+		this.pane.createDialog( "Karte öffnen" ).setVisible( true );
 
 //		if( this.pane.getValue() != null )
 //		{
@@ -294,5 +231,99 @@ public class OpenDialog
 		{
 			// TODO Auto-generated catch block
 		}
+	}
+	
+	private void fillRows()
+	{
+		this.mapRows		= null;
+		int cntMap			= 0;
+		String[][] rows		= null;
+		String pathMaps		= this.dSettings.getPath();		
+		
+		if( !pathMaps.equals( "" ) )
+		{
+			File dir				= new File( pathMaps );
+			
+			if( dir.exists() && dir.isDirectory() )
+			{
+				String[] files	= dir.list();
+				int amount		= files.length;
+				rows			= new String[amount][];
+				
+				for( int count = 0; count < amount; count++ )
+				{
+					int strLen		= files[count].length() - this.extMap.length();
+					int strPos		= files[count].lastIndexOf( this.extMap );
+					
+					if( strLen == strPos )
+					{
+						String fDest			= pathMaps + "/" + files[count];
+						
+						try 
+						{
+							FileInputStream file	= new FileInputStream( fDest );
+							BufferedInputStream buf	= new BufferedInputStream( file );
+							
+							try 
+							{
+								ObjectInputStream read	= new ObjectInputStream( buf );
+								
+								try 
+								{
+									String 	mapName			= (String) read.readObject();
+									
+									rows[cntMap]			= new String[3];
+									rows[cntMap][0]			= mapName;
+									rows[cntMap][1]			= "kA";
+									rows[cntMap][2]			= "kA";
+									
+									cntMap++;
+									
+									read.close();
+								} catch( ClassNotFoundException e ) 
+								{
+									read.close();
+								}
+							} catch( IOException e )
+							{
+							}
+						} catch( FileNotFoundException e )
+						{
+						}
+					}
+				}
+			}
+		} 
+		
+		if( rows != null )
+		{
+			this.mapRows		= new String[cntMap][];
+			
+			for( int cntRow	= 0; cntRow < cntMap; cntRow++ )
+			{
+				this.mapRows[cntRow]	= new String[3];
+				this.mapRows[cntRow][0]	= rows[cntRow][0];
+				this.mapRows[cntRow][1]	= rows[cntRow][1];
+				this.mapRows[cntRow][2]	= rows[cntRow][2];
+			}
+		} else
+		{
+			this.mapRows		= new String[1][];
+			this.mapRows[0]		= new String[3];
+			
+			this.mapRows[0][0]	= "a"; 
+			this.mapRows[0][1]	= "a";
+			this.mapRows[0][2]	= "a";
+		}
+		
+		for( int i=0; i< this.mapRows.length; i++ )
+		{
+			this.mapModel.addRow( this.mapRows[i] );
+		}
+	}
+	
+	private void resetTable()
+	{
+		this.mapTable.removeAll();		
 	}
 }
