@@ -3,7 +3,6 @@ package lightbeam.editor.dialogs;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -15,18 +14,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.sql.RowSet;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-
-import core.tilestate.TileArray;
-
 import lightbeam.editor.MapArea;
 
 public class OpenDialog
@@ -40,7 +34,13 @@ public class OpenDialog
 	private JLabel lblOpen				= new JLabel( "Kartenauswahl:" );
 	private String[][] mapRows			= null;
 	private DefaultTableModel mapModel 	= new DefaultTableModel( mapRows, mapCols );
-	private JTable mapTable				= new JTable( mapModel );
+	private JTable mapTable				= new JTable( mapModel ) 
+	{
+		private static final long serialVersionUID = -1084225514626748678L;
+
+		public boolean isCellEditable(int rowIndex, int vColIndex) { return false; }
+    };
+    
 	private JScrollPane scroll			= new JScrollPane( mapTable );
 	private MapArea mapArea				= null;
 	
@@ -54,7 +54,9 @@ public class OpenDialog
 		this.mapTable.setBounds( new Rectangle( 10, 30, 350, 350 ) );
 		
 		this.mapTable.setFillsViewportHeight( true );
+		this.mapTable.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
 		this.mapTable.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
+//		this.mapTable.
 		
 		this.panel.add( this.lblOpen );
 		this.panel.add( this.scroll );
