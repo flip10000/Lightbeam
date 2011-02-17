@@ -6,16 +6,15 @@ import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import lightbeam.editor.dialogs.SaveDialog;
 import core.GameEditor;
 import core.tilestate.TileArray;
 
@@ -85,25 +84,9 @@ public class Editor extends GameEditor
 	
 	public void saveMap()
 	{
-		try 
-		{
-			JFileChooser saveDialog		= new JFileChooser();
-			
-			saveDialog.showSaveDialog( this.frame );
-			
-			FileOutputStream file		= new FileOutputStream( saveDialog.getSelectedFile() );
-			BufferedOutputStream buf	= new BufferedOutputStream( file );
-			ObjectOutputStream write 	= new ObjectOutputStream( buf );
-
-			write.writeObject( this.mapArea.getMap() );
-			write.writeObject( this.mapArea.getMapName() );
-
-			write.close();
-		} catch( IOException e )
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		SaveDialog dialog	= new SaveDialog( this.mapArea );
+		
+		dialog.showDialog();
 	}
 	
 	public void refreshSize()
