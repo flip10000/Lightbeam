@@ -40,8 +40,6 @@ public class MapArea
 	private TileArray map						= null;
 //	private TileArray oldMap					= null;
 	
-	private String mapName						= "Testkarte";
-	
 	public MapArea( AbstractTileSetFactory tileset, int rows, int cols )
 	{
 		this.tileset	= tileset;
@@ -231,7 +229,6 @@ public class MapArea
 	}
 	
 	public TileArray getMap() 	{ return this.map; 		} 
-	public String getMapName()	{ return this.mapName; 	}
 	
 	public void setMap( TileArray map )			
 	{ 
@@ -265,7 +262,7 @@ public class MapArea
 			}
 		}
 	}
-	public void setMapName( String mapName )	{ this.mapName = mapName; 	}
+	
 	public void reload()						{ this.scroll.repaint();	}
 	
 	public void initMap( int rows, int cols )
