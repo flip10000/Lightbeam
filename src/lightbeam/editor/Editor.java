@@ -35,9 +35,8 @@ public class Editor extends GameEditor
 		this.frame.setSize( 800, 600 );
 		this.frame.setMinimumSize( new Dimension( 484, 404 ) );
 		this.frame.setLocationRelativeTo( null );		
-		
-		//Setzen eines Fenstertitels
 		this.frame.setTitle( this.preTitle + "<Neue Karte>" );
+		
 		this.toolbar			= new Toolbar( this );
 		
 		this.mapArea			= new MapArea( this.eTileset, this.initRows, this.initCols );		
