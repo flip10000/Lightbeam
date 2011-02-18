@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,13 +23,15 @@ import lightbeam.editor.MapArea;
 
 public class SaveDialog
 {
+	private final String extMap			= ".map";
+	
 	private JOptionPane pane			= null;
 	private JPanel panel				= new JPanel();
 	private JLabel lblMap				= new JLabel( "Kartenname:" );
 	private JTextField inpMap			= new JTextField();
 	private MapArea mapArea				= null;
-	
-	private final String extMap			= ".map";
+	private OpenDialog dOpen			= OpenDialog.getInstance();					
+	private String selMapDest			= null;
 	
 	public SaveDialog( MapArea mapArea )	
 	{
@@ -48,6 +51,16 @@ public class SaveDialog
 	
 	public void showDialog()
 	{
+		this.selMapDest				= null;
+		ArrayList<Object> selMap	= this.dOpen.getMap();
+
+		if( selMap != null )
+		{
+			System.out.println((String)selMap.get( 0 ));
+			 this.inpMap.setText( (String)selMap.get( 0 ) );
+			 this.selMapDest	= this.dOpen.getLoadedMapDest();
+		}
+		
 		this.pane.createDialog( "Karte speichern" ).setVisible( true );
 		
 		if( this.pane.getValue() != null )
@@ -56,7 +69,7 @@ public class SaveDialog
 			
 			if( selOption == JOptionPane.OK_OPTION )
 			{
-				String mapName			= inpMap.getText();
+				String mapName			= this.inpMap.getText();
 				SettingsDialog dialog	= new SettingsDialog();
 				String pathMaps			= dialog.getPath();
 
