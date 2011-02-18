@@ -20,6 +20,7 @@ public class Editor extends GameEditor
 	public MapSettings mapsettings			= null;
 	
 	private JPanel left_panel				= new JPanel();
+	private OpenDialog dOpen				= OpenDialog.getInstance();
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
 	private Toolbar toolbar					= null;
@@ -84,19 +85,13 @@ public class Editor extends GameEditor
 		dialog.showDialog();
 	}
 	
-	public void refreshSize()
-	{
-		
-	}
-	
 	public void loadMap()
 	{
 		this.frame.setTitle( this.preTitle + "lade Karte..." );
-		OpenDialog dOpen	= new OpenDialog();
 
-		dOpen.showDialog();
+		this.dOpen.showDialog();
 		
-		ArrayList<Object> mapData	= dOpen.getMap();
+		ArrayList<Object> mapData	= this.dOpen.getMap();
 		String mapName				= (String)mapData.get( 0 );
 		TileArray mapArea			= (TileArray)mapData.get( 1 );
 		String difficulty			= (String)mapData.get( 2 );
@@ -115,6 +110,7 @@ public class Editor extends GameEditor
 	
 	public void newMap()
 	{
+		this.dOpen.reset();
 		this.mapsettings.resetSettings( this.initRows, this.initCols );
 		this.mapArea.resetMap( this.initRows, this.initCols );
 	}
