@@ -21,12 +21,16 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
+import core.gui.GUIScreener;
 import core.tilestate.TileArray;
 
 public class OpenDialog
 {
 	private final String[] mapCols		= { "Kartenname", "Kartenstatus", "Schwierigkeitsgrad" };
 	private final String extMap			= ".map";
+	
+	private static OpenDialog dOpen		= new OpenDialog();
 	
 	private JOptionPane pane			= null;
 	private SettingsDialog dSettings	= new SettingsDialog();
@@ -52,8 +56,11 @@ public class OpenDialog
 	private String loadedDifficulty		= null;
 	private String loadedBuildStatus	= null;
 	
-	public OpenDialog()	
+	public static OpenDialog getInstance()	{ return dOpen; }
+	
+	private OpenDialog() 
 	{
+		System.out.println("yx");
 		this.panel.setLayout( null );
 		this.panel.setPreferredSize( new Dimension( 400, 400 ) );
 		
@@ -84,6 +91,7 @@ public class OpenDialog
 	
 	public void showDialog()
 	{
+		this.resetClassVars();
 		this.resetTable();
 		this.fillRows();
 		
@@ -111,6 +119,16 @@ public class OpenDialog
 		retVal.add( this.loadedBuildStatus );
 		
 		return retVal;
+	}
+	
+	
+	public String getLoadedMapDest() { return this.selMapDest; 	}
+	public void reset() 
+	{ 
+		this.selMapDest 		= null;
+		
+		this.resetClassVars();
+		this.resetTable();
 	}
 	
 	private void loadMap()
@@ -247,12 +265,19 @@ public class OpenDialog
 			this.mapModel.addRow( this.mapRows[i] );
 		}
 	}
+
+	private void resetClassVars()
+	{
+		this.mapDest			= null;
+		this.mapRows			= null;
+		this.loadedMapName		= null;
+		this.loadedTileArray	= null;
+		this.loadedDifficulty	= null;
+		this.loadedBuildStatus	= null;
+	}
 	
 	private void resetTable()
 	{
-		this.mapDest		= null;
-		this.mapRows		= null;
-		this.selMapDest		= null;
 		this.txtMapSelected.setText( "<keine Auswahl>" );
 		
 		this.mapTable.removeAll();		
