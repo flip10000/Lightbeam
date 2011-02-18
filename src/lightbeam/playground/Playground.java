@@ -141,9 +141,9 @@ public class Playground extends GamePlayground
 			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
 			BufferedInputStream buf	= new BufferedInputStream( file );
 			ObjectInputStream read 	= new ObjectInputStream( buf );
- 
-			TileArray map 			= (TileArray) read.readObject();
+
 			String 	mapName			= (String) read.readObject();
+			TileArray map 			= (TileArray) read.readObject();
 
 			this.mapArea.setMap( map, true );
 			this.mapArea.setMapName( mapName );
