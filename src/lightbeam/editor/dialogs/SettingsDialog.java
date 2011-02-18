@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
 public class SettingsDialog 
 {
 	private JOptionPane pane			= null;
@@ -68,32 +69,32 @@ public class SettingsDialog
 	public void showDialog()
 	{
 		this.pane.createDialog( "Einstellungen" ).setVisible( true );
+		int selOption	= ( (Integer)this.pane.getValue() ).intValue();
 		
-		if( this.pane.getValue() != null )
+		if( selOption == JOptionPane.OK_OPTION )
 		{
-			int selOption	= ( (Integer)this.pane.getValue() ).intValue();
+			String path		= this.inpPath.getText();
+			File stat 		= new File( path );
 			
-			if( selOption == JOptionPane.OK_OPTION )
+			if( stat.exists() && stat.isDirectory() )
 			{
-				String path		= this.inpPath.getText();
-				File stat 		= new File( path );
+				this.setPath	= path;
 				
-				if( stat.exists() && stat.isDirectory() )
-				{
-					this.setPath	= path;
-					
-					this.saveSettings();
-				} else if( stat.exists() == false )
-				{
-					// ToDo: Fragen, ob Verzeichnis erstellt werden soll, da noch nicht existiert!
-					this.setPath	= path;
-					
+				this.saveSettings();
+			} else if( stat.exists() == false )
+			{
+				if (JOptionPane.showConfirmDialog(null, "Das angegebene Verzeichnis existiert nicht. Soll es angelegt werden?",
+						"Verzeichnis anlegen",JOptionPane.YES_NO_OPTION) 
+						== JOptionPane.YES_OPTION){
+					this.setPath	= path;				
 					stat.mkdir();
 					this.saveSettings();
-				} else
-				{
-					// ToDo: Fehlermeldung, das angegebenes Ziel zwar existiert, aber kein Ordner ist!
 				}
+				
+			} else
+			{
+				JOptionPane.showMessageDialog(null, "Der angegebene Zielpfad enthält kein Verzeichnis!", 
+						"Fehler beim Speichern", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -109,13 +110,14 @@ public class SettingsDialog
 			try { f.createNewFile(); }
 			catch (IOException e) 
 			{
-				// ToDo: Meldung, das Fehler beim erstellen der Datei!
+				JOptionPane.showMessageDialog(null, "Datei konnte nicht erstellt werden! (" + e.getMessage() + " )", 
+						"Fehler beim Speichern", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		} else if( f.exists() && !f.isFile() )
 		{
-			return;
-			//ToDo: Fehlermeldung, das angegebenes Ziel zwar existiert, aber keine Datei ist!
+			JOptionPane.showMessageDialog(null, "Bei dem angegebene Zielpfad handelt es sich nicht um eine beschreibbare Datei!", 
+					"Fehler beim Speichern", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		FileOutputStream file;
@@ -132,12 +134,12 @@ public class SettingsDialog
 
 				write.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Schreiben fehlgeschlagen! (" + e.getMessage() + " )", 
+						"Fehler beim Schreiben", JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Die zu beschreibende Datei konnte nicht gefunden werden! (" + e.getMessage() + " )", 
+					"Datei nicht gefunden!", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -162,23 +164,24 @@ public class SettingsDialog
 						this.setPath		= (String) read.readObject();
 					} catch (ClassNotFoundException e) 
 					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Klasse konnte nicht gefunden werden! (" + e.getMessage() + " )", 
+								"Fehler", JOptionPane.ERROR_MESSAGE);
 					}
 					
 					read.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Lesen der Datei fehlgeschlagen! (" + e.getMessage() + " )", 
+							"Fehler beim Lesen", JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (FileNotFoundException e) 
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Die zulesende Datei konnte nicht gefunden werden! (" + e.getMessage() + " )", 
+						"Datei nicht gefunden!", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if( f.exists() && !f.isFile() )
 		{
-			// ToDo: Fehlermeldung, dass Ziel zwar existiert, aber keine Datei ist!
+			JOptionPane.showMessageDialog(null, "Bei dem angegebene Zielpfad handelt es sich nicht um eine lesbare Datei!", 
+					"Fehler beim Lesen", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

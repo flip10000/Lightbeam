@@ -5,15 +5,12 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import lightbeam.editor.dialogs.OpenDialog;
 import lightbeam.editor.dialogs.SaveDialog;
 import core.GameEditor;
 import core.tilestate.TileArray;
@@ -28,6 +25,7 @@ public class Editor extends GameEditor
 	private Toolbar toolbar					= null;
 	private int initRows					= 10;
 	private int initCols					= 10;	
+	private String preTitle					= "Karte - erstellen/verändern - ";
 	
 	public Editor()
 	{
@@ -37,7 +35,7 @@ public class Editor extends GameEditor
 		this.frame.setLocationRelativeTo( null );		
 		
 		//Setzen eines Fenstertitels
-		this.frame.setTitle( "Karte - erstellen/verändern" );
+		this.frame.setTitle( this.preTitle + "<Neue Karte>" );
 		this.toolbar			= new Toolbar( this );
 		
 		this.mapArea			= new MapArea( this.eTileset, this.initRows, this.initCols );		
@@ -72,13 +70,10 @@ public class Editor extends GameEditor
 	}
 
 
-//	public void show() 					{ this.frame.setVisible( true ); 	}
 	public JFrame getFrame()			{ return this.frame;				}
-	
 	public MapSettings getMapSettings()	{ return this.mapsettings;			}
 	public TilePalette getPalette() 	{ return this.palette;				}
 	public JPanel getPanel() 			{ return this.left_panel;			}
-//	public TileSet getTileset()			{ return this.tileSet;				}
 	
 	public MapArea getMap() { return this.mapArea; }
 	
@@ -96,30 +91,26 @@ public class Editor extends GameEditor
 	
 	public void loadMap()
 	{
-		try {
-			JFileChooser loadDialog	= new JFileChooser();
-			
-			loadDialog.showOpenDialog( this.frame );
-			
-			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
-			BufferedInputStream buf	= new BufferedInputStream( file );
-			ObjectInputStream read 	= new ObjectInputStream( buf );
- 
-			TileArray map 			= (TileArray) read.readObject();
-			String 	mapName			= (String) read.readObject();
+		this.frame.setTitle( this.preTitle + "lade Karte..." );
+		OpenDialog dOpen	= new OpenDialog();
 
-			this.mapArea.setMap( map );
-			this.mapArea.setMapName( mapName );
+		dOpen.showDialog();
+		
+		ArrayList<Object> mapData	= dOpen.getMap();
+		String mapName				= (String)mapData.get( 0 );
+		TileArray mapArea			= (TileArray)mapData.get( 1 );
+		String difficulty			= (String)mapData.get( 2 );
+		String status				= (String)mapData.get( 3 );
+
+		if( mapArea != null && mapName != null )
+		{
+			this.mapArea.setMap( mapArea );
+			this.frame.setTitle( this.preTitle + "<"+mapName+">" );
 			this.mapArea.reload();
-			
-			read.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}				
+		} else
+		{
+			this.frame.setTitle( this.preTitle + "<Neue Karte>" );
+		}
 	}
 	
 	public void newMap()
