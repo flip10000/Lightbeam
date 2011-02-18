@@ -21,6 +21,7 @@ public class Editor extends GameEditor
 	
 	private JPanel left_panel				= new JPanel();
 	private OpenDialog dOpen				= OpenDialog.getInstance();
+	private SaveDialog dSave				= SaveDialog.getInstance();
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
 	private Toolbar toolbar					= null;
@@ -80,9 +81,9 @@ public class Editor extends GameEditor
 	
 	public void saveMap()
 	{
-		SaveDialog dialog	= new SaveDialog( this.mapArea );
+		this.dSave.prepare( this.mapArea );
 		
-		dialog.showDialog();
+		this.dSave.showDialog();
 	}
 	
 	public void loadMap()
