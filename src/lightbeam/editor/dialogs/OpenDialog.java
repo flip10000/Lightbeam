@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import core.gui.GUIScreener;
 import core.tilestate.TileArray;
 
 public class OpenDialog
@@ -60,7 +59,6 @@ public class OpenDialog
 	
 	private OpenDialog() 
 	{
-		System.out.println("yx");
 		this.panel.setLayout( null );
 		this.panel.setPreferredSize( new Dimension( 400, 400 ) );
 		
@@ -280,7 +278,7 @@ public class OpenDialog
 	{
 		this.txtMapSelected.setText( "<keine Auswahl>" );
 		
-		this.mapTable.removeAll();		
+		while( this.mapModel.getRowCount() > 0 ) { this.mapModel.removeRow( this.mapModel.getRowCount() - 1 ); }
 	}
 	
 	private void setRowFocus()
