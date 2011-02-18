@@ -24,6 +24,7 @@ import lightbeam.editor.MapArea;
 public class SaveDialog
 {
 	private final String extMap			= ".map";
+	private static SaveDialog dSave		= new SaveDialog();
 	
 	private JOptionPane pane			= null;
 	private JPanel panel				= new JPanel();
@@ -31,9 +32,12 @@ public class SaveDialog
 	private JTextField inpMap			= new JTextField();
 	private MapArea mapArea				= null;
 	private OpenDialog dOpen			= OpenDialog.getInstance();					
-	private String selMapDest			= null;
 	
-	public SaveDialog( MapArea mapArea )	
+	private SaveDialog() {}
+	
+	public static SaveDialog getInstance() { return dSave; }
+	
+	public void prepare( MapArea mapArea )	
 	{
 		this.mapArea	= mapArea;
 		
@@ -51,15 +55,9 @@ public class SaveDialog
 	
 	public void showDialog()
 	{
-		this.selMapDest				= null;
 		ArrayList<Object> selMap	= this.dOpen.getMap();
 
-		if( selMap != null )
-		{
-			System.out.println((String)selMap.get( 0 ));
-			 this.inpMap.setText( (String)selMap.get( 0 ) );
-			 this.selMapDest	= this.dOpen.getLoadedMapDest();
-		}
+		if( selMap != null ) { this.inpMap.setText( (String)selMap.get( 0 ) ); }
 		
 		this.pane.createDialog( "Karte speichern" ).setVisible( true );
 		
@@ -157,12 +155,13 @@ public class SaveDialog
 	
 	private void proceedSaving( String pathMaps, String mapName )
 	{
-		File dir		= new File( pathMaps );
-		String[] files	= dir.list();
-		int amount		= 0;
-		boolean mExists	= false;
+		File dir			= new File( pathMaps );
+		String[] files		= dir.list();
+		int amount			= 0;
+		boolean mExists		= false;
+		String loadedMap	= this.dOpen.getLoadedMapDest();
 		
-		if( files != null )
+		if( files != null && loadedMap == null )
 		{
 			amount		= files.length;
 			
@@ -181,7 +180,8 @@ public class SaveDialog
 		
 		if( !mExists )
 		{
-			this.saveMap( pathMaps + "/map" + amount + this.extMap, mapName );
+			if( loadedMap != null )	{ this.saveMap( loadedMap, mapName ); 									}
+			else					{ this.saveMap( pathMaps + "/map" + amount + this.extMap, mapName );	}
 		} else
 		{
 			JPanel panelQuestion	= new JPanel();
