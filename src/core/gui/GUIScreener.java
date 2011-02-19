@@ -231,6 +231,15 @@ public class GUIScreener extends JWindow implements Runnable
 		this.setVisible( true );
 	}
 	
+	/**
+	 * 
+	 * Methode zum Anzeigen des Spielauswahl-Bildschirmes
+	 * 
+	 * @param gameIcons
+	 * 			Liste der Icons auswählbarer Spiele
+	 * @param gameNames
+	 * 			Liste der Namen auswählbarer Spiele
+	 */
 	public void showGames( ArrayList<ImageIcon> gameIcons, ArrayList<String> gameNames )
 	{
 		// Zeige Fade-Buttons:
@@ -299,7 +308,9 @@ public class GUIScreener extends JWindow implements Runnable
 		btnExit.setVisible(true);
 	}
 	
-	// Selbsterklärend:
+	/**
+	 * Bildschirminhalte aktualisieren
+	 */
 	public void repaintScreenPanel() 
 	{ 
 		this.repaint();
@@ -307,7 +318,9 @@ public class GUIScreener extends JWindow implements Runnable
 		this.fadePanel.repaint();
 	}
 	
-	// Alle Buttons um eine Buttonbreite nach rechts faden:
+	/**
+	 * Methode verschiebt Icons zur Spielauswahl eine Position nach rechts
+	 */
 	private void fadeRight()
 	{
 		// Prüfen, ob thread nicht aktiv ist und ob 
@@ -328,7 +341,9 @@ public class GUIScreener extends JWindow implements Runnable
 		}
 	}
 	
-	// Alle Buttons um eine Buttonbreite nach links faden:
+	/**
+	 * Methode verschiebt Icons zur Spielauswahl eine Position nach links
+	 */
 	private void fadeLeft()
 	{
 		// Prüfen, ob thread nicht aktiv ist und ob 
@@ -384,16 +399,24 @@ public class GUIScreener extends JWindow implements Runnable
 		this.fadeThread	= null;
 	}
 	
-	// Die Obergrenze für die Progress-Bar übergeben:
+	/**
+	 * Die Obergrenze für die wird Progress-Bar übergeben
+	 */
 	public void setMaximum( int length ) { this.progressBar.setMaximum( length ); }
 	
-	// Den aktuelle Fortschritt anzeigen:
+	/**
+	 * Aktuellen Fortschritt des Progress-Bar erhöhen
+	 */
 	public void setProgress()			{ this.progressBar.setValue( this.progressBar.getValue() + 1 ); }
 	
-	// Game-Label auf Defaultwert zurücksetzen:
+	/**
+	 * Game-Label auf Defaultwert zurücksetzen
+	 */
 	private void clearGameinfo() { this.gameLabel.setText( this.defaultInfo ); }
 	
-	// Aktuellen Spielenamen auf GameLabel setzen:
+	/**
+	 * Aktuellen Spielenamen auf GameLabel setzen
+	 */ 
 	private void setGameinfo( Object button )
 	{
 		for( int cntGame = 0; cntGame < gLen; cntGame++ )
@@ -407,11 +430,15 @@ public class GUIScreener extends JWindow implements Runnable
 		}		
 	}
 
-	// GameBuilder anweisen, angeklicktes Spiel zu starten:
+	/**
+	 * Weist GameBuilder an, das angeklickte Spiel zu starten
+	 * 
+	 * @param button
+	 * 			das Icon (der Button) des ausgewählten Spiels
+	 */
 	private void openGame( Object button ) 
 	{
-		// Angeklicktes Spiel suchen (geht auch schöner per MouseLocation),
-		// aber reciht hier, da kein imenser Aufwand:
+		// Angeklicktes Spiel suchen 
 		for( int cntGame = 0; cntGame < gLen; cntGame++ )
 		{
 			if( button.equals( btnGames.get( cntGame ) ) )
