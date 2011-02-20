@@ -26,6 +26,7 @@ public class SaveDialog
 	private final String extMap			= ".map";
 	private static SaveDialog dSave		= new SaveDialog();
 	
+//	GUI-Elemente
 	private JOptionPane pane			= null;
 	private JPanel panel				= new JPanel();
 	private JLabel lblMap				= new JLabel( "Kartenname:" );
@@ -33,10 +34,23 @@ public class SaveDialog
 	private MapArea mapArea				= null;
 	private OpenDialog dOpen			= OpenDialog.getInstance();					
 	
+	/**
+	 * leerer Standardkonstruktor
+	 */
 	private SaveDialog() {}
 	
+	/**
+	 * Instanz des Speichern-Dialoges erstellen	
+	 * @return neuer Speichern-Dialog
+	 */
 	public static SaveDialog getInstance() { return dSave; }
 	
+	/**
+	 * Vorbereitungen für Panel abarbeiten
+	 * 
+	 * @param mapArea
+	 * 			Die aktuelle MapArea
+	 */
 	public void prepare( MapArea mapArea )	
 	{
 		this.mapArea	= mapArea;
@@ -53,10 +67,14 @@ public class SaveDialog
 		this.pane 		= new JOptionPane( this.panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION );
 	}
 	
+	/**
+	 * Speicherdialog aufrufen
+	 */
 	public void showDialog()
 	{
+//		Liste mit Maps anlegen
 		ArrayList<Object> selMap	= this.dOpen.getMap();
-
+//		Wenn Map ausgewählt
 		if( selMap != null ) { this.inpMap.setText( (String)selMap.get( 0 ) ); }
 		
 		this.pane.createDialog( "Karte speichern" ).setVisible( true );
@@ -64,20 +82,23 @@ public class SaveDialog
 		if( this.pane.getValue() != null )
 		{
 			int selOption	= ( (Integer)this.pane.getValue() ).intValue();
-			
+//			Wenn Dialog mit OK bestätigt wurde
 			if( selOption == JOptionPane.OK_OPTION )
 			{
 				String mapName			= this.inpMap.getText();
 				SettingsDialog dialog	= new SettingsDialog();
 				String pathMaps			= dialog.getPath();
 
+//				Wenn Pfad und Map ausgewählt sind -> Speichervorgang fortsetzen
 				if( !pathMaps.equals( "" ) && !mapName.equals( "" ) )
 				{
 					this.proceedSaving( pathMaps, mapName );
 				} else
 				{
+//					Wenn Speicherpfad leer ist
 					if( pathMaps.equals( "" ) )
 					{
+//						Dialog zur Aufforderung der Auswahl eines Speicherorts in den Settings hochbringen
 						JPanel panelNoPath	= new JPanel();
 						
 						panelNoPath.setLayout( new BorderLayout() );
@@ -107,9 +128,18 @@ public class SaveDialog
 		}
 	}
 	
+	/**
+	 * Map-Namen auslesen
+	 * @param mapDest
+	 * 			Ort der Map
+	 * @return der Name der Map
+	 */
 	private String getMapName( String mapDest )
 	{
-		// ToDo: Prüfen, ob typ in mapDest == .map!
+		//TODO Prüfen, ob typ in mapDest == .map!
+//		if (mapDest.endsWith(".map")){
+//			
+//		}
 		int strLen	= mapDest.length() - this.extMap.length();
 		int strPos	= mapDest.lastIndexOf( this.extMap );
 		
@@ -132,19 +162,19 @@ public class SaveDialog
 						return fMapName;
 					} catch (ClassNotFoundException e) 
 					{
-						// TODO Fehler ausgeben, das map nicht gepsiechert werden kann,
-						// da Zugriff auf vorhandene Dateien nichtm öglich ist, um zu überprüfen, ob
-						// map bereits vorhanden!
+						handleException(e);
 						read.close();
 						
 						return null;
 					}
 				} catch( IOException e )
 				{
+					handleException(e);
 					return null;
 				}
 			} catch( FileNotFoundException e ) 
 			{
+				handleException(e);
 				return null;
 			}
 		} else
@@ -153,6 +183,14 @@ public class SaveDialog
 		}		
 	}
 	
+	/**
+	 * Setzt den Speichervorgang fort
+	 * 
+	 * @param pathMaps
+	 * 			Speicherpfad für die Map
+	 * @param mapName
+	 * 			Speichername der Map
+	 */
 	private void proceedSaving( String pathMaps, String mapName )
 	{
 		File dir			= new File( pathMaps );
@@ -178,12 +216,14 @@ public class SaveDialog
 			}
 		}
 		
+//		Wenn Map noch nicht existiert -> anlegen
 		if( !mExists )
 		{
 			if( loadedMap != null )	{ this.saveMap( loadedMap, mapName ); 									}
 			else					{ this.saveMap( pathMaps + "/map" + amount + this.extMap, mapName );	}
 		} else
 		{
+//			Frage, ob Map überschrieben werden soll ausgeben
 			JPanel panelQuestion	= new JPanel();
 			
 			panelQuestion.setLayout( new BorderLayout() );
@@ -212,6 +252,13 @@ public class SaveDialog
 		}		
 	}
 	
+	/**
+	 * Finales Speichern der Map
+	 * @param mapDest
+	 * 			Zielpfad zum Speichern
+	 * @param mapName
+	 * 			Speichername der Map
+	 */
 	private void saveMap( String mapDest, String mapName )
 	{
 		try 
@@ -229,11 +276,31 @@ public class SaveDialog
 				write.close();
 			} catch( IOException e )
 			{
-				// TODO Auto-generated catch block
+				handleException(e);
 			}
 		} catch( FileNotFoundException e )
 		{
-			// TODO Auto-generated catch block
+			handleException(e);
+		}
+	}
+	
+	/**
+	 * Fehler abfangen und entsprechende Message hochbringen
+	 * @param e
+	 * 		Fehler-Event
+	 */
+	private void handleException(Exception e){
+		if (e instanceof IOException){
+		JOptionPane.showMessageDialog(null, "Auswahl konnte nicht geladen werden " +"("+e.getMessage()+")" , 
+				"Fehler beim Auslesen", JOptionPane.ERROR_MESSAGE);
+		}
+		else if (e instanceof ClassNotFoundException){
+		JOptionPane.showMessageDialog(null, "Zugriff auf vorhandene Datei nicht möglich! Prüfung, ob Map bereits vorhanen nicht möglich! " +"("+e.getMessage()+")" , 
+				"Speichern nicht möglich", JOptionPane.ERROR_MESSAGE);
+		}
+		else if (e instanceof FileNotFoundException){
+		JOptionPane.showMessageDialog(null, "Datei konnte nicht gefunden werden! " +"("+e.getMessage()+")" , 
+				"Datei nicht gefunden", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

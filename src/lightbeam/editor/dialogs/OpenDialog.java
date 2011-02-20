@@ -125,7 +125,7 @@ public class OpenDialog
 	}
 
 	/**
-	 * Liste mit Attributen der ausgewählten Map holen
+	 * Liste mit Attributen der Maps holen
 	 * 
 	 * @return die Attribute der Map
 	 */
