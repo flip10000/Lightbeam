@@ -22,6 +22,8 @@ import core.tilestate.ITileState;
 import core.tilestate.Tile;
 import core.tilestate.TileArray;
 
+import core.tilestate.Logic;
+
 import lightbeam.tiles.TileBeam;
 import lightbeam.tiles.TileBeamsource;
 import lightbeam.tiles.TileField;
@@ -345,6 +347,15 @@ public class MapArea
 			
 			this.scroll.repaint();
 		}
+		
+		/* Added MC Check Lösbar */
+		Logic logic = new Logic();
+		if (logic.tileArrayUseful(this.map.tiles(),this.map.cols(),this.map.rows(),true)){
+			System.out.print(" *lösbar* \n");
+		} else {
+			System.out.print(" *nicht lösbar* \n");
+		}
+		/* end added */
 	}
 	
 	private void removeBeams( Tile source, Tile trigger, int axis, int posMouse )

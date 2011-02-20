@@ -22,6 +22,11 @@ public class TileArray implements Serializable
 	private transient Tile[][] conttiles;
 	private transient ArrayList<Tile> filteredTiles	= null;
 	
+	//geta tiles
+	public Tile[][] tiles(){
+		return this.tiles;
+	}
+	
 	public TileArray() {}
 	
 	public TileArray( int rows, int cols )
