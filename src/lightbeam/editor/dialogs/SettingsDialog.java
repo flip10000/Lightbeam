@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 
 public class SettingsDialog 
 {
+//	Elemente für GUI
 	private JOptionPane pane			= null;
 	private JPanel panel				= new JPanel();
 	private JLabel lblPath				= new JLabel( "Speicherort:" );
@@ -31,14 +32,19 @@ public class SettingsDialog
 	private JButton btnPath				= new JButton( "..." );
 	private JFileChooser fc				= new JFileChooser();
 	
+//	Strings zur Anlage einer Speicherdatei
 	private String setPath				= "";
 	private final String setFile		= "settings.cnf";
 	
+	/*
+	 * Standardkonstruktor
+	 */
 	public SettingsDialog()	
 	{
 		this.loadSettings();
 		this.inpPath.setText( this.setPath ); 
 		
+//		Dialog aufbauen
 		this.panel.setLayout( null );
 		this.panel.setPreferredSize( new Dimension( 400, 40 ) );
 		
@@ -66,23 +72,34 @@ public class SettingsDialog
 
 	}
 	
+	/**
+	 * 
+	 * Öffnet den Dialog zur Auswahl des Speicherorts der Settings-Datei
+	 * 
+	 */
 	public void showDialog()
 	{
+//		Dialog hochbringen
 		this.pane.createDialog( "Einstellungen" ).setVisible( true );
 		int selOption	= ( (Integer)this.pane.getValue() ).intValue();
-		
+//		Wenn Auswahl mit OK bestätigt wurde
 		if( selOption == JOptionPane.OK_OPTION )
 		{
+//			Speicherpfad
 			String path		= this.inpPath.getText();
+//			Speicherpfad anlegen
 			File stat 		= new File( path );
-			
+//			Wenn Pfad existiert und es sich um ein Verzeichnis handelt
 			if( stat.exists() && stat.isDirectory() )
 			{
+//				Pfad übernehmen 
 				this.setPath	= path;
-				
+//				Speichern aufrufen
 				this.saveSettings();
+//				Wenn Verzeichnis noch nicht existiert
 			} else if( stat.exists() == false )
 			{
+//				Dialog fragt ob Verzeichnis angelegt werden soll
 				if (JOptionPane.showConfirmDialog(null, "Das angegebene Verzeichnis existiert nicht. Soll es angelegt werden?",
 						"Verzeichnis anlegen",JOptionPane.YES_NO_OPTION) 
 						== JOptionPane.YES_OPTION){
@@ -99,12 +116,19 @@ public class SettingsDialog
 		}
 	}
 	
+	/**
+	 * Pfad holen
+	 */
 	public String getPath() { return this.setPath; }
 	
+	/**
+	 * Methode zum Anlegen der Settings-Datei 
+	 */
 	private void saveSettings()
 	{
 		File f	= new File( this.setFile );
 		
+//	 Wenn Datei nicht existiert -> Fehlermessage hochbringen
 		if( !f.exists() )
 		{
 			try { f.createNewFile(); }
@@ -142,16 +166,19 @@ public class SettingsDialog
 					"Datei nicht gefunden!", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+	/**
+	 * Methode zum laden der Settings-Datei
+	 */
 	private void loadSettings()
 	{
 		File f	= new File( this.setFile );
-		
+//		wenn existiert und Typ Datei ist
 		if( f.exists() && f.isFile() )
 		{
 			FileInputStream file;
 			try 
 			{
+//				Dateiinhalt auslesen
 				file = new FileInputStream( this.setFile );
 				BufferedInputStream buf	= new BufferedInputStream( file );
 				ObjectInputStream read;
@@ -178,6 +205,7 @@ public class SettingsDialog
 				JOptionPane.showMessageDialog(null, "Die zulesende Datei konnte nicht gefunden werden! (" + e.getMessage() + " )", 
 						"Datei nicht gefunden!", JOptionPane.ERROR_MESSAGE);
 			}
+//			Wenn angegebener Pfad keine datei ist
 		} else if( f.exists() && !f.isFile() )
 		{
 			JOptionPane.showMessageDialog(null, "Bei dem angegebene Zielpfad handelt es sich nicht um eine lesbare Datei!", 

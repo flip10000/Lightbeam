@@ -31,6 +31,7 @@ public class OpenDialog
 	
 	private static OpenDialog dOpen		= new OpenDialog();
 	
+//	GUI-Elemente
 	private JOptionPane pane			= null;
 	private SettingsDialog dSettings	= new SettingsDialog();
 	private JPanel panel				= new JPanel();
@@ -50,15 +51,24 @@ public class OpenDialog
 	private JTextField txtMapSelected	= new JTextField( "<keine Auswahl>" );
 	private String selMapDest			= null;
 	
+//	Strings der zu öffnenden Elemente
 	private String loadedMapName		= null;
 	private TileArray loadedTileArray	= null;
 	private String loadedDifficulty		= null;
 	private String loadedBuildStatus	= null;
 	
+/**
+ * Instanz des Öffnen-Dialoges erstellen	
+ * @return neuer Öffnen-Dialog
+ */
 	public static OpenDialog getInstance()	{ return dOpen; }
 	
+	/**
+	 * Standardkonstruktor
+	 */
 	private OpenDialog() 
 	{
+//		Öffnen-Dialog aufbauen
 		this.panel.setLayout( null );
 		this.panel.setPreferredSize( new Dimension( 400, 400 ) );
 		
@@ -87,6 +97,10 @@ public class OpenDialog
 		this.panel.add( this.txtMapSelected );
 	}
 	
+	/**
+	 * Methode zum Öffnen eines Öffnen-Dialogs
+	 *
+	 */
 	public void showDialog()
 	{
 		this.resetClassVars();
@@ -98,15 +112,23 @@ public class OpenDialog
 
 		if( this.pane.getValue() != null )
 		{
-			int selOption	= ( (Integer)this.pane.getValue() ).intValue();
-			
+//			Auswahl auslesen
+			int selOption	= 
+				( (Integer)this.pane.getValue() ).intValue();
+//			Wenn OK gewählt und aktuell eine Map ausgewählt
 			if( selOption == JOptionPane.OK_OPTION && this.selMapDest != null )
 			{
+//				ausgewählte Map laden
 				this.loadMap();
 			}
 		}
 	}
 
+	/**
+	 * Liste mit Attributen der ausgewählten Map holen
+	 * 
+	 * @return die Attribute der Map
+	 */
 	public ArrayList<Object> getMap()
 	{
 		ArrayList<Object> retVal	= new ArrayList<Object>();
@@ -119,8 +141,15 @@ public class OpenDialog
 		return retVal;
 	}
 	
-	
+	/**
+	 * Ort der geladenen Map holen
+	 * @return Ort der ausgewählten Map
+	 */
 	public String getLoadedMapDest() { return this.selMapDest; 	}
+	
+	/**
+	 * Setzt Auswahl zurück
+	 */
 	public void reset() 
 	{ 
 		this.selMapDest 		= null;
@@ -129,6 +158,9 @@ public class OpenDialog
 		this.resetTable();
 	}
 	
+	/**
+	 * Methode zum Laden der ausgewählten Map
+	 */
 	private void loadMap()
 	{
 		FileInputStream file;
@@ -149,34 +181,37 @@ public class OpenDialog
 					this.loadedMapName		= (String) read.readObject();
 					// Geladenes Map-TileArray:
 					this.loadedTileArray	= (TileArray) read.readObject();
-					// ToDo: Geladener Map-Schwierigkeitsgrad:					
+					//TODO: Geladener Map-Schwierigkeitsgrad:					
 //					this.loadedDifficulty	= (String) read.readObject();
 					this.loadedDifficulty	= "Leicht";
-					// ToDo: Geladener Map-Status:
+					// TODO: Geladener Map-Status:
 //					this.loadedBuildStatus	= (String) read.readObject();
 					this.loadedBuildStatus	= "Spielbar";
 				} catch( ClassNotFoundException e )
 				{
-					// TODO Passende Fehlermeldung (read.close() muss bleiben!!!)!
+					handleException(e);
 					read.close();
 				}
 			} catch( IOException e )
 			{
-				// TODO Passende Fehlermeldung
+				handleException(e);
 			}
 		} catch( FileNotFoundException e ) 
 		{
-			// TODO Passende Fehlermeldung
+			handleException(e);
 		}
 	}
 	
+	/**
+	 * Füllen des Auswahlbildschirms mit vorhandenen Maps
+	 */
 	private void fillRows()
 	{
 		this.mapRows		= null;
 		int cntMap			= 0;
 		String[][] rows		= null;
 		String pathMaps		= this.dSettings.getPath();		
-		
+//		Wenn Pfad angegeben wurde
 		if( !pathMaps.equals( "" ) )
 		{
 			File dir				= new File( pathMaps );
@@ -186,7 +221,7 @@ public class OpenDialog
 				String[] files	= dir.list();
 				int amount		= files.length;
 				rows			= new String[amount][];
-				
+//				Für jede Map eine Zeile auslesen
 				for( int count = 0; count < amount; count++ )
 				{
 					int strLen		= files[count].length() - this.extMap.length();
@@ -220,24 +255,28 @@ public class OpenDialog
 									read.close();
 								} catch( ClassNotFoundException e ) 
 								{
+									handleException(e);
 									read.close();
 								}
 							} catch( IOException e )
 							{
+								handleException(e);
 							}
 						} catch( FileNotFoundException e )
 						{
+							handleException(e);
 						}
 					}
 				}
 			}
 		} 
-		
+//		Wenn Maps vorhanden sind 
 		if( rows != null )
 		{
 			this.mapRows		= new String[cntMap][];
 			this.mapDest		= new String[cntMap];
 			
+//			Für jede Map ein Array mit Attributen anlegen
 			for( int cntRow	= 0; cntRow < cntMap; cntRow++ )
 			{
 				this.mapRows[cntRow]	= new String[3];
@@ -264,6 +303,9 @@ public class OpenDialog
 		}
 	}
 
+	/**
+	 * Variablen zurücksetzen
+	 */
 	private void resetClassVars()
 	{
 		this.mapDest			= null;
@@ -274,6 +316,9 @@ public class OpenDialog
 		this.loadedBuildStatus	= null;
 	}
 	
+	/**
+	 * Auswahltabelle zurücksetzen
+	 */
 	private void resetTable()
 	{
 		this.txtMapSelected.setText( "<keine Auswahl>" );
@@ -281,6 +326,9 @@ public class OpenDialog
 		while( this.mapModel.getRowCount() > 0 ) { this.mapModel.removeRow( this.mapModel.getRowCount() - 1 ); }
 	}
 	
+	/**
+	 * Zeile fokussieren
+	 */
 	private void setRowFocus()
 	{
 		int rowSelected = this.mapTable.getSelectedRow();
@@ -290,5 +338,22 @@ public class OpenDialog
 			this.selMapDest		= this.mapDest[rowSelected];
 			this.txtMapSelected.setText( (String)this.mapTable.getModel().getValueAt( rowSelected, 0 ) );
 		}
+	}
+	
+	/**
+	 * Fehler abfangen und entsprechende Message hochbringen
+	 * @param e
+	 * 		Fehler-Event
+	 */
+	private void handleException(Exception e){
+		if (e instanceof IOException){
+		JOptionPane.showMessageDialog(null, "Auswahl konnte nicht geladen werden " +"("+e.getMessage()+")" , 
+				"Fehler beim Auslesen", JOptionPane.ERROR_MESSAGE);}
+		else if (e instanceof ClassNotFoundException){
+		JOptionPane.showMessageDialog(null, "Auswahl nicht gefunden! " +"("+e.getMessage()+")" , 
+				"Fehler", JOptionPane.ERROR_MESSAGE);}
+		else if (e instanceof FileNotFoundException){
+		JOptionPane.showMessageDialog(null, "Datei konnte nicht gefunden werden! " +"("+e.getMessage()+")" , 
+				"Datei nicht gefunden", JOptionPane.ERROR_MESSAGE);}
 	}
 }
