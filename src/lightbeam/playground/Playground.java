@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -19,6 +21,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import lightbeam.editor.Editor;
+import lightbeam.playground.Toolbar;
+
 import core.GamePlayground;
 import core.tilestate.TileArray;
 
@@ -28,22 +33,21 @@ public class Playground extends GamePlayground
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
 	
-	private JToolBar toolBar				= null;
-	private JButton saveButton				= null;
-	private JButton openMapButton			= null;
-	private JButton openGameButton 			= null;
-	private JButton closeButton				= null;
+	private Toolbar toolbar					= null;
 	
 	private int initRows					= 10;
 	private int initCols					= 10;	
 	
 	public Playground()
 	{
-		//Setzen eines Fenstertitels
+		// Attribs des Fensters setzen
+		this.frame.setSize( 800, 600 );
+		this.frame.setLocationRelativeTo( null );
+		this.frame.setMinimumSize( new Dimension( 484, 404 ) );
+		
 		this.frame.setTitle( "Spiel - spielen" );
 		
-		this.toolBar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
-        		
+		this.toolbar				= new Toolbar( this );
 		this.mapArea				= new MapArea( this.gTileset, this.initRows, this.initCols );		
 		
 		this.left_panel.setLayout( null );
@@ -51,58 +55,28 @@ public class Playground extends GamePlayground
 
 		this.frame.setLayout( new BorderLayout() );
  
-		this.frame.add( this.toolBar,BorderLayout.NORTH );
+		this.frame.add( this.toolbar.get(), BorderLayout.NORTH );
 		this.frame.add( this.left_panel, BorderLayout.WEST );
 		this.frame.add( this.mapArea.getScrollPane() , BorderLayout.CENTER );
+		
+		this.frame.addComponentListener(new ComponentListener() 
+		{
+			public void componentResized( ComponentEvent arg0 ) 	
+			{
+				Playground.this.toolbar.refreshSize();
+			}
+			public void componentHidden(ComponentEvent arg0) 	{}
+			public void componentMoved(ComponentEvent arg0) 	{}
 
-		//ToolBar füllen
-		// Neue map ertellen:
-		ImageIcon openImage = new ImageIcon("src/fx/Toolbar/open.png");
-		this.openGameButton = new JButton(openImage);
-		this.openGameButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Playground.this.loadGame();
-			}
-		});		
-		this.toolBar.add(this.openGameButton);
-		// Map laden/öffnen:
-		this.openMapButton = new JButton(openImage);
-		this.openMapButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Playground.this.loadMap();
-			}
+			public void componentShown(ComponentEvent arg0) 	{}
 		});
-		
-		this.toolBar.add(this.openMapButton);	
-		// Map speichern:
-		ImageIcon saveImage = new ImageIcon("src/fx/Toolbar/save.png");
-		this.saveButton = new JButton(saveImage);
-		this.saveButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Playground.this.saveGame();
-			}
-		});
-		this.toolBar.add(this.saveButton);
-		// Editor schließen:
-		ImageIcon closeImage = new ImageIcon("src/fx/Toolbar/close.png");
-		this.closeButton = new JButton(closeImage);
-		this.closeButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Playground.this.closePlayground();
-			}
-		});	
-		this.toolBar.add(this.closeButton);
-		
-		// Größe des Fensters setzen
-		this.frame.setSize( 800, 600 );
-		this.frame.setLocationRelativeTo( null );
 	}
 	
 	public JFrame getFrame()			{ return this.frame;				}
 	public TilePalette getPalette() 	{ return this.palette;				}
 	public JPanel getPanel() 			{ return this.left_panel;			}
 	
-	private void loadMap()
+	public void loadMap()
 	{
 		try {
 			JFileChooser loadDialog	= new JFileChooser();
@@ -130,7 +104,7 @@ public class Playground extends GamePlayground
 		}				
 	}
 	
-	private void loadGame()
+	public void loadGame()
 	{
 		try 
 		{
@@ -141,9 +115,9 @@ public class Playground extends GamePlayground
 			FileInputStream file 	= new FileInputStream( loadDialog.getSelectedFile() );
 			BufferedInputStream buf	= new BufferedInputStream( file );
 			ObjectInputStream read 	= new ObjectInputStream( buf );
- 
-			TileArray map 			= (TileArray) read.readObject();
+
 			String 	mapName			= (String) read.readObject();
+			TileArray map 			= (TileArray) read.readObject();
 
 			this.mapArea.setMap( map, true );
 			this.mapArea.setMapName( mapName );
@@ -159,7 +133,7 @@ public class Playground extends GamePlayground
 		}				
 	}	
 	
-	private void saveGame()
+	public void saveGame()
 	{
 		try 
 		{

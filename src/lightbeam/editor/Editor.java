@@ -20,6 +20,8 @@ public class Editor extends GameEditor
 	public MapSettings mapsettings			= null;
 	
 	private JPanel left_panel				= new JPanel();
+	private OpenDialog dOpen				= OpenDialog.getInstance();
+	private SaveDialog dSave				= SaveDialog.getInstance();
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
 	private Toolbar toolbar					= null;
@@ -33,9 +35,8 @@ public class Editor extends GameEditor
 		this.frame.setSize( 800, 600 );
 		this.frame.setMinimumSize( new Dimension( 484, 404 ) );
 		this.frame.setLocationRelativeTo( null );		
-		
-		//Setzen eines Fenstertitels
 		this.frame.setTitle( this.preTitle + "<Neue Karte>" );
+		
 		this.toolbar			= new Toolbar( this );
 		
 		this.mapArea			= new MapArea( this.eTileset, this.initRows, this.initCols );		
@@ -79,24 +80,18 @@ public class Editor extends GameEditor
 	
 	public void saveMap()
 	{
-		SaveDialog dialog	= new SaveDialog( this.mapArea );
+		this.dSave.prepare( this.mapArea );
 		
-		dialog.showDialog();
-	}
-	
-	public void refreshSize()
-	{
-		
+		this.dSave.showDialog();
 	}
 	
 	public void loadMap()
 	{
 		this.frame.setTitle( this.preTitle + "lade Karte..." );
-		OpenDialog dOpen	= new OpenDialog();
 
-		dOpen.showDialog();
+		this.dOpen.showDialog();
 		
-		ArrayList<Object> mapData	= dOpen.getMap();
+		ArrayList<Object> mapData	= this.dOpen.getMap();
 		String mapName				= (String)mapData.get( 0 );
 		TileArray mapArea			= (TileArray)mapData.get( 1 );
 		String difficulty			= (String)mapData.get( 2 );
@@ -115,6 +110,7 @@ public class Editor extends GameEditor
 	
 	public void newMap()
 	{
+		this.dOpen.reset();
 		this.mapsettings.resetSettings( this.initRows, this.initCols );
 		this.mapArea.resetMap( this.initRows, this.initCols );
 	}
