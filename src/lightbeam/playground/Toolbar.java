@@ -28,16 +28,15 @@ public class Toolbar
 	{
 		this.playground			= playground;
 		this.sDialog			= new SettingsDialog();
-        this.toolBar			= new JToolBar( "Toolbar", JToolBar.HORIZONTAL );
-        
+        this.toolBar			= new JToolBar( "Toolbar", JToolBar.HORIZONTAL );  
         this.toolBar.setComponentOrientation( ComponentOrientation.LEFT_TO_RIGHT );        
         this.toolBar.setLayout( null );
         this.toolBar.setPreferredSize( new Dimension( playground.getFrame().getWidth(), 38 ) );
 
 		// ToolBar füllen
-		ImageIcon imgOpenMap		= new ImageIcon( "src/fx/Toolbar/openMap.png" );
-		ImageIcon imgOpenSavegame	= new ImageIcon( "src/fx/Toolbar/openSavegame.png" );
-		ImageIcon imgSave 			= new ImageIcon( "src/fx/Toolbar/saveGame.png" );
+		ImageIcon imgOpenMap		= new ImageIcon( "src/fx/Toolbar/newMap.png" );
+		ImageIcon imgOpenSavegame	= new ImageIcon( "src/fx/Toolbar/open.png" );
+		ImageIcon imgSave 			= new ImageIcon( "src/fx/Toolbar/save.png" );
 		ImageIcon imgClose 			= new ImageIcon( "src/fx/Toolbar/close.png" );		
 		ImageIcon imgSettings		= new ImageIcon( "src/fx/Toolbar/settings.png" );
         
