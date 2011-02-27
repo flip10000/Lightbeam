@@ -17,13 +17,14 @@ import core.tilestate.TileArray;
 
 public class Editor extends GameEditor
 {
-	public MapSettings mapsettings			= null;
+	public MapSettings mapSettings			= null;
 	
 	private JPanel left_panel				= new JPanel();
 	private OpenDialog dOpen				= OpenDialog.getInstance();
 	private SaveDialog dSave				= SaveDialog.getInstance();
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
+	private MapStatus mapStatus				= null;
 	private Toolbar toolbar					= null;
 	private int initRows					= 10;
 	private int initCols					= 10;	
@@ -40,16 +41,18 @@ public class Editor extends GameEditor
 		this.toolbar			= new Toolbar( this );
 		
 		this.mapArea			= new MapArea( this.eTileset, this.initRows, this.initCols );		
-		this.mapsettings		= new MapSettings( this.mapArea, this.initRows, this.initCols );		
+		this.mapSettings		= new MapSettings( this.mapArea, this.initRows, this.initCols );		
 		this.palette			= new TilePalette( this.eTileset );
+		this.mapStatus			= new MapStatus( this.mapArea );
 		
-		this.palette.setBounds( new Rectangle( 5, this.mapsettings.panel().getBounds().y + this.mapsettings.panel().getBounds().height, 128, 128 ) );
+		this.palette.setBounds( new Rectangle( 5, this.mapSettings.panel().getBounds().y + this.mapSettings.panel().getBounds().height, 128, 128 ) );
 
 		this.left_panel.setLayout( null );
-		this.left_panel.setPreferredSize( new Dimension( this.mapsettings.panel().getBounds().x + this.mapsettings.panel().getBounds().width + 5, 200 ) );
+		this.left_panel.setPreferredSize( new Dimension( this.mapSettings.panel().getBounds().x + this.mapSettings.panel().getBounds().width + 5, 200 ) );
 
-		this.left_panel.add( this.mapsettings.panel() );
+		this.left_panel.add( this.mapSettings.panel() );
 		this.left_panel.add( this.palette );
+		this.left_panel.add( this.mapStatus.panel() );
 		
 		this.frame.setLayout( new BorderLayout() );
  
@@ -72,7 +75,7 @@ public class Editor extends GameEditor
 
 
 	public JFrame getFrame()			{ return this.frame;				}
-	public MapSettings getMapSettings()	{ return this.mapsettings;			}
+	public MapSettings getMapSettings()	{ return this.mapSettings;			}
 	public TilePalette getPalette() 	{ return this.palette;				}
 	public JPanel getPanel() 			{ return this.left_panel;			}
 	
@@ -111,7 +114,7 @@ public class Editor extends GameEditor
 	public void newMap()
 	{
 		this.dOpen.reset();
-		this.mapsettings.resetSettings( this.initRows, this.initCols );
+		this.mapSettings.resetSettings( this.initRows, this.initCols );
 		this.mapArea.resetMap( this.initRows, this.initCols );
 	}
 	
