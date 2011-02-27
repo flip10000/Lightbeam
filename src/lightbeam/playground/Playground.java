@@ -14,22 +14,27 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
 
-import lightbeam.editor.Editor;
+import lightbeam.editor.dialogs.OpenDialog;
+import lightbeam.editor.dialogs.SaveDialog;
 import lightbeam.playground.Toolbar;
+import lightbeam.playground.dialogs.OpenMapDialog;
+import lightbeam.playground.dialogs.OpenSavegameDialog;
+import lightbeam.playground.dialogs.SavegameDialog;
 
 import core.GamePlayground;
 import core.tilestate.TileArray;
 
 public class Playground extends GamePlayground
 {
-	private JPanel left_panel				= new JPanel();
+	private JPanel left_panel					= new JPanel();
+	private OpenMapDialog dOpenMap				= OpenMapDialog.getInstance();
+	private OpenSavegameDialog dOpenSavegame	= OpenSavegameDialog.getInstance();
+	private SavegameDialog dSave				= SavegameDialog.getInstance();
+
 	private TilePalette palette				= null;
 	private MapArea mapArea					= null;
 	
@@ -78,6 +83,7 @@ public class Playground extends GamePlayground
 	
 	public void loadMap()
 	{
+		this.dSave.showDialog( this, this.mapArea );
 		try {
 			JFileChooser loadDialog	= new JFileChooser();
 			
@@ -104,7 +110,7 @@ public class Playground extends GamePlayground
 		}				
 	}
 	
-	public void loadGame()
+	public void loadSavegame()
 	{
 		try 
 		{
@@ -135,25 +141,29 @@ public class Playground extends GamePlayground
 	
 	public void saveGame()
 	{
-		try 
-		{
-			JFileChooser saveDialog		= new JFileChooser();
-			
-			saveDialog.showSaveDialog( this.frame );
-			
-			FileOutputStream file		= new FileOutputStream( saveDialog.getSelectedFile() );
-			BufferedOutputStream buf	= new BufferedOutputStream( file );
-			ObjectOutputStream write 	= new ObjectOutputStream( buf );
-			
-			write.writeObject( this.mapArea.getMap() );
-			write.writeObject( this.mapArea.getMapName() );
+//		this.dSave.prepare( this.mapArea );
+		
+		this.dSave.showDialog( this, this.mapArea );
 
-			write.close();
-		} catch( IOException e )
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try 
+//		{
+//			JFileChooser saveDialog		= new JFileChooser();
+//			
+//			saveDialog.showSaveDialog( this.frame );
+//			
+//			FileOutputStream file		= new FileOutputStream( saveDialog.getSelectedFile() );
+//			BufferedOutputStream buf	= new BufferedOutputStream( file );
+//			ObjectOutputStream write 	= new ObjectOutputStream( buf );
+//			
+//			write.writeObject( this.mapArea.getMap() );
+//			write.writeObject( this.mapArea.getMapName() );
+//
+//			write.close();
+//		} catch( IOException e )
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	public JFrame getWindow()	{ return this.frame;	}

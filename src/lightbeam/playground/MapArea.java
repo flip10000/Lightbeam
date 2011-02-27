@@ -38,7 +38,7 @@ public class MapArea
 	private Tile manipSource					= null;
 //	private TileArray oldMap					= null;
 	
-	private String mapName						= "Testkarte";
+	private String mapName						= null;
 	
 	public MapArea( AbstractTileSetFactory tileset, int rows, int cols )
 	{

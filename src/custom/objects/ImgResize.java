@@ -14,5 +14,5 @@ public final class ImgResize
 		g.dispose();
 		
 		return resizedImage;
-	} 
+	}
 }

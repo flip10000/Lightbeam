@@ -68,15 +68,14 @@ public class SaveDialog
 			if( selOption == JOptionPane.OK_OPTION )
 			{
 				String mapName			= this.inpMap.getText();
-				SettingsDialog dialog	= new SettingsDialog();
-				String pathMaps			= dialog.getPath();
+				String pathMaps			= EditorSettingsDialog.getInstance().getPath();
 
-				if( !pathMaps.equals( "" ) && !mapName.equals( "" ) )
+				if( pathMaps != null && !mapName.equals( "" ) )
 				{
 					this.proceedSaving( pathMaps, mapName );
 				} else
 				{
-					if( pathMaps.equals( "" ) )
+					if( pathMaps == null )
 					{
 						JPanel panelNoPath	= new JPanel();
 						
@@ -97,7 +96,7 @@ public class SaveDialog
 							
 							if( selected == 0 )
 							{
-								dialog.showDialog();
+								EditorSettingsDialog.getInstance().showDialog();
 								this.showDialog();
 							}
 						}

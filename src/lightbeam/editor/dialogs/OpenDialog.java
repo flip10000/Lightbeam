@@ -26,20 +26,20 @@ import core.tilestate.TileArray;
 
 public class OpenDialog
 {
-	private final String[] mapCols		= { "Kartenname", "Kartenstatus", "Schwierigkeitsgrad" };
-	private final String extMap			= ".map";
+	private final String[] mapCols			= { "Kartenname", "Kartenstatus", "Schwierigkeitsgrad" };
+	private final String extMap				= ".map";
 	
-	private static OpenDialog dOpen		= new OpenDialog();
+	private static OpenDialog dOpen			= new OpenDialog();
 	
-	private JOptionPane pane			= null;
-	private SettingsDialog dSettings	= new SettingsDialog();
-	private JPanel panel				= new JPanel();
-	private JLabel lblOpen				= new JLabel( "Kartenauswahl:" );
-	private JLabel lblMapSelection		= new JLabel( "Aktuelle Auswahl:" );
-	private String[][] mapRows			= null;
-	private String[] mapDest			= null;
-	private DefaultTableModel mapModel 	= new DefaultTableModel( mapRows, mapCols );
-	private JTable mapTable				= new JTable( mapModel ) 
+	private JOptionPane pane				= null;
+	private EditorSettingsDialog dSettings	= EditorSettingsDialog.getInstance();
+	private JPanel panel					= new JPanel();
+	private JLabel lblOpen					= new JLabel( "Kartenauswahl:" );
+	private JLabel lblMapSelection			= new JLabel( "Aktuelle Auswahl:" );
+	private String[][] mapRows				= null;
+	private String[] mapDest				= null;
+	private DefaultTableModel mapModel 		= new DefaultTableModel( mapRows, mapCols );
+	private JTable mapTable					= new JTable( mapModel ) 
 	{
 		private static final long serialVersionUID = -1084225514626748678L;
 
@@ -177,7 +177,7 @@ public class OpenDialog
 		String[][] rows		= null;
 		String pathMaps		= this.dSettings.getPath();		
 		
-		if( !pathMaps.equals( "" ) )
+		if( pathMaps != null )
 		{
 			File dir				= new File( pathMaps );
 			

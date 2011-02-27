@@ -11,23 +11,22 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
-import lightbeam.editor.dialogs.SettingsDialog;
+import lightbeam.playground.dialogs.PlaygroundSettingsDialog;
 
 public class Toolbar 
 {
-	private Playground playground			= null;
-	private JToolBar toolBar				= null;
-	private JButton btnOpenMap				= null;
-	private JButton btnOpenSavegame			= null;	
-	private JButton btnSave					= null;
-	private JButton btnClose				= null;
-	private JButton btnSettings				= null;
-	private SettingsDialog sDialog			= null;
+	private Playground playground				= null;
+	private JToolBar toolBar					= null;
+	private JButton btnOpenMap					= null;
+	private JButton btnOpenSavegame				= null;	
+	private JButton btnSave						= null;
+	private JButton btnClose					= null;
+	private JButton btnSettings					= null;
+	private PlaygroundSettingsDialog sDialog	= PlaygroundSettingsDialog.getInstance();
 
 	public Toolbar( Playground playground ) 
 	{
 		this.playground			= playground;
-		this.sDialog			= new SettingsDialog();
         this.toolBar			= new JToolBar( "Toolbar", JToolBar.HORIZONTAL );
         
         this.toolBar.setComponentOrientation( ComponentOrientation.LEFT_TO_RIGHT );        
@@ -81,7 +80,7 @@ public class Toolbar
 		// Gespeichertes Spiel laden:
 		this.btnOpenSavegame.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				Toolbar.this.playground.loadGame();
+				Toolbar.this.playground.loadSavegame();
 			}
 		});
 		

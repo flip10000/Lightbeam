@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
-import lightbeam.editor.dialogs.SettingsDialog;
+import lightbeam.editor.dialogs.EditorSettingsDialog;
 
 public class Toolbar 
 {
@@ -22,12 +22,11 @@ public class Toolbar
 	private JButton btnOpen 				= null;
 	private JButton btnClose				= null;
 	private JButton btnSettings				= null;
-	private SettingsDialog sDialog			= null;
+	private EditorSettingsDialog sDialog	= EditorSettingsDialog.getInstance();
 
 	public Toolbar( Editor editor ) 
 	{
 		this.editor				= editor;
-		this.sDialog			= new SettingsDialog();
         this.toolBar			= new JToolBar( "Toolbar", JToolBar.HORIZONTAL );
         this.toolBar.setComponentOrientation( ComponentOrientation.LEFT_TO_RIGHT );        
         this.toolBar.setLayout( null );

@@ -21,30 +21,36 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import lightbeam.playground.dialogs.PlaygroundSettingsDialog;
 
-public class SettingsDialog 
+
+public class EditorSettingsDialog 
 {
+	private static EditorSettingsDialog instance	= new EditorSettingsDialog();
+	
 	private JOptionPane pane			= null;
 	private JPanel panel				= new JPanel();
-	private JLabel lblPath				= new JLabel( "Speicherort:" );
+	private JLabel lblPath				= new JLabel( "Speicherort (Karten):" );
 	private JTextField inpPath			= new JTextField();
 	private JButton btnPath				= new JButton( "..." );
 	private JFileChooser fc				= new JFileChooser();
 	
-	private String setPath				= "";
+	private String mapPath				= null;
 	private final String setFile		= "settings.cnf";
 	
-	public SettingsDialog()	
+	public static EditorSettingsDialog getInstance() { return instance; }
+	
+	private EditorSettingsDialog()	
 	{
 		this.loadSettings();
-		this.inpPath.setText( this.setPath ); 
+		this.inpPath.setText( this.mapPath ); 
 		
 		this.panel.setLayout( null );
-		this.panel.setPreferredSize( new Dimension( 400, 40 ) );
+		this.panel.setPreferredSize( new Dimension( 430, 60 ) );
 		
-		this.lblPath.setBounds( new Rectangle( 10, 10, 70, 20 ) );
-		this.inpPath.setBounds( new Rectangle( 95, 10, 270, 20 ) );
-		this.btnPath.setBounds( new Rectangle( 370, 10, 20, 20 ) );
+		this.lblPath.setBounds( new Rectangle( 10, 10, 170, 20 ) );
+		this.inpPath.setBounds( new Rectangle( 10, 30, 370, 20 ) );
+		this.btnPath.setBounds( new Rectangle( 380, 30, 20, 19 ) );
 		
 		this.panel.add( this.lblPath );
 		this.panel.add( this.inpPath );
@@ -56,19 +62,18 @@ public class SettingsDialog
         
 		this.btnPath.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				SettingsDialog.this.fc.showOpenDialog( SettingsDialog.this.pane );
+				EditorSettingsDialog.this.fc.showOpenDialog( EditorSettingsDialog.this.pane );
 				
-				String path	= SettingsDialog.this.fc.getSelectedFile() + "";
+				String path	= EditorSettingsDialog.this.fc.getSelectedFile() + "";
 
-				SettingsDialog.this.inpPath.setText( ( !path.equals( "null"  ) )? path : "" );
+				EditorSettingsDialog.this.inpPath.setText( ( !path.equals( "null"  ) )? path : "" );
 			}
 		});
-
 	}
 	
 	public void showDialog()
 	{
-		this.pane.createDialog( "Einstellungen" ).setVisible( true );
+		this.pane.createDialog( "Editoreinstellungen" ).setVisible( true );
 		int selOption	= ( (Integer)this.pane.getValue() ).intValue();
 		
 		if( selOption == JOptionPane.OK_OPTION )
@@ -78,19 +83,25 @@ public class SettingsDialog
 			
 			if( stat.exists() && stat.isDirectory() )
 			{
-				this.setPath	= path;
+				this.mapPath	= path;
 				
 				this.saveSettings();
-			} else if( stat.exists() == false )
+			} else if( stat.exists() == false && !path.equals( "" ) )
 			{
 				if (JOptionPane.showConfirmDialog(null, "Das angegebene Verzeichnis existiert nicht. Soll es angelegt werden?",
 						"Verzeichnis anlegen",JOptionPane.YES_NO_OPTION) 
 						== JOptionPane.YES_OPTION){
-					this.setPath	= path;				
+					this.mapPath	= path;				
 					stat.mkdir();
 					this.saveSettings();
 				}
 				
+			} else if( stat.exists() == false && path.equals( "" ) )
+			{
+				JOptionPane.showMessageDialog( null, "Sie haben kein Verzeichnis angegeben! Bitte wiederholen Sie den Vorgang erneut!", 
+						"Ungültige Eingabe", JOptionPane.ERROR_MESSAGE );
+				
+				this.showDialog();
 			} else
 			{
 				JOptionPane.showMessageDialog(null, "Der angegebene Zielpfad enthält kein Verzeichnis!", 
@@ -99,7 +110,7 @@ public class SettingsDialog
 		}
 	}
 	
-	public String getPath() { return this.setPath; }
+	public String getPath() { return this.mapPath; }
 	
 	private void saveSettings()
 	{
@@ -130,7 +141,8 @@ public class SettingsDialog
 			try 
 			{
 				write = new ObjectOutputStream( buf );
-				write.writeObject( this.setPath );
+				write.writeObject( this.mapPath );
+				write.writeObject( PlaygroundSettingsDialog.getInstance().getPath() );
 
 				write.close();
 			} catch (IOException e) {
@@ -161,7 +173,7 @@ public class SettingsDialog
 					
 					try 
 					{
-						this.setPath		= (String) read.readObject();
+						this.mapPath		= (String) read.readObject();
 					} catch (ClassNotFoundException e) 
 					{
 						JOptionPane.showMessageDialog(null, "Klasse konnte nicht gefunden werden! (" + e.getMessage() + " )", 
