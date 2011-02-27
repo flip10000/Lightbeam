@@ -15,9 +15,9 @@ public class GameEditor extends GameObjects implements IGameEditor
 		// Fenster schliessen
 		GameEditor.this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
-//		GameEditor.this.frame.addWindowListener(new WindowAdapter(){
-//		    public void windowClosing(WindowEvent e) { GameEditor.this.closeEditor(); }
-//		});		
+		GameEditor.this.frame.addWindowListener(new WindowAdapter(){
+		    public void windowClosing(WindowEvent e) { GameEditor.this.closeEditor(); }
+		});		
 	}
 
 	public void closeEditor()
