@@ -14,9 +14,9 @@ public class GamePlayground extends GameObjects implements IGamePlayground
 	{
 		// Fenster schliessen
 		GamePlayground.this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		GamePlayground.this.frame.addWindowListener(new WindowAdapter(){
-		    public void windowClosing(WindowEvent e) { GamePlayground.this.closePlayground(); }
-		});		
+//		GamePlayground.this.frame.addWindowListener(new WindowAdapter(){
+//		    public void windowClosing(WindowEvent e) { GamePlayground.this.closePlayground(); }
+//		});		
 	}
 
 	public void closePlayground()

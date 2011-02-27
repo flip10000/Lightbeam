@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.RepaintManager;
@@ -20,6 +21,8 @@ import javax.swing.RepaintManager;
 import core.tilefactory.AbstractTileSetFactory;
 import core.tilestate.Tile;
 import core.tilestate.TileArray;
+
+import core.tilestate.Logic;
 
 import lightbeam.tiles.TileField;
 
@@ -865,5 +868,18 @@ public class MapArea
 				this.map.pushReady( diff, diff.row(), diff.col() );
 			}
 		}
+		
+		/* added MC Check Lösbar */
+		Logic logic = new Logic();
+		if (logic.tileArrayUseful(this.map.tiles(),this.map.cols(),this.map.rows(),false)){
+			System.out.print(" *lösbar* \n");
+			if(logic.tileArrayComplete(this.map.tiles(),this.map.cols(),this.map.rows())){
+				System.out.print(" *gewonnen* \n");
+			}
+		} else {
+			System.out.print(" *so nicht lösbar* \n");
+		}
+		/* end added */
+		
 	}
 }
