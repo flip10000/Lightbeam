@@ -2,183 +2,114 @@ package lightbeam.editor;
 
 
 import java.awt.Cursor;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import core.GameObjects;
-import core.tilestate.ITileState;
+import lightbeam.solution.LogicClient;
 
+import core.GameObjects;
+import core.tilestate.TileArray;
 
 public class MapStatus extends GameObjects
 {
-	private JPanel panelSettings	= new JPanel();
+	private Editor editor				= null;	
+	private LogicClient logicClient		= new LogicClient();
+	private JPanel panelStatus			= new JPanel();
 	
-	private JLabel lblSolvable		= new JLabel( "Lösbar:" );
-	private JTextField txtSolvable	= new JTextField();
+	private JLabel lblSolvable			= new JLabel( "Lösbar:" );
+	private JTextField txtSolvable		= new JTextField();
 	
-	private ITileState oldTileState	= null;
-	private ITileState curTileState	= null;
+	private JLabel lblConclusive		= new JLabel( "Eindeutig:" );
+	private JTextField txtConclusive	= new JTextField();
 	
-	private MapArea maparea			= null;
-
+	private JLabel lblDifficulty		= new JLabel( "Schwierigkeit:" );
+	private JTextField txtDifficulty	= new JTextField();
+	
+	private JButton btnCheck			= new JButton( "Karte testen" );
+	
 	final static Cursor CURSOR_HAND				= new Cursor( Cursor.HAND_CURSOR );
 	final static Cursor CURSOR_DEFAULT			= new Cursor( Cursor.DEFAULT_CURSOR );
 	
-	private int lblWidth			= 59;
-	private int txtWidth			= 30;
-	private int btnWidth			= 16;
-	private int btnHeight			= 16;
-	
-	private int margin_left			= 15;
-	private int margin_right		= 8;
-	private int margin_top			= 15;
-	private int margin_bottom		= 8;
-	private int ctrlHeight			= 32;
-	
-	public MapStatus( MapArea maparea )
+	public MapStatus( Editor editor )
 	{
-//		this.maparea		= maparea;
-//		
-//		panelSettings.setBorder( new TitledBorder( "Einstellungen:" ) );
-//		panelSettings.setLayout( null );
-//		
-//		JPanel pnlRows		= new JPanel();		
-//		JPanel pnlCols		= new JPanel();
-//		
-//		pnlRows.setLayout( null );
-//		pnlCols.setLayout( null );
-//		
-//		JLabel lblRows	= new JLabel( "Zeilen:" );
-//		lblRows.setBounds( margin_left, margin_top, lblWidth, ctrlHeight );
-//		
-//		JLabel lblCols	= new JLabel( "Spalten:" );
-//		lblCols.setBounds( margin_left, lblRows.getBounds().y + lblRows.getBounds().height + 5, lblWidth, ctrlHeight );
-//
-//		this.txtRows.setText( rows + "" );
-//		this.txtRows.setBounds( margin_left + lblWidth, margin_top, txtWidth, ctrlHeight );
-//		this.txtRows.setHorizontalAlignment( JTextField.CENTER );
-//		this.txtRows.setEditable( false );
-//		
-//		this.txtCols.setText( cols + "" );
-//		this.txtCols.setBounds( margin_left + lblWidth, lblCols.getBounds().y , txtWidth, ctrlHeight );
-//		this.txtCols.setHorizontalAlignment( JTextField.CENTER );
-//		this.txtCols.setEditable( false );
-//
-//		// Spielfeldzeile hinzufügen: 
-//		this.btnRowsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
-//		this.btnRowsUp.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y, btnWidth, btnHeight );
-//		this.btnRowsUp.addMouseListener( new MouseAdapter(){public void mouseReleased(MouseEvent e){
-//			oldTileState	= MapStatus.this.eTileset.getSelected();
-//			curTileState	= MapStatus.this.eTileset.tile( 1 );
-//
-//			MapStatus.this.eTileset.setSelected( curTileState );
-//			MapStatus.this.maparea.addRow();
-//			MapStatus.this.eTileset.setSelected( oldTileState );
-//			
-//			int amountRows	= Integer.parseInt( MapStatus.this.txtRows.getText() ) + 1;
-//			MapStatus.this.txtRows.setText( amountRows + "" );
-//		}});
-//		this.btnRowsUp.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
-//		{
-//			MapStatus.this.btnRowsUp.setCursor( MapStatus.CURSOR_HAND );
-//		}});
-//		this.btnRowsUp.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
-//		{
-//			MapStatus.this.btnRowsUp.setCursor( MapStatus.CURSOR_DEFAULT );
-//		}});
-//		
-//		// Spielfeldzeile entfernen:
-//		this.btnRowsDown.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnDown.png" ) );
-//		this.btnRowsDown.setBounds( 2 * margin_left + txtRows.getBounds().x, txtRows.getBounds().y + txtRows.getBounds().height - btnHeight, btnWidth, btnHeight );
-//		this.btnRowsDown.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
-//			if( MapStatus.this.maparea.delRow() == true )
-//			{
-//				int amountRows	= Integer.parseInt( MapStatus.this.txtRows.getText() ) - 1;
-//				MapStatus.this.txtRows.setText( amountRows + "" );
-//			}
-//		}});
-//		this.btnRowsDown.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
-//		{
-//			MapStatus.this.btnRowsDown.setCursor( MapStatus.CURSOR_HAND );
-//		}});
-//		this.btnRowsDown.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
-//		{
-//			MapStatus.this.btnRowsDown.setCursor( MapStatus.CURSOR_DEFAULT );
-//		}});
-//
-//		
-//		this.btnColsUp.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnUp.png" ) );		
-//		this.btnColsUp.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y, btnWidth, btnHeight );
-//		this.btnColsUp.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
-//			oldTileState	= MapStatus.this.eTileset.getSelected();
-//			curTileState	= MapStatus.this.eTileset.tile( 1 );
-//			
-//			MapStatus.this.eTileset.setSelected( curTileState );
-//			MapStatus.this.maparea.addCol();
-//			MapStatus.this.eTileset.setSelected( oldTileState );
-//			
-//			int amountCols	= Integer.parseInt( MapStatus.this.txtCols.getText() ) + 1;
-//			MapStatus.this.txtCols.setText( amountCols + "" );
-//		}});
-//		this.btnColsUp.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
-//		{
-//			MapStatus.this.btnColsUp.setCursor( MapStatus.CURSOR_HAND );
-//		}});
-//		this.btnColsUp.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
-//		{
-//			MapStatus.this.btnColsUp.setCursor( MapStatus.CURSOR_DEFAULT );
-//		}});
-//
-//
-//		this.btnColsDown.setIcon( new ImageIcon( "./src/fx/Lightbeam/editor/palette/btnDown.png" ) );
-//		this.btnColsDown.setBounds( 2 * margin_left + txtCols.getBounds().x, txtCols.getBounds().y + txtRows.getBounds().height - btnHeight, btnWidth, btnHeight );
-//		this.btnColsDown.addMouseListener( new MouseAdapter(){public void mouseClicked(MouseEvent e){
-//			if( MapStatus.this.maparea.delCol() == true )
-//			{
-//				int amountCols	= Integer.parseInt( MapStatus.this.txtCols.getText() ) - 1;
-//				MapStatus.this.txtCols.setText( amountCols + "" );
-//			}
-//		}});
-//		this.btnColsDown.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
-//		{
-//			MapStatus.this.btnColsDown.setCursor( MapStatus.CURSOR_HAND );
-//		}});
-//		this.btnColsDown.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
-//		{
-//			MapStatus.this.btnColsDown.setCursor( MapStatus.CURSOR_DEFAULT );
-//		}});
-//		
-//		int iWidth	= margin_left + lblWidth + txtWidth + btnWidth + margin_right;
-//		int iHeight	= txtCols.getBounds().y + txtCols.getBounds().height + margin_bottom;
-//		
-//		this.panelSettings.add( lblRows );
-//		this.panelSettings.add( this.txtRows );
-//		this.panelSettings.add( this.btnRowsUp );
-//		this.panelSettings.add( this.btnRowsDown );
-//		
-//		this.panelSettings.add( lblCols );
-//		this.panelSettings.add( this.txtCols );
-//		this.panelSettings.add( this.btnColsUp );
-//		this.panelSettings.add( this.btnColsDown );
-//		
-//		this.panelSettings.setBounds( 5, 5 , iWidth, iHeight );	
+		this.editor	= editor;
+		this.panelStatus.setBorder( new TitledBorder( "Kartenstatus:" ) );
+		this.panelStatus.setLayout( null );
+		
+		this.txtSolvable.setEditable( false );
+		this.txtConclusive.setEditable( false );
+		this.txtDifficulty.setEditable( false );
+		
+		this.lblSolvable.setBounds( new Rectangle( 10, 20, 100, 15 ) );
+		this.txtSolvable.setBounds( new Rectangle( 10, this.lblSolvable.getBounds().y + this.lblSolvable.getBounds().height + 3, 110, 20 ) );
+		
+		this.btnCheck.setBounds( new Rectangle( 10, this.txtSolvable.getBounds().y + this.txtSolvable.getBounds().height + 20, this.txtSolvable.getBounds().width, 20 ) );
+		
+		this.lblConclusive.setBounds( new Rectangle( 10, this.btnCheck.getBounds().y + this.btnCheck.getBounds().height + 5, 100, 15 ) );
+		this.txtConclusive.setBounds( new Rectangle( 10, this.lblConclusive.getBounds().y + this.lblConclusive.getBounds().height + 3, 110, 20 ) );
+		
+		this.lblDifficulty.setBounds( new Rectangle( 10, this.txtConclusive.getBounds().y + this.txtConclusive.getBounds().height + 5, 100, 15 ) );
+		this.txtDifficulty.setBounds( new Rectangle( 10, this.lblDifficulty.getBounds().y + this.lblDifficulty.getBounds().height + 3, 110, 20 ) );
+		
+		this.panelStatus.add( this.lblSolvable );
+		this.panelStatus.add( this.txtSolvable );
+		
+		this.panelStatus.add( this.lblConclusive );
+		this.panelStatus.add( this.txtConclusive );
+		
+		this.panelStatus.add( this.lblDifficulty );
+		this.panelStatus.add( this.txtDifficulty );
+		
+		this.panelStatus.add( this.btnCheck );
+		
+		this.panelStatus.setBounds( 5, 226, 128, 200 );
+		this.panelStatus.setVisible( true );
+		
+		this.btnCheck.addMouseListener( new MouseAdapter(){public void mouseReleased(MouseEvent e){
+			TileArray map	= MapStatus.this.editor.getMap().getMap();
+			
+			MapStatus.this.logicClient.check( map );
+			
+			System.out.println(MapStatus.this.logicClient.getResult());
+			
+			// ToDo: Remove! Nur zu Testzwecken!
+			TileArray tmp	= MapStatus.this.logicClient.getMap();
+			
+			for( int row = 0; row < tmp.rows(); row++ )
+			{
+				for( int col = 0; col < tmp.cols(); col++ )
+				{
+				}
+			}
+
+			// Ende
+		}});
+		
 	}
 	
-	public JPanel panel() { return this.panelSettings; }
+	public JPanel panel() { return this.panelStatus; }
 	
-	public void resetSettings( int rows, int cols )	
+	public void setSolvable( boolean solvable )
 	{
-		this.oldTileState	= null;
-		this.curTileState	= null;
-
-//		this.txtRows.setText( rows + "" );
-//		this.txtCols.setText( cols + "" );
+		if( solvable == true )	{ this.txtSolvable.setText( "Ja" );		}
+		else					{ this.txtSolvable.setText( "Nein" );	}
+	}
+	
+	public void setConclusive( boolean consclusive )
+	{
+		if( consclusive == true )	{ this.txtConclusive.setText( "Ja" );	}
+		else						{ this.txtConclusive.setText( "Nein" );	}
+	}
+	
+	public void setConclusive( String difficulty )
+	{
+		this.txtDifficulty.setText( difficulty );
 	}
 }
