@@ -90,7 +90,7 @@ public class Logic
 						
 						// filtered to logicly possible beamsources
 						List<Tile> possibleBeamsources 	= this.getPossibleBeamsources( availableBeamsources, y, x );
-						
+
 						if( possibleBeamsources.size() == 1 )
 						{
 							// beam einsetzen/ziehen
@@ -128,6 +128,7 @@ public class Logic
 							
 							useful = true;
 						}
+						
 					}
 				}
 			}
