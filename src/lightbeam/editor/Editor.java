@@ -39,16 +39,16 @@ public class Editor extends GameEditor
 		this.frame.setTitle( this.preTitle + "<Neue Karte>" );
 		
 		this.toolbar			= new Toolbar( this );
-		
-		this.mapArea			= new MapArea( this.eTileset, this.initRows, this.initCols );		
+
+		this.mapStatus			= new MapStatus( this );
+		this.mapArea			= new MapArea( this.eTileset, this.mapStatus, this.initRows, this.initCols );		
 		this.mapSettings		= new MapSettings( this.mapArea, this.initRows, this.initCols );		
 		this.palette			= new TilePalette( this.eTileset );
-		this.mapStatus			= new MapStatus( this.mapArea );
 		
 		this.palette.setBounds( new Rectangle( 5, this.mapSettings.panel().getBounds().y + this.mapSettings.panel().getBounds().height, 128, 128 ) );
 
 		this.left_panel.setLayout( null );
-		this.left_panel.setPreferredSize( new Dimension( this.mapSettings.panel().getBounds().x + this.mapSettings.panel().getBounds().width + 5, 200 ) );
+		this.left_panel.setPreferredSize( new Dimension( this.mapSettings.panel().getBounds().x + this.mapSettings.panel().getBounds().width + 5, 500 ) );
 
 		this.left_panel.add( this.mapSettings.panel() );
 		this.left_panel.add( this.palette );
