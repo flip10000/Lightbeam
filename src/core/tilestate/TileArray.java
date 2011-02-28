@@ -148,6 +148,7 @@ public class TileArray implements Serializable
 
 	public int rows() 						{ return this.tiles.length; 		}
 	public int cols()						{ return this.tiles[0].length;		}
+	
 	public Tile tile( int row, int col )	
 	{ 
 		return this.tiles[row][col];		
@@ -165,6 +166,12 @@ public class TileArray implements Serializable
 	{
 		this.withState( tileState );
 		this.tiles[this.setRow][this.setCol].parent( beamsource );
+	}
+	
+	public void withTile( Tile tile )
+	{
+		this.tiles[this.setRow][this.setCol]	= tile;
+		
 	}
 	
 	public void withState( ITileState tileState ) 
@@ -337,6 +344,103 @@ public class TileArray implements Serializable
 		{
 			return null;
 		}
+	}
+	
+	public ArrayList<Tile> getTilesInArea( String type )
+	{
+		ArrayList<Tile> sources	= new ArrayList<Tile>();
+		
+		for( int row = 0; row < this.rows; row++ )
+		{
+			for( int col = 0; col < this.cols; col++ )
+			{
+				Tile tile	= this.tiles[row][col];
+
+				if( tile.type().equals( type ) )
+				{
+					sources.add( tile );
+				}
+			}
+		}
+		
+		return sources;
+	}
+	
+	public Tile getLeftBlocking( Tile tile, String type )
+	{
+		int tRow	= tile.row();
+		
+		for( int col = tile.col() - 1; col > -1; col-- )
+		{
+			Tile lTile	= this.tile( tRow, col );
+			
+			if( lTile.type().equals( type ) ) { return lTile; }
+		}
+		
+		return null;
+	}
+	
+	public Tile getTopBlocking( Tile tile, String type )
+	{
+		int tCol	= tile.col();
+		
+		for( int row = tile.row() - 1; row > -1; row-- )
+		{
+			Tile lTile	= this.tile( row, tCol );
+			
+			if( lTile.type().equals( type ) ) { return lTile; }
+		}
+		
+		return null;
+	}
+	
+	public Tile getRightBlocking( Tile tile, String type )
+	{
+		int tRow	= tile.row();
+		
+		for( int col = tile.col() + 1; col < this.rows; col++ )
+		{
+			Tile lTile	= this.tile( tRow, col );
+			
+			if( lTile.type().equals( type ) ) { return lTile; }
+		}
+		
+		return null;
+	}
+	
+	public Tile getBottomBlocking( Tile tile, String type )
+	{
+		int tCol	= tile.col();
+		
+		for( int row = tile.row() + 1; row < this.rows; row++ )
+		{
+			Tile lTile	= this.tile( row, tCol );
+			
+			if( lTile.type().equals( type ) ) { return lTile; }
+		}
+		
+		return null;
+	}
+	
+	public TileArray createClone()
+	{
+		int oRows		= this.rows;
+		int oCols		= this.cols;
+		
+		TileArray clone	= new TileArray( oRows, oCols );
+		Tile[][] cTiles	= new Tile[oRows][oCols];
+		
+		for( int row = 0; row < oRows; row++ )
+		{
+			cTiles[row]	= new Tile[oCols];
+			
+			for( int col = 0; col < oCols; col++ )
+			{
+				clone.setTile( row, col ).withTile( (Tile)this.tiles[row][col].clone() );
+			}
+		}
+		
+		return clone;
 	}
 }
 
