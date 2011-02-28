@@ -90,6 +90,7 @@ public class MapSettings extends GameObjects
 			int amountRows	= Integer.parseInt( MapSettings.this.txtRows.getText() ) + 1;
 			MapSettings.this.txtRows.setText( amountRows + "" );
 		}});
+		
 		this.btnRowsUp.addMouseListener(new MouseAdapter(){public void mouseEntered( MouseEvent e ) 
 		{
 			MapSettings.this.btnRowsUp.setCursor( MapSettings.CURSOR_HAND );
