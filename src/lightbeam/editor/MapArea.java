@@ -22,8 +22,7 @@ import core.tilestate.ITileState;
 import core.tilestate.Tile;
 import core.tilestate.TileArray;
 
-import core.tilestate.Logic;
-
+import lightbeam.solution.Solvable;
 import lightbeam.tiles.TileBeam;
 import lightbeam.tiles.TileBeamsource;
 import lightbeam.tiles.TileField;
@@ -35,6 +34,8 @@ public class MapArea
 	private JPanel panel						= null;
 	private JScrollPane scroll					= new JScrollPane();
 	
+	private MapStatus mapStatus					= null;
+	
 	final static Cursor CURSOR_HAND				= new Cursor( Cursor.HAND_CURSOR );
 	final static Cursor CURSOR_DEFAULT			= new Cursor( Cursor.DEFAULT_CURSOR );
 	
@@ -42,10 +43,11 @@ public class MapArea
 	private TileArray map						= null;
 //	private TileArray oldMap					= null;
 	
-	public MapArea( AbstractTileSetFactory tileset, int rows, int cols )
+	public MapArea( AbstractTileSetFactory tileset, MapStatus mapStatus, int rows, int cols )
 	{
 		this.tileset	= tileset;
-
+		this.mapStatus	= mapStatus;
+		
 		this.tileset.setSelected( this.tileset.tile( 1 ) );
 		
 		this.panel		= new JPanel() 
@@ -72,11 +74,17 @@ public class MapArea
 		this.panel.addMouseListener(new MouseAdapter(){public void mouseClicked( MouseEvent e ) 
 		{
 			MapArea.this.updateTile( ( e.getY() / 32 ), ( e.getX() / 32 ) );
+			
+			if( Solvable.check( MapArea.this.map ) )	{ MapArea.this.mapStatus.setSolvable( true ); 	}
+			else 										{ MapArea.this.mapStatus.setSolvable( false );	}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
 		{
 			MapArea.this.updateTile( ( e.getY() / 32 ), ( e.getX() / 32 ) );
+			
+			if( Solvable.check( MapArea.this.map ) )	{ MapArea.this.mapStatus.setSolvable( true ); 	}
+			else 										{ MapArea.this.mapStatus.setSolvable( false );	}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
@@ -109,7 +117,13 @@ public class MapArea
 	public void addRow()
 	{
 		this.map.addRow( this.tileset.getSelected() );
+
 		this.scroll.repaint();
+		
+		if( Solvable.check( this.map ) )	{ this.mapStatus.setSolvable( true ); 	}
+		else 								{ this.mapStatus.setSolvable( false );	}
+		
+		
 	}
 	
 	public boolean delRow()
@@ -123,6 +137,9 @@ public class MapArea
 			this.updateBeamsources();
 			this.scroll.repaint();
 			
+			if( Solvable.check( this.map ) )	{ this.mapStatus.setSolvable( true ); 	}
+			else 								{ this.mapStatus.setSolvable( false );	}
+			
 			return true;
 		} else
 		{
@@ -134,6 +151,9 @@ public class MapArea
 	{
 		this.map.addCol( this.tileset.getSelected() );
 		this.scroll.repaint();
+		
+		if( Solvable.check( this.map ) )	{ this.mapStatus.setSolvable( true ); 	}
+		else 								{ this.mapStatus.setSolvable( false );	}
 	}
 	
 	public boolean delCol()
@@ -146,6 +166,9 @@ public class MapArea
 			this.map.delCol();
 			this.updateBeamsources();
 			this.scroll.repaint();
+
+			if( Solvable.check( this.map ) )	{ this.mapStatus.setSolvable( true ); 	}
+			else 								{ this.mapStatus.setSolvable( false );	}
 			
 			return true;
 		} else
@@ -347,15 +370,6 @@ public class MapArea
 			
 			this.scroll.repaint();
 		}
-		
-		/* Added MC Check Lösbar */
-		Logic logic = new Logic();
-		if (logic.tileArrayUseful(this.map.tiles(),this.map.cols(),this.map.rows(),true)){
-			System.out.print(" *lösbar* \n");
-		} else {
-			System.out.print(" *nicht lösbar* \n");
-		}
-		/* end added */
 	}
 	
 	private void removeBeams( Tile source, Tile trigger, int axis, int posMouse )
