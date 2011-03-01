@@ -63,11 +63,23 @@ public class ConclusiveReachable implements ILogicStrategy
 					// Mögliche eindeutige Felder der Beamsource zuordnen:
 					this.fieldToSource.add( i, pos );
 					
-					// Häufigkeit der Feldbenutzung bzgl. der möglichen Beamsources hochzählen:
-					if( pos[0][1] > -1 ) { this.fields[sRow][pos[0][1]]++; }
-					if( pos[1][0] > -1 ) { this.fields[pos[1][0]][sCol]++; }
-					if( pos[2][1] > -1 ) { this.fields[sRow][pos[2][1]]++; }
-					if( pos[3][0] > -1 ) { this.fields[pos[3][0]][sCol]++; }
+					// Häufigkeit der Feldbenutzung bzgl. der möglichen Beamsources hochzählen, falls
+					// letzmögliche Felder noch nicht zugeordnet:
+					if( pos[0][1] > -1 && this.isField( sRow, pos[0][1] ) ) { this.fields[sRow][pos[0][1]]++; }
+					if( pos[1][0] > -1 && this.isField( pos[1][0], sCol ) ) { this.fields[pos[1][0]][sCol]++; }
+					if( pos[2][1] > -1 && this.isField( sRow, pos[2][1] ) ) { this.fields[sRow][pos[2][1]]++; }
+					if( pos[3][0] > -1 && this.isField( pos[3][0], sCol ) ) { this.fields[pos[3][0]][sCol]++; }
+				} else
+				{
+					this.fieldToSource.add( i, null );
+				}
+			}
+			
+			for( int r = 0; r < this.map.rows(); r++ )
+			{
+				for( int c = 0; c < this.map.cols(); c++ )
+				{
+//					System.out.println("["+r+"|"+c+"]"+this.fields[r][c]);
 				}
 			}
 			
@@ -81,53 +93,56 @@ public class ConclusiveReachable implements ILogicStrategy
 				{
 					// Alle letztmöglichen Felder einer Beamsource holen:
 					int[][] fieldsPos	= this.fieldToSource.get( i );
-
-					// Prüfen, ob letztmögliches Feld von links der Beamsource eindeutig
-					// zuordenbar ist. Dabei ist:
-					// [0][0] = row,
-					// [0][1] = col
-					if( fieldsPos[0][0] > -1 && fieldsPos[0][1] > -1 
-						&& this.fields[fieldsPos[0][0]][fieldsPos[0][1]] == 1 
-					) {
-						this.assignFieldsToSource( fieldsPos[0][0], fieldsPos[0][1], source );
-						
-						if( this.result == false ) { this.result = true; }
-					}
 					
-					// Prüfen, ob letztmögliches Feld oberhalb der Beamsource eindeutig
-					// zuordenbar ist. Dabei ist:
-					// [1][0] = row,
-					// [1][1] = col
-					if( fieldsPos[1][0] > -1 && fieldsPos[1][1] > -1 && 
-						this.fields[fieldsPos[1][0]][fieldsPos[1][1]] == 1 
-					) {
-						this.assignFieldsToSource( fieldsPos[1][0], fieldsPos[1][1], source );
+					if( fieldsPos != null )
+					{
+						// Prüfen, ob letztmögliches Feld von links der Beamsource eindeutig
+						// zuordenbar ist. Dabei ist:
+						// [0][0] = row,
+						// [0][1] = col
+						if( fieldsPos[0][0] > -1 && fieldsPos[0][1] > -1 
+							&& this.fields[fieldsPos[0][0]][fieldsPos[0][1]] == 1 
+						) {
+							this.assignFieldsToSource( fieldsPos[0][0], fieldsPos[0][1], source );
+		
+							if( this.result == false ) { this.result = true; }
+						}
 						
-						if( this.result == false ) { this.result = true; }
-					}
-					
-					// Prüfen, ob letztmögliches Feld rechts von der Beamsource eindeutig
-					// zuordenbar ist. Dabei ist:
-					// [2][0] = row,
-					// [2][1] = col
-					if( fieldsPos[2][0] > -1 && fieldsPos[2][1] > -1 &&
-						this.fields[fieldsPos[2][0]][fieldsPos[2][1]] == 1 
-					) {
-						this.assignFieldsToSource( fieldsPos[2][0], fieldsPos[2][1], source );
+						// Prüfen, ob letztmögliches Feld oberhalb der Beamsource eindeutig
+						// zuordenbar ist. Dabei ist:
+						// [1][0] = row,
+						// [1][1] = col
+						if( fieldsPos[1][0] > -1 && fieldsPos[1][1] > -1 && 
+							this.fields[fieldsPos[1][0]][fieldsPos[1][1]] == 1 
+						) {
+							this.assignFieldsToSource( fieldsPos[1][0], fieldsPos[1][1], source );
+							
+							if( this.result == false ) { this.result = true; }
+						}
 						
-						if( this.result == false ) { this.result = true; }
-					}
-					
-					// Prüfen, ob letztmögliches Feld unterhalb der Beamsource eindeutig
-					// zuordenbar ist. Dabei ist:
-					// [3][0] = row,
-					// [3][1] = col
-					if( fieldsPos[3][0] > -1 && fieldsPos[3][1] > -1 &&
-						this.fields[fieldsPos[3][0]][fieldsPos[3][1]] == 1 
-					) {
-						this.assignFieldsToSource( fieldsPos[3][0], fieldsPos[3][1], source );
+						// Prüfen, ob letztmögliches Feld rechts von der Beamsource eindeutig
+						// zuordenbar ist. Dabei ist:
+						// [2][0] = row,
+						// [2][1] = col
+						if( fieldsPos[2][0] > -1 && fieldsPos[2][1] > -1 &&
+							this.fields[fieldsPos[2][0]][fieldsPos[2][1]] == 1 
+						) {
+							this.assignFieldsToSource( fieldsPos[2][0], fieldsPos[2][1], source );
+							
+							if( this.result == false ) { this.result = true; }
+						}
 						
-						if( this.result == false ) { this.result = true; }
+						// Prüfen, ob letztmögliches Feld unterhalb der Beamsource eindeutig
+						// zuordenbar ist. Dabei ist:
+						// [3][0] = row,
+						// [3][1] = col
+						if( fieldsPos[3][0] > -1 && fieldsPos[3][1] > -1 &&
+							this.fields[fieldsPos[3][0]][fieldsPos[3][1]] == 1 
+						) {
+							this.assignFieldsToSource( fieldsPos[3][0], fieldsPos[3][1], source );
+							
+							if( this.result == false ) { this.result = true; }
+						}
 					}
 				}
 			}
@@ -210,7 +225,7 @@ public class ConclusiveReachable implements ILogicStrategy
 		
 		// Prüfen, ob links von Beamsource weiteres Beamsource liegt:
 		Tile rightBlock		= this.map.getRightBlocking( source, "beamsource" );
-		
+
 		// Wenn nein, dann:
 		if( rightBlock == null )
 		{
@@ -255,7 +270,7 @@ public class ConclusiveReachable implements ILogicStrategy
 		}
 		
 		// Wenn gefunden, dann Tile-Row-Position speichern:
-		if( bottomLastPos > -1 && bottomLastPos != source.col() ) 
+		if( bottomLastPos > -1 && bottomLastPos != source.row() ) 
 		{ 
 			return bottomLastPos;
 		}
@@ -282,7 +297,7 @@ public class ConclusiveReachable implements ILogicStrategy
 				}
 				
 				// Beamstrength für den nächsten Durchlauf vermindern:
-				this.map.tile( sRow, sCol ).strength( this.map.tile( sRow, sCol ).strength() - fCol );
+				this.map.tile( sRow, sCol ).strength( this.map.tile( sRow, sCol ).strength() - ( sCol - fCol ) );
 			}
 			// Nein, Felder sollen rechts von der Beamsource zugeordnet werden:
 			else
@@ -294,7 +309,7 @@ public class ConclusiveReachable implements ILogicStrategy
 				}
 				
 				// Beamstrength für den nächsten Durchlauf vermindern:				
-				this.map.tile( sRow, sCol ).strength( this.map.tile( sRow, sCol ).strength() - fCol );
+				this.map.tile( sRow, sCol ).strength( this.map.tile( sRow, sCol ).strength() - ( fCol - sCol ) );
 			}
 		}
 		// Nein, vertikale Zuordnung:
@@ -310,7 +325,7 @@ public class ConclusiveReachable implements ILogicStrategy
 				}
 				
 				// Beamstrength für den nächsten Durchlauf vermindern:				
-				this.map.tile( sRow, sCol ).strength( this.map.tile( sRow, sCol ).strength() - fRow );
+				this.map.tile( sRow, sCol ).strength( this.map.tile( sRow, sCol ).strength() - ( sRow - fRow ) );
 			}
 			// Nein, Felder sollen unterhalb von der Beamsource zugeordnet werden:
 			else
@@ -322,8 +337,13 @@ public class ConclusiveReachable implements ILogicStrategy
 				}
 				
 				// Beamstrength für den nächsten Durchlauf vermindern:				
-				this.map.tile( sRow, sCol ).strength( this.map.tile( sRow, sCol ).strength() - fRow );
+				this.map.tile( sRow, sCol ).strength( this.map.tile( sRow, sCol ).strength() - ( fRow  - sRow ) );
 			}
 		}
+	}
+	
+	private boolean isField( int row, int col )
+	{
+		return ( this.map.tile( row, col ).type().equals( "field" ) )? true : false;
 	}
 }
