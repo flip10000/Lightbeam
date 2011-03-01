@@ -63,7 +63,23 @@ public class ConclusiveReachable implements ILogicStrategy
 					
 					// Mögliche eindeutige Felder der Beamsource zuordnen:
 					this.fieldToSource.add( i, pos );
-					
+//if( pos[0][1] == 10 )
+//{
+//	System.out.println("left" + " -> " + sRow + "|" + sCol );
+//} 
+//if( pos[1][0] == 10 )
+//{
+//	System.out.println("top" + " -> " + sRow + "|" + sCol );
+//} 
+//if( pos[2][1] == 10 )
+//{
+//	System.out.println("right" + " -> " + sRow + "|" + sCol );
+//} 
+//if( pos[3][0] == 10 )
+//{
+//	System.out.println("bottom" + " -> " + sRow + "|" + sCol );
+//} 
+
 					// Häufigkeit der Feldbenutzung bzgl. der möglichen Beamsources hochzählen, falls
 					// letzmögliche Felder noch nicht zugeordnet:
 					if( pos[0][1] > -1 && this.isField( sRow, pos[0][1] ) ) { this.fields[sRow][pos[0][1]]++; }
@@ -195,7 +211,7 @@ public class ConclusiveReachable implements ILogicStrategy
 		// Ansonsten:
 		else 
 		{
-			topLastPos	= ( sRow - strength > topBlock.col() )? ( sRow - strength ) : topBlock.col() + 1;
+			topLastPos	= ( sRow - strength > topBlock.row() )? ( sRow - strength ) : topBlock.row() + 1;
 		}
 		
 		// Wenn gefunden, dann Tile-Row-Positions speichern:
@@ -203,6 +219,8 @@ public class ConclusiveReachable implements ILogicStrategy
 		{ 
 			return topLastPos;
 		}
+		
+		
 		
 		// "Nicht gefunden" zurückgeben:
 		return -1;
