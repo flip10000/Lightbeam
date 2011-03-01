@@ -1,17 +1,18 @@
 package lightbeam.solution;
 
+import core.GameObjects;
 import core.tilestate.Tile;
 import core.tilestate.TileArray;
 import lightbeam.solution.strategies.ConclusiveReachable;
 
-public class LogicClient 
+public class LogicClient extends GameObjects
 {
 	private boolean result	= false; 
 	private TileArray map	= null;
 	
 	public LogicClient() {}
 	
-	public void check( TileArray map )
+	public void check( TileArray map, ILogicResponse callee )
 	{
 		this.map	= map.createClone();
 		this.result	= false;
@@ -26,6 +27,9 @@ public class LogicClient
 		{		
 			lContext.executeLogic();
 
+			try { callee.logicResponse( lContext.getMap() ); }
+			catch( Exception e ) {}
+			
 			if( lContext.getResult() == true )
 			{
 				this.map	= lContext.getMap();
@@ -54,6 +58,11 @@ public class LogicClient
 				Tile tile	= map.tile( row, col );
 				
 				if( tile.type().equals( "beam" ) ) { tile.type( "field" ); }
+				
+				if( !tile.type().equals( "beamsource" ) )
+				{
+					tile.color( Tile.CRED );
+				}
 			}
 		}
 	}
