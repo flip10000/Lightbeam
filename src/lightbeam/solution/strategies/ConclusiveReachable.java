@@ -141,9 +141,9 @@ public class ConclusiveReachable implements ILogicStrategy
 		} 
 	}
 	
-	public void setMap( TileArray map )	{ this.map = map;	}	
-	public TileArray getMap()		{ return this.map; 		}
-	public boolean getResult() 		{ return this.result;	}
+	public void setMap( TileArray map )	{ this.map = map;		}	
+	public TileArray getMap()			{ return this.map; 		}
+	public boolean getResult() 			{ return this.result;	}
 
 	// Letztmögliches "Feld" links von der Beamsource zurückgeben:
 	private int getTillLastLeftField( Tile source )
