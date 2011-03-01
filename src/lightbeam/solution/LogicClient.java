@@ -4,45 +4,52 @@ import core.GameObjects;
 import core.tilestate.Tile;
 import core.tilestate.TileArray;
 import lightbeam.solution.strategies.ConclusiveReachable;
+import lightbeam.solution.strategies.ForcedToBeam;
 
 public class LogicClient extends GameObjects
 {
-	private boolean result	= false; 
-	private TileArray map	= null;
+	private TileArray map			= null;
+	private LogicContext lContext	= null;
+	
+	// Aktulle Auswahl der Lösungs-Strategie
+	private int logicStrategy		= 1;
+	private int amountOfStrategies	= 2;
+	
+	private boolean[] result	= new boolean[this.amountOfStrategies];	
+	private boolean done		= false;
 	
 	public LogicClient() {}
 	
 	public void check( TileArray map, ILogicResponse callee )
 	{
-		this.map	= map.createClone();
-		this.result	= false;
-		
+		this.map		= map.createClone();
+		this.resetResults();
 		this.simulateMode( this.map );		
-
-		LogicContext lContext	= new LogicContext( this.map );
+		this.lContext	= new LogicContext( this.map );
 		
-		lContext.setLogic( new ConclusiveReachable() );
-		
-		while( lContext.getResult() == true )
-		{		
-			lContext.executeLogic();
-			this.map	= lContext.getMap();
+		while( this.done == false )
+		{
+			this.setStrategy();
+			this.lContext.executeLogic();
+			this.map	= this.lContext.getMap();
 			this.markTiles();
 			callee.logicResponse( this.map );
 
-			if( lContext.getResult() == true )
+			if( this.lContext.getResult() == false )
 			{
-				this.result = true;
+				this.result[this.logicStrategy-1] = false;
+				
+				if( this.endOfStrategies() == true )	{ this.done = true;		}
+				else									{ this.logicStrategy++;	}
 			} else
 			{
-				// ToDo: Nächste Strategie auswählen!!
+				this.resetResults();
 			}
-
 		}
 	}
 	
-	public boolean getResult() 	{ return this.result; 	}
-	public TileArray getMap() 	{ return this.map; 		}
+	public boolean[] getResult() 	{ return this.result;	}
+	public TileArray getMap() 		{ return this.map; 		}
 	
 	private void simulateMode( TileArray map )
 	{
@@ -77,6 +84,40 @@ public class LogicClient extends GameObjects
 					this.map.tile( row, col ).color( Tile.CGREEN );
 				}
 			}
+		}
+	}
+	
+	private void resetResults()
+	{
+		for( int i = 0; i < this.amountOfStrategies; i++ ) { this.result[i]	= true; }
+	}
+	
+	private boolean endOfStrategies()
+	{
+		int len			= this.result.length;
+		
+		for( int i = 0; i < len; i++ )
+		{
+			if( this.result[i] == true ) { return false; }
+		}
+		
+		return true;
+	}
+	
+	private void setStrategy()
+	{
+		switch( this.logicStrategy )
+		{
+			case 1:
+				this.lContext.setLogic( new ConclusiveReachable() );
+				break;
+			case 2:
+				this.lContext.setLogic( new ForcedToBeam() );
+				break;
+			default:
+				this.lContext.setLogic( new ConclusiveReachable() );
+				this.logicStrategy	= 1;
+				break;
 		}
 	}
 }
