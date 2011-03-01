@@ -75,14 +75,6 @@ public class ConclusiveReachable implements ILogicStrategy
 				}
 			}
 			
-			for( int r = 0; r < this.map.rows(); r++ )
-			{
-				for( int c = 0; c < this.map.cols(); c++ )
-				{
-//					System.out.println("["+r+"|"+c+"]"+this.fields[r][c]);
-				}
-			}
-			
 			// Alle Beamsources durchlaufen:
 			for( int i = 0; i < sSources; i++ )
 			{
