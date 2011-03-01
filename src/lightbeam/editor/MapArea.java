@@ -41,6 +41,8 @@ public class MapArea
 	
 	private RepaintManager m					= null;
 	private TileArray map						= null;
+	private boolean testmode					= false;
+	private TileArray mapCopy					= null;
 //	private TileArray oldMap					= null;
 	
 	public MapArea( AbstractTileSetFactory tileset, MapStatus mapStatus, int rows, int cols )
@@ -73,40 +75,49 @@ public class MapArea
 		
 		this.panel.addMouseListener(new MouseAdapter(){public void mouseClicked( MouseEvent e ) 
 		{
-			MapArea.this.updateTile( ( e.getY() / 32 ), ( e.getX() / 32 ) );
-			
-			if( Solvable.check( MapArea.this.map ) )	{ MapArea.this.mapStatus.setSolvable( true ); 	}
-			else 										{ MapArea.this.mapStatus.setSolvable( false );	}
+			if( MapArea.this.testmode == false )
+			{
+				MapArea.this.updateTile( ( e.getY() / 32 ), ( e.getX() / 32 ) );
+				
+				if( Solvable.check( MapArea.this.map ) )	{ MapArea.this.mapStatus.setSolvable( true ); 	}
+				else 										{ MapArea.this.mapStatus.setSolvable( false );	}
+			}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseDragged(MouseEvent e) 
 		{
-			MapArea.this.updateTile( ( e.getY() / 32 ), ( e.getX() / 32 ) );
-			
-			if( Solvable.check( MapArea.this.map ) )	{ MapArea.this.mapStatus.setSolvable( true ); 	}
-			else 										{ MapArea.this.mapStatus.setSolvable( false );	}
+			if( MapArea.this.testmode == false )
+			{
+				MapArea.this.updateTile( ( e.getY() / 32 ), ( e.getX() / 32 ) );
+				
+				if( Solvable.check( MapArea.this.map ) )	{ MapArea.this.mapStatus.setSolvable( true ); 	}
+				else 										{ MapArea.this.mapStatus.setSolvable( false );	}
+			}
 		}});
 		
 		this.panel.addMouseMotionListener(new MouseMotionAdapter(){public void mouseMoved( MouseEvent e ) 
 		{
-			int row	= e.getY() / 32;
-			int col = e.getX() / 32;
-			
-			if( MapArea.this.isInArea( row, col ) )
+			if( MapArea.this.testmode == false )
 			{
-				String focusedType	= MapArea.this.map.tile( row, col ).type();
-	
-				if( focusedType.equals( "beam" ) || focusedType.equals( "beamsource" ) )
+				int row	= e.getY() / 32;
+				int col = e.getX() / 32;
+				
+				if( MapArea.this.isInArea( row, col ) )
 				{
-					Tile beamsource	= MapArea.this.map.tile( row, col );
-					
-					if( focusedType.equals( "beam" ) )
+					String focusedType	= MapArea.this.map.tile( row, col ).type();
+		
+					if( focusedType.equals( "beam" ) || focusedType.equals( "beamsource" ) )
 					{
-						beamsource 	= beamsource.parent();
+						Tile beamsource	= MapArea.this.map.tile( row, col );
+						
+						if( focusedType.equals( "beam" ) )
+						{
+							beamsource 	= beamsource.parent();
+						}
+						
+						MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
+						MapArea.this.highlightBeamsource( beamsource );
 					}
-					
-					MapArea.this.highlightBeams( beamsource.row(), beamsource.col() );
-					MapArea.this.highlightBeamsource( beamsource );
 				}
 			}
 		}});
@@ -122,8 +133,6 @@ public class MapArea
 		
 		if( Solvable.check( this.map ) )	{ this.mapStatus.setSolvable( true ); 	}
 		else 								{ this.mapStatus.setSolvable( false );	}
-		
-		
 	}
 	
 	public boolean delRow()
@@ -177,6 +186,43 @@ public class MapArea
 		}
 	}
 	
+	public void setTestmode( boolean testmode )	
+	{
+		this.testmode	= testmode;
+		
+		if( testmode == true )	
+		{ 
+			this.mapCopy = this.map.createClone(); 	
+		} else					
+		{ 
+			this.map = this.mapCopy;
+			this.scroll.repaint();
+		}
+	}
+	
+	public void setTestmodeMap( TileArray tMap )
+	{
+		int tRows				= tMap.rows();
+		int tCols				= tMap.cols();
+		BufferedImage imgField	= this.tileset.tile( 1 ).image();
+		
+		for( int row = 0; row < tRows; row++ )
+		{
+			for( int col = 0; col < tCols; col++ )
+			{
+				Tile tile	= tMap.tile( row, col );
+				
+				if( tile.type().equals( "field" ) && !tile.image().equals( imgField ) )
+				{
+					tMap.tile( row, col ).image( imgField );
+				}
+			}
+		}
+		
+		this.map	= tMap;
+		this.scroll.repaint();
+	}
+	
 	private void paintComponent( Graphics g )
 	{
 		Rectangle r	= g.getClipBounds();
@@ -193,23 +239,33 @@ public class MapArea
 			{
 				Tile tile				= this.map.tile( row, col );
 				BufferedImage imgTile	= tile.image();
-				int strength			= tile.strength();
+				int strength			= ( this.testmode == false )? tile.strength() : this.mapCopy.tile( row, col ).strength();
 				
 				g.drawImage( imgTile, col * 32, row * 32, this.panel );
 				
-				if( tile.focused() == true )
+				if( this.testmode == false )
 				{
-					if( tile.type().equals( "beam" ) )
+					if( tile.focused() == true )
 					{
-						g.setColor( new Color( 255, 0, 0, 135 ) );
-					} else if( tile.type().equals( "beamsource" ) )
-					{
-						g.setColor( new Color( 3, 115, 210, 135 ) );
+						if( tile.type().equals( "beam" ) )
+						{
+							g.setColor( new Color( 255, 0, 0, 135 ) );
+						} else if( tile.type().equals( "beamsource" ) )
+						{
+							g.setColor( new Color( 3, 115, 210, 135 ) );
+						}
+						
+						g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
 					}
-					
-					g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
+				} else
+				{
+					if( tile.type().equals( "field" ) )
+					{
+						g.setColor( tile.color() );
+						g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
+					} 
 				}
-				
+					
 				// Ich denke max 999 Beams/Beamsource sollten reichen!
 				// Keine Lust auf Relative Größenermittlung der FontSizes sowie Padding,
 				// Margin, etc. in Relation zum parentTile !!!
