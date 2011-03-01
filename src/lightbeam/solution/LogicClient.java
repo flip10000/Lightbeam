@@ -18,7 +18,7 @@ public class LogicClient extends GameObjects
 		this.result	= false;
 		
 		this.simulateMode( this.map );		
-		
+
 		LogicContext lContext	= new LogicContext( this.map );
 		
 		lContext.setLogic( new ConclusiveReachable() );
@@ -26,20 +26,18 @@ public class LogicClient extends GameObjects
 		while( lContext.getResult() == true )
 		{		
 			lContext.executeLogic();
+			this.map	= lContext.getMap();
+			this.markTiles();
+			callee.logicResponse( this.map );
 
-			try { callee.logicResponse( lContext.getMap() ); }
-			catch( Exception e ) {}
-			
 			if( lContext.getResult() == true )
 			{
-				this.map	= lContext.getMap();
-				this.result	= true;
-				
-				lContext.setMap( this.map );
+				this.result = true;
 			} else
 			{
 				// ToDo: Nächste Strategie auswählen!!
 			}
+
 		}
 	}
 	
@@ -57,11 +55,26 @@ public class LogicClient extends GameObjects
 			{
 				Tile tile	= map.tile( row, col );
 				
-				if( tile.type().equals( "beam" ) ) { tile.type( "field" ); }
+				if( tile.type().equals( "beam" ) ) 			{ tile.type( "field" );		}
+				if( !tile.type().equals( "beamsource" ) )	{ tile.color( Tile.CRED );	}
+			}
+		}
+	}
+	
+	private void markTiles()
+	{
+		int rows	= this.map.rows();
+		int cols	= this.map.cols();
+		
+		for( int row = 0; row < rows; row++ )
+		{
+			for( int col = 0; col < cols; col++ )
+			{
+				Tile tile	= this.map.tile( row, col );
 				
-				if( !tile.type().equals( "beamsource" ) )
+				if( tile.type().equals( "beam" ) && !tile.color().equals( Tile.CGREEN ) )
 				{
-					tile.color( Tile.CRED );
+					this.map.tile( row, col ).color( Tile.CGREEN );
 				}
 			}
 		}
