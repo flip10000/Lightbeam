@@ -263,7 +263,11 @@ public class MapArea
 					{
 						g.setColor( tile.color() );
 						g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
-					} 
+					} else if( tile.type().equals( "beam" ) )
+					{
+						g.setColor( tile.color() );
+						g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
+					}
 				}
 					
 				// Ich denke max 999 Beams/Beamsource sollten reichen!
