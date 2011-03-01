@@ -231,7 +231,6 @@ public class TileArray implements Serializable
 		}
 		
 		return foundTiles;
-		
 	}
 	
 	public ArrayList<Tile> removeFrom( int posSource, int fromDirection, ArrayList<Tile> inTiles )
@@ -397,8 +396,8 @@ public class TileArray implements Serializable
 	public Tile getRightBlocking( Tile tile, String type )
 	{
 		int tRow	= tile.row();
-		
-		for( int col = tile.col() + 1; col < this.rows; col++ )
+
+		for( int col = tile.col() + 1; col < this.cols; col++ )
 		{
 			Tile lTile	= this.tile( tRow, col );
 			
