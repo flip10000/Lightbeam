@@ -23,7 +23,7 @@ public class ConclusiveReachable implements ILogicStrategy
 		// Wenn vorhanden:
 		if( beamsources != null )
 		{
-			int sSources		= beamsources.size();
+			int sSources			= beamsources.size();
 			
 			this.fieldToSource		= new ArrayList<int[][]>();
 			this.fields				= new int[this.map.rows()][this.map.cols()];
@@ -40,6 +40,7 @@ public class ConclusiveReachable implements ILogicStrategy
 				if( strenght > 0 )
 				{
 					int pos[][]		= new int[4][2];
+					
 					// Alle möglichen Feld-Positionen (nur Spalten) von links der Source
 					// speichern:
 					pos[0][0]		= sRow;
