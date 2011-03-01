@@ -14,6 +14,8 @@ public class LogicClient
 	public void check( TileArray map )
 	{
 		this.map	= map.createClone();
+		this.result	= false;
+		
 		this.simulateMode( this.map );		
 		
 		LogicContext lContext	= new LogicContext( this.map );
@@ -34,8 +36,6 @@ public class LogicClient
 			{
 				// ToDo: Nächste Strategie auswählen!!
 			}
-			
-			
 		}
 	}
 	
