@@ -39,7 +39,7 @@ public class LogicClient extends GameObjects
 			this.map	= this.lContext.getMap();
 			this.markTiles();
 			callee.logicResponse( this.map );
-
+			
 			if( this.lContext.getResult() == false )
 			{
 				this.result[this.logicStrategy-1] = false;
