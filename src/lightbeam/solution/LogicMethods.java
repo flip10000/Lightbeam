@@ -3,7 +3,7 @@ package lightbeam.solution;
 import core.tilestate.Tile;
 import core.tilestate.TileArray;
 
-public class LogicMethods implements ILogicStrategy
+public class LogicMethods
 {
 	private TileArray map			= null;
 	private boolean result			= false;
@@ -13,8 +13,6 @@ public class LogicMethods implements ILogicStrategy
 	
 	public TileArray getMap()					{ return this.map; 		}	
 	public boolean getResult() 					{ return this.result;	}	
-
-	public void execute()						{						}
 	
 	// Letztmögliches "Feld" links von der Beamsource zurückgeben:
 	protected int getTillLastLeftField( Tile source )
@@ -213,7 +211,7 @@ public class LogicMethods implements ILogicStrategy
 				int calcStrength	= this.map.tile( sRow, sCol ).strength() - ( sRow - fRow );
 				int newStrength		= ( calcStrength > 0 )? calcStrength : 0;
 				
-				this.map.tile( fRow, sCol ).strength( newStrength );
+				this.map.tile( sRow, sCol ).strength( newStrength );
 			}
 			// Nein, Felder sollen unterhalb von der Beamsource zugeordnet werden:
 			else
