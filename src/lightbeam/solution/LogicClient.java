@@ -1,5 +1,7 @@
 package lightbeam.solution;
 
+import java.util.ArrayList;
+
 import core.GameObjects;
 import core.tilestate.Tile;
 import core.tilestate.TileArray;
@@ -22,13 +24,16 @@ public class LogicClient extends GameObjects
 	
 	public void check( TileArray map, ILogicResponse callee )
 	{
-		this.map		= map.createClone();
+		this.done			= false;
+		this.map			= map.createClone();
+		this.logicStrategy	= 1;
 		this.resetResults();
 		this.simulateMode( this.map );		
-		this.lContext	= new LogicContext( this.map );
+		this.lContext		= new LogicContext( this.map );
 		
 		while( this.done == false )
 		{
+			this.recalcStrength();
 			this.setStrategy();
 			this.lContext.executeLogic();
 			this.map	= this.lContext.getMap();
@@ -119,5 +124,17 @@ public class LogicClient extends GameObjects
 				this.logicStrategy	= 1;
 				break;
 		}
+	}
+	
+	private void recalcStrength()
+	{
+		ArrayList<Tile> beamsources	= this.map.getTilesInArea( "beamsource" );
+		int bSize					= beamsources.size();
+		
+		for( int i = 0; i < bSize; i++ )
+		{
+//			ArrayList<Tile> beams	= this.
+		}
+		
 	}
 }
