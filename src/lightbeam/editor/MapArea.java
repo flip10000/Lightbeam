@@ -192,7 +192,24 @@ public class MapArea
 		
 		if( testmode == true )	
 		{ 
-			this.mapCopy = this.map.createClone(); 	
+			int rows				= this.map.rows();
+			int cols				= this.map.cols();
+			
+			this.mapCopy 			= this.map.createClone();
+			BufferedImage imgField	= this.tileset.tile( 1 ).image();
+			
+			for( int row = 0; row < rows; row++ )
+			{
+				for( int col = 0; col < cols; col++ )
+				{
+					Tile tile	= this.map.tile( row, col );
+					
+					if( tile.type().equals( "beam" ) )
+					{
+						this.map.tile( row, col ).image( imgField );
+					}
+				}
+			}
 		} else					
 		{ 
 			this.map = this.mapCopy;
@@ -265,6 +282,46 @@ public class MapArea
 						g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
 					} else if( tile.type().equals( "beam" ) )
 					{
+						int direction	= tile.direction();
+						
+						g.setColor( Tile.CBLUE_NOALPHA );
+						
+						if( tile.isEnd() == false )
+						{
+							if( direction == Tile.HORIZONTAL )
+							{
+								g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 14, 28, 5 );								
+							} else
+							{
+								g.fillRect( ( col * 32 ) + 14, ( row * 32 ) + 2, 5, 28 );
+							}
+						} else
+						{
+							if( direction == Tile.HORIZONTAL )
+							{
+								if( col < tile.parent().col() )
+								{
+									g.fillRect( ( col * 32 ) + 6, ( row * 32 ) + 14, 24, 5 );
+									g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 5, 28 );
+								} else
+								{
+									g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 14, 24, 5 );
+									g.fillRect( ( col * 32 ) + 26, ( row * 32 ) + 2, 5, 28 );
+								}
+							} else
+							{
+								if( row < tile.parent().row() )
+								{
+									g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 5 );
+									g.fillRect( ( col * 32 ) + 14, ( row * 32 ) + 6, 5, 24 );
+								} else
+								{
+									g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 26, 28, 5 );
+									g.fillRect( ( col * 32 ) + 14, ( row * 32 ) + 2, 5, 24 );
+								}
+							}
+						}
+						
 						g.setColor( tile.color() );
 						g.fillRect( ( col * 32 ) + 2, ( row * 32 ) + 2, 28, 28 );
 					}
