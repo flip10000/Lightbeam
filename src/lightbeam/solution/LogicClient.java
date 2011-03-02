@@ -27,7 +27,7 @@ public class LogicClient extends GameObjects
 		this.done			= false;
 		this.map			= map.createClone();
 		this.logicStrategy	= 1;
-		this.resetResults();
+		this.reset();
 		this.simulateMode( this.map );		
 		this.lContext		= new LogicContext( this.map );
 		
@@ -48,7 +48,7 @@ public class LogicClient extends GameObjects
 				else									{ this.logicStrategy++;	}
 			} else
 			{
-				this.resetResults();
+				this.reset();
 			}
 		}
 	}
@@ -92,9 +92,10 @@ public class LogicClient extends GameObjects
 		}
 	}
 	
-	private void resetResults()
+	private void reset()
 	{
 		for( int i = 0; i < this.amountOfStrategies; i++ ) { this.result[i]	= true; }
+		this.logicStrategy = 1;
 	}
 	
 	private boolean endOfStrategies()
