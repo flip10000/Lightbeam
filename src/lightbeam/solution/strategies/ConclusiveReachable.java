@@ -18,6 +18,7 @@ public class ConclusiveReachable extends LogicMethods implements ILogicStrategy
 	{
 		super.setResult( false );
 		this.map	= super.getMap();
+		
 		// Alle Beamsources in der map holen:
 		ArrayList<Tile> beamsources	= this.map.getTilesInArea( "beamsource" );
 		
@@ -140,8 +141,6 @@ public class ConclusiveReachable extends LogicMethods implements ILogicStrategy
 					}
 				}
 			}
-			
-			super.setMap( this.map );
 		} 
 	}
 }
