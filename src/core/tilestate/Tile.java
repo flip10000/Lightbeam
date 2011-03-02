@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class Tile implements Serializable, Cloneable
 {
 	public final transient static Color CBLUE			= new Color( 3, 115, 210, 110 );
+	public final transient static Color CBLUE_NOALPHA	= new Color( 3, 115, 210, 255 );
 	public final transient static Color CRED			= new Color( 255, 0, 0, 100 );
 	public final transient static Color CYELLOW			= new Color( 255, 212, 0, 100 );
 	public final transient static Color CGREEN			= new Color( 76, 188, 64, 100 );
@@ -22,6 +23,7 @@ public class Tile implements Serializable, Cloneable
 	private int row								= 0;
 	private int col								= 0;
 	private boolean isSolution					= false;
+	private boolean isEnd						= false;
 	private Color color							= new Color( 255, 255, 255, 0 );
 	private transient BufferedImage image		= null;
 
@@ -62,6 +64,7 @@ public class Tile implements Serializable, Cloneable
 	public void hidden( boolean hidden )		{ this.hidden = hidden;				}
 	public void focus( boolean blFocus )		{ this.focused = blFocus;			}
 	public void solution( boolean isSolution )	{ this.isSolution = isSolution;		}
+	public void isEnd( boolean isEnd )			{ this.isEnd = true;				}
 	
 	// Geta - Methoden
 	public Tile parent()						{ return this.parent; 				}	
@@ -76,6 +79,7 @@ public class Tile implements Serializable, Cloneable
 	public boolean focused()					{ return this.focused;				}
 	public boolean hidden()						{ return this.hidden;				}
 	public boolean solution()					{ return this.isSolution;			}
+	public boolean isEnd()						{ return this.isEnd;				}					
 	
 	protected Object clone()
 	{
