@@ -174,7 +174,7 @@ public class MapSettings extends GameObjects
 		this.panelSettings.add( this.btnColsUp );
 		this.panelSettings.add( this.btnColsDown );
 		
-		this.panelSettings.setBounds( 5, 5 , iWidth, iHeight );	
+		this.panelSettings.setBounds( 5, 85, iWidth, iHeight );	
 	}
 	
 	public JPanel panel() { return this.panelSettings; }
