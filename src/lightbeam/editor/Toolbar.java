@@ -57,9 +57,9 @@ public class Toolbar
 		this.btnSave.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 		this.btnSettings.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 		
-		this.btnNew.setToolTipText( "Neues Spielfeld anlegen!" );
-		this.btnOpen.setToolTipText( "Gespeichertes Spielfeld öffnen!" );
-		this.btnSave.setToolTipText( "Aktuelles Spielfeld speichern!" );
+		this.btnNew.setToolTipText( "Neues Karte erstellen!" );
+		this.btnOpen.setToolTipText( "Gespeicherte Karte öffnen!" );
+		this.btnSave.setToolTipText( "Aktuelles Karte speichern!" );
 		this.btnClose.setToolTipText( "Editor schließen!" );
 		this.btnSettings.setToolTipText( "Einstellungen!" );
 		
@@ -86,10 +86,10 @@ public class Toolbar
 		// Map speichern:
 		this.btnSave.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				Toolbar.this.editor.saveMap();
+				Toolbar.this.editor.saveMap( false );
 			}
 		});
-
+		
 		// Editor Einstellungen:
 		this.btnSettings.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
