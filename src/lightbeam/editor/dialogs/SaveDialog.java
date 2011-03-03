@@ -32,7 +32,8 @@ public class SaveDialog
 	private JTextField inpMap			= new JTextField();
 	private MapArea mapArea				= null;
 	private OpenDialog dOpen			= OpenDialog.getInstance();					
-	
+	private boolean saved				= false;
+	private String saveMapName			= null;
 	private SaveDialog() {}
 	
 	public static SaveDialog getInstance() { return dSave; }
@@ -53,58 +54,82 @@ public class SaveDialog
 		this.pane 		= new JOptionPane( this.panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION );
 	}
 	
-	public void showDialog()
+	public void showDialog( boolean saveAs )
 	{
 		ArrayList<Object> selMap	= this.dOpen.getMap();
+		String[][] maps				= this.dOpen.getMaps();
+		
+		this.saved					= false;
+		this.inpMap.setText( "" );
 
-		if( selMap != null ) { this.inpMap.setText( (String)selMap.get( 0 ) ); }
-		
-		this.pane.createDialog( "Karte speichern" ).setVisible( true );
-		
-		if( this.pane.getValue() != null )
+		if( selMap.get(0) != null ) 
+		{ 
+			this.inpMap.setText( (String)selMap.get( 0 ) ); 
+		} else if( this.saveMapName != null )
 		{
-			int selOption	= ( (Integer)this.pane.getValue() ).intValue();
-			
-			if( selOption == JOptionPane.OK_OPTION )
+			this.inpMap.setText( this.saveMapName );
+			this.saveMapName = null;
+		}
+		
+		if( saveAs == true || selMap.get(0) == null ) 
+		{ 
+			this.pane.createDialog( "Karte speichern unter" ).setVisible( true );
+		
+			if( this.pane.getValue() != null )
 			{
-				String mapName			= this.inpMap.getText();
-				String pathMaps			= EditorSettingsDialog.getInstance().getPath();
-
-				if( pathMaps != null && !mapName.equals( "" ) )
+				int selOption	= ( (Integer)this.pane.getValue() ).intValue();
+				
+				if( selOption == JOptionPane.OK_OPTION )
 				{
-					this.proceedSaving( pathMaps, mapName );
-				} else
-				{
-					if( pathMaps == null )
+					String mapName			= this.inpMap.getText();
+					String pathMaps			= EditorSettingsDialog.getInstance().getPath();
+	
+					if( pathMaps != null && !mapName.equals( "" ) )
 					{
-						JPanel panelNoPath	= new JPanel();
-						
-						panelNoPath.setLayout( new BorderLayout() );
-						
-						JLabel lblHint		= new JLabel( "Zur Speicherung Ihrer Karte müssen Sie einen Zielpfad festlegen!" );
-						JLabel lblHint2		= new JLabel( "Klicken Sie auf \"Ok\" um diesen festzulegen!" );
-						
-						panelNoPath.add( lblHint, BorderLayout.NORTH );
-						panelNoPath.add( lblHint2, BorderLayout.SOUTH );
-						
-						JOptionPane dSetPath	= new JOptionPane( panelNoPath, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION );
-						dSetPath.createDialog( "Speicherort hinterlegen!" ).setVisible( true );
-						
-						if( dSetPath.getValue() != null )
+						this.saved = this.proceedSaving( pathMaps, mapName );
+					} else
+					{
+						if( pathMaps == null )
 						{
-							int selected	= ( (Integer)dSetPath.getValue() ).intValue();
+							JPanel panelNoPath	= new JPanel();
 							
-							if( selected == 0 )
+							panelNoPath.setLayout( new BorderLayout() );
+							
+							JLabel lblHint		= new JLabel( "Zur Speicherung Ihrer Karte müssen Sie einen Zielpfad festlegen!" );
+							JLabel lblHint2		= new JLabel( "Klicken Sie auf \"Ok\" um diesen festzulegen!" );
+							
+							panelNoPath.add( lblHint, BorderLayout.NORTH );
+							panelNoPath.add( lblHint2, BorderLayout.SOUTH );
+							
+							JOptionPane dSetPath	= new JOptionPane( panelNoPath, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION );
+							dSetPath.createDialog( "Speicherort hinterlegen!" ).setVisible( true );
+							
+							if( dSetPath.getValue() != null )
 							{
-								EditorSettingsDialog.getInstance().showDialog();
-								this.showDialog();
+								int selected	= ( (Integer)dSetPath.getValue() ).intValue();
+								
+								if( selected == 0 )
+								{
+									EditorSettingsDialog.getInstance().showDialog();
+									this.showDialog( saveAs );
+								}
 							}
 						}
 					}
 				}
 			}
-		}
+		} 
 	}
+	
+	public boolean saveMapName( String name )
+	{
+		String pathMaps	= EditorSettingsDialog.getInstance().getPath(); 
+		
+		return false;
+	}
+	
+	public String getSavedMapName()				{ return this.inpMap.getText();	}
+	public void setSaveMapName( String name )	{ this.saveMapName	= name;		}
 	
 	private String getMapName( String mapDest )
 	{
@@ -152,14 +177,22 @@ public class SaveDialog
 		}		
 	}
 	
-	private void proceedSaving( String pathMaps, String mapName )
+	public boolean saved()
+	{
+		boolean saved	= this.saved;
+		this.saved		= false;
+		
+		return saved;
+	}
+	
+	private boolean proceedSaving( String pathMaps, String mapName )
 	{
 		File dir			= new File( pathMaps );
 		String[] files		= dir.list();
 		int amount			= 0;
 		boolean mExists		= false;
 		String loadedMap	= this.dOpen.getLoadedMapDest();
-		
+
 		if( files != null && loadedMap == null )
 		{
 			amount		= files.length;
@@ -179,8 +212,8 @@ public class SaveDialog
 		
 		if( !mExists )
 		{
-			if( loadedMap != null )	{ this.saveMap( loadedMap, mapName ); 									}
-			else					{ this.saveMap( pathMaps + "/map" + amount + this.extMap, mapName );	}
+			if( loadedMap != null )	{ return this.saveMap( loadedMap, mapName );								}
+			else					{ return this.saveMap( pathMaps + "/map" + amount + this.extMap, mapName );	}
 		} else
 		{
 			JPanel panelQuestion	= new JPanel();
@@ -202,16 +235,18 @@ public class SaveDialog
 
 				if( selected == 0 )
 				{
-					this.saveMap( pathMaps + "/map" + amount + this.extMap, mapName );
+					return this.saveMap( pathMaps + "/map" + amount + this.extMap, mapName );
 				} else
 				{
-					this.showDialog();
+					this.showDialog( true );
 				}
 			}
-		}		
+		}
+		
+		return false;
 	}
 	
-	private void saveMap( String mapDest, String mapName )
+	private boolean saveMap( String mapDest, String mapName )
 	{
 		try 
 		{
@@ -228,11 +263,16 @@ public class SaveDialog
 				write.close();
 			} catch( IOException e )
 			{
+				return false;
 				// TODO Auto-generated catch block
+				
 			}
 		} catch( FileNotFoundException e )
 		{
+			return false;
 			// TODO Auto-generated catch block
 		}
+		
+		return true;
 	}
 }
