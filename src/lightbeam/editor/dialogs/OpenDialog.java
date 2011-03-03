@@ -1,5 +1,6 @@
 package lightbeam.editor.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,6 +23,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
+import lightbeam.editor.Editor;
+import lightbeam.editor.MapName;
 
 import core.tilestate.TileArray;
 
@@ -35,7 +40,8 @@ public class OpenDialog
 	private EditorSettingsDialog dSettings	= EditorSettingsDialog.getInstance();
 	private JPanel panel					= new JPanel();
 	private JLabel lblOpen					= new JLabel( "Kartenauswahl:" );
-	private JLabel lblMapSelection			= new JLabel( "Aktuelle Auswahl:" );
+	private JLabel lblMapSelection			= new JLabel( "Auswahl:" );
+	private JButton btnDelete				= new JButton( "Löschen" );
 	private String[][] mapRows				= null;
 	private String[] mapDest				= null;
 	private DefaultTableModel mapModel 		= new DefaultTableModel( mapRows, mapCols );
@@ -49,18 +55,21 @@ public class OpenDialog
 	private JScrollPane scroll			= new JScrollPane( mapTable );
 	private JTextField txtMapSelected	= new JTextField( "<keine Auswahl>" );
 	private String selMapDest			= null;
+	private int selTableInx				= -1;
 	
 	private String loadedMapName		= null;
 	private TileArray loadedTileArray	= null;
 	private String loadedDifficulty		= null;
 	private String loadedBuildStatus	= null;
+	private Editor editor				= null;
+	private String loadedDest			= null;
 	
 	public static OpenDialog getInstance()	{ return dOpen; }
 	
 	private OpenDialog() 
 	{
 		this.panel.setLayout( null );
-		this.panel.setPreferredSize( new Dimension( 400, 400 ) );
+		this.panel.setPreferredSize( new Dimension( 400, 410 ) );
 		
 		this.lblOpen.setBounds( new Rectangle( 10, 10, 120, 20 ) );
 		this.scroll.setBounds( new Rectangle( 10, 30, 350, 350 ) );
@@ -77,18 +86,28 @@ public class OpenDialog
 			}
 		});
 
-		this.lblMapSelection.setBounds( new Rectangle( this.scroll.getBounds().x, this.scroll.getBounds().y + this.scroll.getBounds().height, 110, 20 ) );
-		this.txtMapSelected.setBounds( this.lblMapSelection.getBounds().x + this.lblMapSelection.getBounds().width, this.scroll.getBounds().y + this.scroll.getBounds().height, this.scroll.getBounds().width - this.lblMapSelection.getBounds().width, 20 );
+		this.lblMapSelection.setBounds( new Rectangle( this.scroll.getBounds().x, this.scroll.getBounds().y + this.scroll.getBounds().height + 5, 60, 20 ) );
+		this.txtMapSelected.setBounds( this.lblMapSelection.getBounds().x + this.lblMapSelection.getBounds().width, this.scroll.getBounds().y + this.scroll.getBounds().height + 5, this.scroll.getBounds().width - this.lblMapSelection.getBounds().width - 90, 20 );
+		this.btnDelete.setBounds( this.txtMapSelected.getBounds().x + this.txtMapSelected.getBounds().width + 4, this.txtMapSelected.getBounds().y, 85, this.txtMapSelected.getBounds().height );
+		
 		this.txtMapSelected.setEditable( false );
 		
 		this.panel.add( this.lblOpen );
 		this.panel.add( this.scroll );
 		this.panel.add( this.lblMapSelection );
 		this.panel.add( this.txtMapSelected );
+		this.panel.add( this.btnDelete );
+		
+		this.btnDelete.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e)
+		{ 
+			OpenDialog.this.deleteMap();
+		}});
 	}
 	
-	public void showDialog()
+	public void showDialog( Editor editor )
 	{
+		this.editor	= editor;
+		
 		this.resetClassVars();
 		this.resetTable();
 		this.fillRows();
@@ -131,6 +150,8 @@ public class OpenDialog
 	
 	private void loadMap()
 	{
+		this.loadedDest	= null;
+		
 		FileInputStream file;
 		
 		try 
@@ -155,6 +176,8 @@ public class OpenDialog
 					// ToDo: Geladener Map-Status:
 //					this.loadedBuildStatus	= (String) read.readObject();
 					this.loadedBuildStatus	= "Spielbar";
+					
+					this.loadedDest			= this.selMapDest;
 				} catch( ClassNotFoundException e )
 				{
 					// TODO Passende Fehlermeldung (read.close() muss bleiben!!!)!
@@ -170,12 +193,11 @@ public class OpenDialog
 		}
 	}
 	
-	private void fillRows()
+	public String[][] getMaps() 
 	{
-		this.mapRows		= null;
-		int cntMap			= 0;
+		String pathMaps		= this.dSettings.getPath();
 		String[][] rows		= null;
-		String pathMaps		= this.dSettings.getPath();		
+		int cntMap			= 0;
 		
 		if( pathMaps != null )
 		{
@@ -231,7 +253,16 @@ public class OpenDialog
 					}
 				}
 			}
-		} 
+		}
+		
+		return rows;
+	}
+	
+	private void fillRows()
+	{
+		this.mapRows		= null;
+		String[][] rows		= this.getMaps();
+		int cntMap			= rows.length;
 		
 		if( rows != null )
 		{
@@ -276,6 +307,8 @@ public class OpenDialog
 	
 	private void resetTable()
 	{
+		this.selTableInx	= -1;
+		
 		this.txtMapSelected.setText( "<keine Auswahl>" );
 		
 		while( this.mapModel.getRowCount() > 0 ) { this.mapModel.removeRow( this.mapModel.getRowCount() - 1 ); }
@@ -290,5 +323,97 @@ public class OpenDialog
 			this.selMapDest		= this.mapDest[rowSelected];
 			this.txtMapSelected.setText( (String)this.mapTable.getModel().getValueAt( rowSelected, 0 ) );
 		}
+	}
+	
+	private void deleteMap()
+	{
+		JPanel panelNoPath	= new JPanel();
+		
+		panelNoPath.setLayout( new BorderLayout() );
+		
+		JLabel lblHint		= new JLabel( "Die Karte wird im Moment von Ihnen bearbeitet!" );
+		JLabel lblHint2		= new JLabel( "Klicken Sie auf \"Ok\" um die Karte trotzdem zu löschen!" );
+		
+		panelNoPath.add( lblHint, BorderLayout.NORTH );
+		panelNoPath.add( lblHint2, BorderLayout.SOUTH );
+		
+		int rowSelected		= this.mapTable.getSelectedRow();
+		
+		if( rowSelected > -1 )
+		{
+			String selMapDest		= this.mapDest[rowSelected];
+
+			if( selMapDest	!= this.loadedDest )
+			{
+				lblHint.setText( "Möchten Sie die Karte wirklich löschen?" );
+				lblHint2.setText( "" );
+				
+				JOptionPane dQuestion	= new JOptionPane( panelNoPath, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION );
+				
+				dQuestion.createDialog( "Fehler beim löschen" ).setVisible( true );
+				
+				if( dQuestion.getValue() != null )
+				{
+					int selected	= ( (Integer)dQuestion.getValue() ).intValue();
+					
+					if( selected == 0 )
+					{
+						if( this.proceedDelete( selMapDest ) == false )
+						{
+							lblHint.setText( "Fehler beim löschen der Karte! Stellen Sie sicher, dass keine weitere Anwendung auf die Karte" );
+							lblHint2.setText( "zugreift und wiederholen Sie den Vorgang erneut!" );
+							
+							JOptionPane dError	= new JOptionPane( panelNoPath, JOptionPane.ERROR_MESSAGE, JOptionPane.OK_CANCEL_OPTION );
+							
+							dError.createDialog( "Fehler beim löschen" ).setVisible( true );
+						}
+					}
+				}
+			} else
+			{
+				JOptionPane dWarning	= new JOptionPane( panelNoPath, JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION );
+				dWarning.createDialog( "Geöffnete Karte löschen" ).setVisible( true );
+				
+				if( dWarning.getValue() != null )
+				{
+					int selected	= ( (Integer)dWarning.getValue() ).intValue();
+					
+					if( selected == 0 )
+					{
+						this.editor.newMap();
+						
+						if( this.proceedDelete( selMapDest ) == false )
+						{
+							lblHint.setText( "Fehler beim löschen der Karte! Stellen Sie sicher, dass keine weitere Anwendung auf die Karte" );
+							lblHint2.setText( "zugreift und wiederholen Sie den Vorgang erneut!" );
+							
+							JOptionPane dError	= new JOptionPane( panelNoPath, JOptionPane.ERROR_MESSAGE, JOptionPane.OK_CANCEL_OPTION );
+							
+							dError.createDialog( "Fehler beim löschen" ).setVisible( true );
+						} 
+					}
+				}
+			}
+		}
+		
+		this.resetClassVars();
+		this.resetTable();
+		this.fillRows();
+	}
+	
+	private boolean proceedDelete( String mapDest )
+	{
+		File map = new File( mapDest );
+	    
+		if( map.exists() && map.isFile() )
+		{
+			map.delete();
+			
+			if( map.exists() ) { return false; }
+
+			return true;
+	    }
+		
+		return false;
 	}
 }
