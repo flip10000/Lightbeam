@@ -97,7 +97,7 @@ public class ForcedToBeam extends LogicMethods implements ILogicStrategy
 					}
 					
 					// Prüfen, ob Beamsource in Umgebung existiert und
-					// einen Beam der aktuellen Beamsource blockiert:
+					// einen Beam den aktuellen Beamsource blockiert:
 					if( lSource != null || tSource != null || rSource != null || bSource != null )
 					{
 						// Differenzen init:
@@ -109,7 +109,7 @@ public class ForcedToBeam extends LogicMethods implements ILogicStrategy
 						// Mit links anfangen, falls Beamsource existiert
 						// und prüfen, ob Stärke der akt. Beamsource größer als Differenz zw.
 						// Beamsources:
-						if( strength > lDiff )
+						if( strength > lDiff && lSource != null )
 						{
 							// Links blockiert:
 							blockings[0]	= true;
@@ -124,7 +124,7 @@ public class ForcedToBeam extends LogicMethods implements ILogicStrategy
 						// Weiter mit oben, falls Beamsource existiert
 						// und prüfen, ob Stärke der akt. Beamsource größer als Differenz zw.
 						// Beamsources:
-						if( strength > tDiff )
+						if( strength > tDiff && tSource != null )
 						{
 							// Oben blockiert:
 							blockings[1]	= true;
@@ -139,7 +139,7 @@ public class ForcedToBeam extends LogicMethods implements ILogicStrategy
 						// Weiter mit rechts, falls Beamsource existiert
 						// und prüfen, ob Stärke der akt. Beamsource größer als Differenz zw.
 						// Beamsources:
-						if( strength > rDiff )
+						if( strength > rDiff && rSource != null )
 						{
 							// Rechts blockiert:
 							blockings[2]	= true;
@@ -154,7 +154,7 @@ public class ForcedToBeam extends LogicMethods implements ILogicStrategy
 						// Weiter mit unten, falls Beamsource existiert
 						// und prüfen, ob Stärke der akt. Beamsource größer als Differenz zw.
 						// Beamsources:
-						if( strength > bDiff )
+						if( strength > bDiff && bSource != null )
 						{
 							// Unten blockiert:
 							blockings[3]	= true;
@@ -173,6 +173,8 @@ public class ForcedToBeam extends LogicMethods implements ILogicStrategy
 
 					while( chkStrength > strength )
 					{
+						this.map	= super.getMap();
+						
 						// Falls links vom Beamsource frei, Beams dort verteilen, soweit es geht:
 						if( blockings[0] == false ) 
 						{
@@ -182,6 +184,13 @@ public class ForcedToBeam extends LogicMethods implements ILogicStrategy
 							int tmpDiff	= ( lBeam == null || ( lSource != null && lBeam.col() < lSource.col() ) )? lDiff : sCol - lBeam.col() - 1;
 							if( tmpDiff > chkStrength ) { tmpDiff = chkStrength; }
 							int tmpCol	= ( sCol - tmpDiff > 0 )? sCol - tmpDiff : 0;
+							if( sRow == 0 && sCol == 0 )
+							{
+								System.out.println(tmpCol);
+								System.out.println(tmpDiff);
+								System.out.println(blockings[2]);
+								System.out.println(blockings[3]);
+							}
 							
 							this.assignFieldsToSource( sRow, tmpCol, source );
 							chkStrength	-= tmpDiff;
