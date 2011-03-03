@@ -15,7 +15,6 @@ import javax.swing.border.TitledBorder;
 import lightbeam.solution.ILogicResponse;
 import lightbeam.solution.LogicClient;
 
-import core.GameObjects;
 import core.tilestate.TileArray;
 
 public class MapStatus implements ILogicResponse
@@ -73,8 +72,7 @@ public class MapStatus implements ILogicResponse
 		
 		this.panelStatus.add( this.btnCheck );
 		
-		this.panelStatus.setBounds( 5, 226, 128, 200 );
-		this.panelStatus.setVisible( true );
+		this.panelStatus.setBounds( 5, 305, 128, 220 );
 		
 		this.btnCheck.addMouseListener( new MouseAdapter(){public void mouseReleased(MouseEvent e){
 			if( MapStatus.this.testmode == 0 )
