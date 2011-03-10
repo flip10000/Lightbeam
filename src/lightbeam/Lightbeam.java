@@ -31,54 +31,54 @@ public class Lightbeam extends Game
 		this.createGUIMenu();
 	}
 	
-	// Aufgerufen durch den GameBuilder ( ab hier belibt alles dem Programmierer überlassen ):
+	// Aufgerufen durch den GameBuilder ( ab hier belibt alles dem Programmierer ï¿½berlassen ):
 	public void execute()					{ this.openGameGUI();	}
 	public String getName()					{ return "Lightbeam";	}
-	public ImageIcon getIcon()				{ return new ImageIcon( "src/fx/Lightbeam/Icon/lightbeam.png" );	}
+	public ImageIcon getIcon()				{ return new ImageIcon( "src/fx/Lightbeam/icon/lightbeam.png" );	}
 	
 	private void createGUIMenu()
 	{
-		this.panel			= new ImagePanel( "./src/fx/Lightbeam/bg/laser.jpg" );
+		this.panel			= new ImagePanel( "src/fx/Lightbeam/bg/background.png" );
 		
-		this.frame.setTitle( "Hauptmenü" );
+		this.frame.setTitle( "Main Menu" );
 		this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.frame.setAlwaysOnTop(true);
 		this.frame.setLayout( new BorderLayout() );
 		this.frame.setResizable( false );
-		this.frame.setSize( 406, 200 );
+		this.frame.setSize( 406, 160 );
 		
 		this.panel.setSize( this.frame.getWidth(), this.frame.getHeight() );
 		
-		JButton playGame 	= new JButton( "Spiel spielen" );
-		playGame.setContentAreaFilled( false );
-		playGame.setBackground( new Color( 0, 0, 0, 25 ) );
-		playGame.setForeground( new Color( 73, 185, 66, 255 ) );
+		JButton playGame 	= new JButton( "New Game" );
+		//playGame.setContentAreaFilled( false );
+		playGame.setBackground( new Color( 67, 67, 67, 255 ) );
+		playGame.setForeground( new Color( 124, 225, 0, 255 ) );
 		playGame.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
-		playGame.setBounds( 10 , 15, 200, 40 );
+		playGame.setBounds( 10 , 20, 100, 40 );
 		playGame.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e) 
 		{
 			Lightbeam.this.closeGameGUI();
 			Lightbeam.this.openPlayground();
 		}});		
 
-		JButton createGame	= new JButton( "Spiel erstellen" );
-		createGame.setContentAreaFilled( false );
-		createGame.setBackground( new Color( 0, 0, 0, 25 ) );
-		createGame.setForeground( new Color( 73, 185, 66, 255 ) );
+		JButton createGame	= new JButton( "Editor" );
+		//createGame.setContentAreaFilled( false );
+		createGame.setBackground( new Color( 67, 67, 67, 255 ) );
+		createGame.setForeground( new Color( 124, 225, 0, 255 ) );
 		createGame.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
-		createGame.setBounds( 10 , 60, 200, 40 );
+		createGame.setBounds( 120 , 20, 100, 40 );
 		createGame.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e) 
 		{
 			Lightbeam.this.closeGameGUI();
 			Lightbeam.this.openEditor();
 		}});
 		
-		JButton closeGame	= new JButton( "Beenden" );
-		closeGame.setContentAreaFilled( false );
-		closeGame.setBackground( new Color( 0, 0, 0, 25 ) );
-		closeGame.setForeground( new Color( 73, 185, 66, 255 ) );
+		JButton closeGame	= new JButton( "Exit Game" );
+		//closeGame.setContentAreaFilled( false );
+		closeGame.setBackground( new Color( 67, 67, 67, 255 ) );
+		closeGame.setForeground( new Color( 124, 225, 0, 255 ) );
 		closeGame.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
-		closeGame.setBounds( 10 , 105, 200, 40 );
+		closeGame.setBounds( 230 , 20, 100, 40 );
 		closeGame.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e) 
 		{
 			Lightbeam.this.closeGameGUI();

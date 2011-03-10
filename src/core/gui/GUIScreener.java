@@ -24,23 +24,23 @@ public class GUIScreener extends JWindow implements Runnable
 	private static final long serialVersionUID = -1844666854822869514L;
 
 	// Instanzvariable auf sich selbst. Es darf nur ein Screener erzeugt werden,
-	// da auch nur einer benötigt wird!
+	// da auch nur einer benï¿½tigt wird!
 	private static GUIScreener screener		= new GUIScreener();
 
 	// Instanzvariable der GameBuilder deklarieren:
 	private Core		gameBuilder		= null;	
 	
 	
-	// Dem JWindow wird ein ImagePanel hinzugefügt, auf welchem
+	// Dem JWindow wird ein ImagePanel hinzugefï¿½gt, auf welchem
 	// per Graphics-Objekt gezeichnet werden kann
 	private ImagePanel 		screenPanel		= null;
 	
 	// Das JWindow wird um ein weiteres Panel zur Statusanzeige des
 	// Ladevorgangs im Rahmen der zu instanziierenden Spiele
-	// ergänzt:
+	// ergï¿½nzt:
 	private JPanel 			progressPanel	= new JPanel();
 	
-	// Label für die Progress-Bar:
+	// Label fï¿½r die Progress-Bar:
 	private JLabel			progressLabel	= new JLabel();
 
 	// Progress-Bar zur Fortschrittsanzeige:
@@ -61,13 +61,13 @@ public class GUIScreener extends JWindow implements Runnable
 	// Button zum links-faden des Spiel-Panels:
 	private JButton			btnRight		= new JButton();
 
-	// ArrayList für die anzuzeigenden Spiele-Buttons:
+	// ArrayList fï¿½r die anzuzeigenden Spiele-Buttons:
 	private ArrayList<JButton> btnGames		= new ArrayList<JButton>();
 	
-	// ArrayList für die anzuzeigenden Spiele-Namen:
+	// ArrayList fï¿½r die anzuzeigenden Spiele-Namen:
 	private ArrayList<String> gameNames		= new ArrayList<String>();
 	
-	// Darzustellender Text, fall über kein Spiel gehovert wird:
+	// Darzustellender Text, fall ï¿½ber kein Spiel gehovert wird:
 	private String 			defaultInfo		= "<no game selected>";
 
 	// Thread zur Animation (fade) des Spiele-Panels:
@@ -87,13 +87,13 @@ public class GUIScreener extends JWindow implements Runnable
 	// Anzahl der vorhandenen Spiele: 
 	private int gLen						= 0;
 	
-	// Margin-Left (für alle CSS-Konformen ;) ) der Spiele-Buttons
+	// Margin-Left (fï¿½r alle CSS-Konformen ;) ) der Spiele-Buttons
 	// im Spiele-Panel:
 	private int marginLeft					= 10;
 
 	private GUIScreener() {}
 	
-	// Instanz zurückgeben:
+	// Instanz zurï¿½ckgeben:
 	public static GUIScreener getInstance()			{ return screener; 			}
 	
 	// Game-Factory zur Steuerung der GUI-Events in Variable speichern:
@@ -102,14 +102,14 @@ public class GUIScreener extends JWindow implements Runnable
 	// Initialisieren der GUIScreener-Komponenten:
 	public void init( String screenerSrc )
 	{
-		// Selbsterklärend:
+		// Selbsterklï¿½rend:
 		this.setFocusable( true );
 		this.setLayout( new BorderLayout() );
 		
 		// A) Vorbereiten der notwendigen GUI-Elemente:
 		
-		// 1) Wir benötigen einen Panel, auf dem die vorhandenen Spiele dargestellt werden.
-		//    Hierfür erzeugen wir ein ImagePanel, um auf diesem per Graphics-Objekt
+		// 1) Wir benï¿½tigen einen Panel, auf dem die vorhandenen Spiele dargestellt werden.
+		//    Hierfï¿½r erzeugen wir ein ImagePanel, um auf diesem per Graphics-Objekt
 		//    ein Background-Image zeichnen:
 		this.screenPanel	= new ImagePanel( new ImageIcon( screenerSrc ).getImage() );
 
@@ -119,13 +119,13 @@ public class GUIScreener extends JWindow implements Runnable
 		this.fadePanel.setLayout( null );
 		this.fadePanel.setDoubleBuffered( true );
 		
-		// 3) Jetzt benötigen wir noch zwei Buttons, um die Spielansicht (fadePanel)
+		// 3) Jetzt benï¿½tigen wir noch zwei Buttons, um die Spielansicht (fadePanel)
 		//    nach rechts bzw links zu faden:
 		//
 		// Button: FadeRight
 		this.btnLeft.setIcon( new ImageIcon( "src/fx/Game/btnLeft.png" ) );
 		this.btnLeft.setContentAreaFilled( false );
-		this.btnLeft.setBackground( new Color( 0, 0, 0, 0 ) );
+		//this.btnLeft.setBackground( new Color( 0, 0, 0, 0 ) );
 		this.btnLeft.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 		this.btnLeft.setBounds( 0, 0, 50, this.screenPanel.getHeight() );
 		this.btnLeft.setDoubleBuffered( true );
@@ -140,7 +140,7 @@ public class GUIScreener extends JWindow implements Runnable
 		// Button: FadeLeft
 		this.btnRight.setIcon( new ImageIcon( "src/fx/Game/btnRight.png" ) );
 		this.btnRight.setContentAreaFilled( false );
-		this.btnRight.setBackground( new Color( 0, 0, 0, 0 ) );		
+		//this.btnRight.setBackground( new Color( 0, 0, 0, 0 ) );		
 		this.btnRight.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 		this.btnRight.setBounds( this.screenPanel.getWidth() - 50, 0, 50, this.screenPanel.getHeight() );
 		this.btnRight.setVisible( false );
@@ -152,36 +152,38 @@ public class GUIScreener extends JWindow implements Runnable
 		}});
 		this.btnRight.setDoubleBuffered( true );	
 		
-		// 4) Nun noch ein Label für das aktuell gehoverte Spiel:
-		this.gameLabel.setBackground( new Color( 0, 0, 0 ) );
-		this.gameLabel.setForeground( new Color( 3, 115, 210, 255 ) );
+		// 4) Nun noch ein Label fï¿½r das aktuell gehoverte Spiel:
+		this.gameLabel.setBackground( new Color( 67, 67, 67, 255 ) );
+		this.gameLabel.setForeground( new Color( 124, 225, 0, 255 ) );
 		this.gameLabel.setText( this.defaultInfo );
 		this.gameLabel.setHorizontalAlignment( JLabel.CENTER );
 		this.gameLabel.setOpaque( true );
 		this.gameLabel.setBounds( 0, this.fadePanel.getHeight() - 15, this.fadePanel.getWidth(), 15 );
 		this.gameLabel.setVisible( false );
 		
-		// 5) Wir erzeugen einen Container für die Progress-Bar und dem Progress-Label:
-		this.progressPanel.setBackground( new Color( 0, 0, 0 ) );		
+		// 5) Wir erzeugen einen Container fï¿½r die Progress-Bar und dem Progress-Label:
+		this.progressPanel.setBackground( new Color( 67, 67, 67, 255 ) );		
 		this.progressPanel.setLayout( new BorderLayout());
 		this.progressPanel.setPreferredSize( new Dimension( this.screenPanel.getWidth(), 20 ) );		
 		this.progressPanel.setBorder( BorderFactory.createLineBorder( Color.BLACK, 2 ) );		
 		
 		// 6) Nun erzeugen wir ein Label mit dem Text "Lade": 
-		this.progressLabel.setBackground( new Color( 0, 0, 0 ) );		
-		this.progressLabel.setForeground( new Color( 3, 115, 210, 255 ) );
+		this.progressLabel.setBackground( new Color( 67, 67, 67, 255 ) );		
+		this.progressLabel.setForeground( new Color( 124, 225, 0, 255 ) );
 		this.progressLabel.setText( " Lade: " );
 		this.progressLabel.setPreferredSize( new Dimension( 53, this.progressPanel.getPreferredSize().height ) );
 
-		// 7) Wir erzeugen eine Progress-Bar für den aktuellen Fortschritt der
+		// 7) Wir erzeugen eine Progress-Bar fï¿½r den aktuellen Fortschritt der
 		//    zu instanziierenden Spiele:
 		this.progressBar.setPreferredSize( new Dimension( this.screenPanel.getWidth() - this.progressLabel.getPreferredSize().width, this.progressLabel.getPreferredSize().height ) );
+		this.progressBar.setForeground( new Color( 124, 225, 0, 255 ) );
+		this.progressBar.setBackground( new Color( 67, 67, 67, 255 ) );
 		
 		// 8) Wie erzeugen einen Exit-Button zum Beenden des Spieles.
 		this.btnExit.setText("Exit");
 		this.btnExit.setContentAreaFilled( false );
-		this.btnExit.setBackground( new Color( 0, 0, 0 ) );	
-		this.btnExit.setForeground( new Color( 3, 115, 210, 255 ) );
+		this.btnExit.setBackground( new Color( 67, 67, 67, 255 ) );	
+		this.btnExit.setForeground( new Color( 124, 225, 0, 255 ) );
 		this.btnExit.setPreferredSize( new Dimension( 55, this.progressPanel.getPreferredSize().height ) );
 		this.btnExit.setVisible( false );
 		
@@ -194,37 +196,37 @@ public class GUIScreener extends JWindow implements Runnable
 		
 		// B) Erzeugen der notwendigen GUI-Elemente:
 		
-		// 1) FadePanel mit Komponenten füllen:
+		// 1) FadePanel mit Komponenten fï¿½llen:
 		this.fadePanel.add( this.gameLabel, null );
 
-		// 2) ScreenPanel mit Komponenten füllen:
+		// 2) ScreenPanel mit Komponenten fï¿½llen:
 		this.screenPanel.add( this.btnLeft, null );
 		this.screenPanel.add( this.btnRight, null );
 		this.screenPanel.add( this.fadePanel, null );
 		
 		// Um flackern zu vermeiden, aktivieren wir die Doppelpufferung. 
-		// Sobald auf dem ImagePanel eine grafische Änderung stattfindet, 
-		// wird zunächst ein komplettes Abbild der Änderung in der Speicher geschrieben.
-		// Nach fertigem rendern wird dieses auf dem Ausgabegerät gezeichnet: 
+		// Sobald auf dem ImagePanel eine grafische ï¿½nderung stattfindet, 
+		// wird zunï¿½chst ein komplettes Abbild der ï¿½nderung in der Speicher geschrieben.
+		// Nach fertigem rendern wird dieses auf dem Ausgabegerï¿½t gezeichnet: 
 		this.screenPanel.setDoubleBuffered( true );
 		
-		// 4) Nun fügen wir dem progressPanel die erzeugten Komponenten hinzu:
+		// 4) Nun fï¿½gen wir dem progressPanel die erzeugten Komponenten hinzu:
 		this.progressPanel.add( this.progressLabel, BorderLayout.WEST );
 		this.progressPanel.add( this.progressBar, BorderLayout.EAST );
 		this.progressPanel.add(this.btnExit, BorderLayout.CENTER);
 		this.btnExit.setVisible(false);
 		
-		// 5) Nun fügen wir die erzeugten Komponenten dem GUIScreener hinzu:
+		// 5) Nun fï¿½gen wir die erzeugten Komponenten dem GUIScreener hinzu:
 		this.add( this.screenPanel, BorderLayout.NORTH );
 		this.add( this.progressPanel, BorderLayout.SOUTH );
 
 		// C) Abschliessende Window-Settings:
 
-		// Im nächsten Schritt passen wir die Höhe und Breite des GUIScreeners
+		// Im nï¿½chsten Schritt passen wir die Hï¿½he und Breite des GUIScreeners
 		// an die beinhaltenden Komponenten an (Autofit): 
 		this.setSize( this.screenPanel.getWidth(), this.screenPanel.getHeight() + this.progressPanel.getPreferredSize().height );
 
-		// Der GUIScreener wird am Ausgabegerät mittig dargestellt:
+		// Der GUIScreener wird am Ausgabegerï¿½t mittig dargestellt:
 		this.setLocationRelativeTo( null );
 		
 		// Der GUIScreener wird angezeigt:
@@ -236,12 +238,13 @@ public class GUIScreener extends JWindow implements Runnable
 	 * Methode zum Anzeigen des Spielauswahl-Bildschirmes
 	 * 
 	 * @param gameIcons
-	 * 			Liste der Icons auswählbarer Spiele
+	 * 			Liste der Icons auswï¿½hlbarer Spiele
 	 * @param gameNames
-	 * 			Liste der Namen auswählbarer Spiele
+	 * 			Liste der Namen auswï¿½hlbarer Spiele
 	 */
 	public void showGames( ArrayList<ImageIcon> gameIcons, ArrayList<String> gameNames )
 	{
+		this.fadePanel.setBackground( new Color( 87, 87, 87, 255 ) );
 		// Zeige Fade-Buttons:
 		this.btnLeft.setVisible( true );
 		this.btnRight.setVisible( true );
@@ -249,27 +252,27 @@ public class GUIScreener extends JWindow implements Runnable
 		// Zeige Spiel-Label:
 		this.gameLabel.setVisible( true );
 		
-		// Ermitteln der Größe des ArrayList (Game-Icons):
+		// Ermitteln der Grï¿½ï¿½e des ArrayList (Game-Icons):
 		this.gLen		= gameIcons.size();
 		
-		// Ermitteln der y-Position für die Abbildung der auswählbaren Spiele:		
-		int g_top		= this.fadePanel.getHeight() / 3;
+		// Ermitteln der y-Position fï¿½r die Abbildung der auswï¿½hlbaren Spiele:		
+		int g_top		= this.fadePanel.getHeight() / 4;
 		
 		// Game-Icons in Form von Buttons generieren
 		// und mit Click/Hover-Events versehen:
 		for( int cntIco = 0; cntIco < this.gLen; cntIco++ )
 		{
-			// Button für Spiel erzeugen:
+			// Button fï¿½r Spiel erzeugen:
 			JButton btnGame	= new JButton();
 			
 			// Spiel-Icon auf Button platzieren:
 			btnGame.setIcon( gameIcons.get( cntIco ) );
 			
 			// Das versteht sich von selbst:
-			btnGame.setBackground( new Color( 0, 0, 0 ) );
-			btnGame.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder(new Color( 1, 69, 117, 255 ) ), BorderFactory.createLoweredBevelBorder() ) );
+			btnGame.setBackground( new Color( 0, 0, 0, 255 ) );
+			btnGame.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createLineBorder(new Color( 124, 255, 0, 255 ) ), BorderFactory.createLoweredBevelBorder() ) );
 			btnGame.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
-			btnGame.setBounds( ( cntIco *  100 ) + ( cntIco + 1 ) * this.marginLeft, g_top, 100, 80 );
+			btnGame.setBounds( ( cntIco *  100 ) + ( cntIco + 1 ) * this.marginLeft, g_top, 100, 100 );
 			btnGame.setDoubleBuffered( true );
 			
 			// Hover-Event (Hier MouseEnter) erzeugen:
@@ -282,7 +285,7 @@ public class GUIScreener extends JWindow implements Runnable
 			// MouseLeave-Event (Hier MouseExited) erzeugen:
 			btnGame.addMouseListener(new MouseAdapter(){public void mouseExited( MouseEvent e ) 
 			{
-				// Spielname ( in Label: gameLabel ) löschen:
+				// Spielname ( in Label: gameLabel ) lï¿½schen:
 				clearGameinfo();
 			}});
 
@@ -302,7 +305,7 @@ public class GUIScreener extends JWindow implements Runnable
 		// ScreenPanel neu zeichnen:
 		this.screenPanel.repaint();
 		
-		// 6) Verschwinden der Progressbar und Einfügen des Beenden-Buttons
+		// 6) Verschwinden der Progressbar und Einfï¿½gen des Beenden-Buttons
 		progressBar.setVisible(false);
 		progressLabel.setVisible(false);
 		btnExit.setVisible(true);
@@ -323,14 +326,14 @@ public class GUIScreener extends JWindow implements Runnable
 	 */
 	private void fadeRight()
 	{
-		// Prüfen, ob thread nicht aktiv ist und ob 
+		// Prï¿½fen, ob thread nicht aktiv ist und ob 
 		// aktuelles Fademinimum nicht erreicht ist:
 		if( this.fadeThread == null && this.curFadePos > 1 )
 		{
 			// Fade-Richtung setzen ( 1 = rechts ):
 			this.fadeDir	= 1;
 			
-			// Thread für eine flüssige Animation erzeugen:
+			// Thread fï¿½r eine flï¿½ssige Animation erzeugen:
 			this.fadeThread	= new Thread( this, "fadeRight" );
 			
 			// Akutelle Fadeposition um 1 runtersetzen: 
@@ -346,14 +349,14 @@ public class GUIScreener extends JWindow implements Runnable
 	 */
 	private void fadeLeft()
 	{
-		// Prüfen, ob thread nicht aktiv ist und ob 
+		// Prï¿½fen, ob thread nicht aktiv ist und ob 
 		// aktuelles Fademaximum nicht erreicht ist:
 		if( this.fadeThread == null && this.curFadePos < ( gLen - 1 ) )
 		{
 			// Fade-Richtung setzen ( -1 = links ):
 			this.fadeDir		= -1;
 			
-			// Thread für eine flüssige Animation erzeugen:
+			// Thread fï¿½r eine flï¿½ssige Animation erzeugen:
 			this.fadeThread		= new Thread( this, "fadeLeft" );
 			
 			// Akutelle Fadeposition um 1 runtersetzen:			
@@ -376,11 +379,11 @@ public class GUIScreener extends JWindow implements Runnable
 			// Jedem einzelnen Spiele-Button faden:
 			for( int cntBtn = 0; cntBtn < this.gLen; cntBtn++ )
 			{
-				// Selbsterklärend:				
+				// Selbsterklï¿½rend:				
 				JButton btnCur	= this.btnGames.get( cntBtn );
-				btnCur.setBounds( btnCur.getBounds().x + this.fadeDir, btnCur.getBounds().y, 100, 80 );
+				btnCur.setBounds( btnCur.getBounds().x + this.fadeDir, btnCur.getBounds().y, 100, 100 );
 				
-				// Selbsterklärend:
+				// Selbsterklï¿½rend:
 				this.screenPanel.repaint();
 				this.fadePanel.repaint();				
 			}
@@ -400,17 +403,17 @@ public class GUIScreener extends JWindow implements Runnable
 	}
 	
 	/**
-	 * Die Obergrenze für die wird Progress-Bar übergeben
+	 * Die Obergrenze fï¿½r die wird Progress-Bar ï¿½bergeben
 	 */
 	public void setMaximum( int length ) { this.progressBar.setMaximum( length ); }
 	
 	/**
-	 * Aktuellen Fortschritt des Progress-Bar erhöhen
+	 * Aktuellen Fortschritt des Progress-Bar erhï¿½hen
 	 */
 	public void setProgress()			{ this.progressBar.setValue( this.progressBar.getValue() + 1 ); }
 	
 	/**
-	 * Game-Label auf Defaultwert zurücksetzen
+	 * Game-Label auf Defaultwert zurï¿½cksetzen
 	 */
 	private void clearGameinfo() { this.gameLabel.setText( this.defaultInfo ); }
 	
@@ -434,7 +437,7 @@ public class GUIScreener extends JWindow implements Runnable
 	 * Weist GameBuilder an, das angeklickte Spiel zu starten
 	 * 
 	 * @param button
-	 * 			das Icon (der Button) des ausgewählten Spiels
+	 * 			das Icon (der Button) des ausgewï¿½hlten Spiels
 	 */
 	private void openGame( Object button ) 
 	{

@@ -33,10 +33,10 @@ public class Toolbar
         this.toolBar.setLayout( null );
         this.toolBar.setPreferredSize( new Dimension( playground.getFrame().getWidth(), 38 ) );
 
-		// ToolBar füllen
+		// ToolBar fï¿½llen
 		ImageIcon imgOpenMap		= new ImageIcon( "src/fx/Toolbar/openMap.png" );
-		ImageIcon imgOpenSavegame	= new ImageIcon( "src/fx/Toolbar/openSavegame.png" );
-		ImageIcon imgSave 			= new ImageIcon( "src/fx/Toolbar/saveGame.png" );
+		ImageIcon imgOpenSavegame	= new ImageIcon( "src/fx/Toolbar/open.png" );
+		ImageIcon imgSave 			= new ImageIcon( "src/fx/Toolbar/save.png" );
 		ImageIcon imgClose 			= new ImageIcon( "src/fx/Toolbar/close.png" );		
 		ImageIcon imgSettings		= new ImageIcon( "src/fx/Toolbar/settings.png" );
         
@@ -58,10 +58,10 @@ public class Toolbar
 		this.btnClose.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 		this.btnSettings.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 
-		this.btnOpenMap.setToolTipText( "Karte öffnen!" );
-		this.btnOpenSavegame.setToolTipText( "Gespeichertes Spiel öffnen!" );
+		this.btnOpenMap.setToolTipText( "Karte ï¿½ffnen!" );
+		this.btnOpenSavegame.setToolTipText( "Gespeichertes Spiel ï¿½ffnen!" );
 		this.btnSave.setToolTipText( "Spielstand speichern!" );
-		this.btnClose.setToolTipText( "Spiel schließen!" );
+		this.btnClose.setToolTipText( "Spiel schlieï¿½en!" );
 		this.btnSettings.setToolTipText( "Einstellungen!" );
 		
 		this.toolBar.add( this.btnOpenMap );
@@ -99,7 +99,7 @@ public class Toolbar
 			}
 		});
 		
-		// Editor schließen:
+		// Editor schlieï¿½en:
 		this.btnClose.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				Toolbar.this.playground.closePlayground();
